@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core neutrals */
+  --color-bg: 248, 250, 252; /* soft slate-50 */
+  --color-bg-soft: 241, 245, 249; /* slate-100 */
+  --color-surface: 255, 255, 255; /* white */
+  --color-border: 226, 232, 240; /* slate-200 */
+  --color-text: 15, 23, 42; /* slate-900 */
+  --color-text-muted: 100, 116, 139; /* slate-500 */
+
+  /* Brand + accent based on #3aaa35 and #f39200 */
+  --color-brand: 58, 170, 53; /* #3aaa35 green */
+  --color-brand-soft: 224, 244, 222; /* soft green tint */
+  --color-brand-strong: 34, 120, 36; /* deeper green */
+
+  --color-accent: 243, 146, 0; /* #f39200 orange */
+  --color-accent-soft: 255, 232, 196; /* warm orange tint */
+
+  /* Feedback */
+  --color-success: 22, 163, 74;
+  --color-error: 220, 38, 38;
+
+  /* Semantic aliases */
+  --color-hero-bg: 248, 250, 252;
+  --color-footer-bg: 15, 23, 42;
+}
+
+body {
+  color: rgb(var(--color-text));
+  background: rgb(var(--color-bg));
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Motion-respecting animation helpers */
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.6s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeInUp,
+  .animate-fadeIn,
+  .animate-slideInRight,
+  .animate-float {
+    animation: none !important;
+  }
+
+  .hover-lift,
+  .hover-scale,
+  .hover-glow {
+    transition: none !important;
+  }
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.12),
+    0 10px 10px -5px rgba(15, 23, 42, 0.06);
+}
+
+.hover-scale {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(58, 170, 53, 0.35);
+}
+
+/* Accent text (no gradients) */
+.gradient-text {
+  color: rgb(var(--color-accent));
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--color-bg-soft));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-brand));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--color-brand-strong));
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid rgb(var(--color-brand));
+  outline-offset: 2px;
+}
