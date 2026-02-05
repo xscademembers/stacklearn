@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import {
   FiFacebook,
   FiInstagram,
@@ -7,6 +10,7 @@ import {
   FiMessageCircle,
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
+import BookConsultButton from "./BookConsultButton";
 
 export default function Footer() {
   return (
@@ -15,9 +19,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Column 1 - Brand & Mission */}
           <div>
-            <div className="text-2xl font-bold text-brand mb-4">
-              Stack Learn
-            </div>
+            <Link href="/" className="inline-block mb-4">
+              <Image
+                src="https://storage.googleapis.com/new_client_files/stack%20learn/StackLearn%20-%20%E1%8F%9A%E1%B4%80%C9%AA%20%EA%80%A4%E1%B4%84%E1%B4%8F%C9%B4!!.png"
+                alt="Stack Learn Logo"
+                width={160}
+                height={50}
+                className="h-12 w-auto brightness-0 invert"
+              />
+            </Link>
             <p className="text-sm mb-4">
               Empowering students to study abroad with expert guidance, global
               partnerships, and transparent support at every step.
@@ -157,12 +167,9 @@ export default function Footer() {
                 <p className="text-gray-300">Mon–Sat | 10:00 AM – 5:00 PM</p>
               </div>
               <div className="pt-4 space-y-2">
-                <Link
-                  href="/contact"
-                  className="block w-full px-4 py-3 bg-brand text-white rounded-full text-center font-bold hover:shadow-xl hover:shadow-brand/40 hover:scale-105 transition-all duration-300 transform text-sm"
-                >
+                <BookConsultButton className="w-full px-4 py-3 text-sm">
                   Book Free Counselling
-                </Link>
+                </BookConsultButton>
                 <a
                   href="https://wa.me/919606031842"
                   target="_blank"

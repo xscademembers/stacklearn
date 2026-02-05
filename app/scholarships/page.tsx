@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiSearch, FiArrowRight } from "react-icons/fi";
+import BookConsultButton from "@/components/BookConsultButton";
 
 const scholarships = [
   {
@@ -55,14 +56,14 @@ export default function ScholarshipsPage() {
       <section className="relative h-96 text-white flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Students celebrating graduation with caps"
+            src="https://images.pexels.com/photos/7092614/pexels-photo-7092614.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Student studying with books"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/60" />
         </div>
         {/* Soft light blobs */}
         <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none">
@@ -74,12 +75,9 @@ export default function ScholarshipsPage() {
           <p className="text-xl mb-8 max-w-3xl mx-auto">
             Explore top global scholarships to make your study abroad journey affordable.
           </p>
-          <Link
-            href="/contact"
-            className="inline-block px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
-          >
+          <BookConsultButton variant="white">
             Check Eligibility
-          </Link>
+          </BookConsultButton>
         </div>
       </section>
 
@@ -183,12 +181,9 @@ export default function ScholarshipsPage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link
-              href="/contact"
-              className="inline-block px-8 py-4 bg-brand text-white rounded-full font-semibold hover:shadow-xl transition-all"
-            >
+            <BookConsultButton>
               Get Expert Help with Your Application
-            </Link>
+            </BookConsultButton>
           </div>
         </div>
       </section>
@@ -254,25 +249,22 @@ export default function ScholarshipsPage() {
       <section className="relative py-20 text-white overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/1205651/pexels-photo-1205651.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="https://images.pexels.com/photos/901964/pexels-photo-901964.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Graduation celebration"
             fill
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-accent/70" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-bold mb-4">Need Help Finding the Right Scholarship?</h2>
           <p className="text-xl mb-8">
             Connect with Stack Learn experts to discover scholarships that match your academic profile and goals.
           </p>
-          <Link
-            href="/contact"
-            className="inline-block px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
-          >
+          <BookConsultButton variant="white">
             Get Scholarship Help
-          </Link>
+          </BookConsultButton>
         </div>
       </section>
     </div>

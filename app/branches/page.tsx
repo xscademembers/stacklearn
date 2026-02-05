@@ -30,14 +30,14 @@ export default function BranchesPage() {
       <section className="relative h-64 text-white flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Modern office interior"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/60" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl font-bold mb-4">Our Branches</h1>
@@ -143,13 +143,13 @@ export default function BranchesPage() {
       <section className="relative py-20 text-white overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="https://images.pexels.com/photos/3184423/pexels-photo-3184423.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Team working together"
             fill
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-accent/70" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-bold mb-4">Can&apos;t find a branch near you?</h2>

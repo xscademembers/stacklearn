@@ -21,30 +21,30 @@ const steps = [
 
 export default function ProcessSection() {
   return (
-    <section className="py-20 relative overflow-hidden">
-      {/* Subtle background image */}
+    <section className="py-16 md:py-24 relative overflow-hidden">
+      {/* Background: solid white + image at 50% opacity */}
       <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-white" />
         <Image
           src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1600"
           alt="Students working together"
           fill
-          className="object-cover"
+          className="object-cover opacity-50"
         />
-        <div className="absolute inset-0 bg-white/95" />
       </div>
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-6 md:px-8 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-extrabold text-slate-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">
             How It <span className="gradient-text">Works</span>
           </h2>
-          <p className="text-xl text-slate-700 font-medium">
+          <p className="text-lg md:text-xl text-slate-700 font-medium max-w-2xl mx-auto">
             Simple steps to your study abroad journey
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto">
           {steps.map((step, index) => (
             <div key={index} className="text-center group">
-              <div className="relative mb-6">
+              <div className="relative mb-8">
                 <div className="w-24 h-24 mx-auto bg-brand rounded-full flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:shadow-brand/50 transition-all duration-300 group-hover:scale-110">
                   <step.icon className="w-12 h-12 text-white group-hover:scale-110 transition-transform duration-300" />
                 </div>
@@ -55,7 +55,7 @@ export default function ProcessSection() {
                   {index + 1}
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-brand transition-colors duration-300">
+              <h3 className="text-xl font-bold text-slate-900 mb-4 group-hover:text-brand transition-colors duration-300">
                 {step.title}
               </h3>
               <p className="text-slate-700 leading-relaxed">{step.description}</p>

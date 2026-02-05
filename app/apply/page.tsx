@@ -14,6 +14,7 @@ const steps = [
 
 export default function ApplyPage() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     // Step 1
     name: "",
@@ -41,30 +42,68 @@ export default function ApplyPage() {
     documents: [] as File[],
   });
 
+  // Validate step before proceeding
+  const validateStep = (step: number): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (step === 1) {
+      if (!formData.name.trim()) newErrors.name = "Full name is required";
+      if (!formData.email.trim()) newErrors.email = "Email is required";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Invalid email format";
+      if (!formData.mobile.trim()) newErrors.mobile = "Mobile number is required";
+      if (!formData.gender) newErrors.gender = "Please select gender";
+    } else if (step === 2) {
+      if (!formData.qualification) newErrors.qualification = "Qualification is required";
+      if (!formData.institution.trim()) newErrors.institution = "Institution name is required";
+      if (!formData.year) newErrors.year = "Passing year is required";
+    } else if (step === 3) {
+      if (!formData.preferredCountry) newErrors.preferredCountry = "Please select a country";
+      if (!formData.course.trim()) newErrors.course = "Course preference is required";
+      if (!formData.level) newErrors.level = "Please select study level";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleNext = () => {
-    if (currentStep < 5) setCurrentStep(currentStep + 1);
+    if (validateStep(currentStep)) {
+      if (currentStep < 5) setCurrentStep(currentStep + 1);
+    }
   };
 
   const handleBack = () => {
+    setErrors({});
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
   const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setSubmitError("");
+    
     try {
       const response = await fetch("/api/applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+      
+      const data = await response.json();
+      
       if (response.ok) {
-        const data = await response.json();
-        alert("Thank you for applying! Our counsellors will review your application and contact you shortly.");
-        // Redirect to confirmation page or home
+        alert("Thank you for applying! Your application ID: " + data.applicationId + ". Our counsellors will review your application and contact you shortly.");
         window.location.href = "/";
+      } else {
+        setSubmitError(data.message || "Failed to submit application. Please try again.");
       }
     } catch (error) {
       console.error("Error submitting application:", error);
-      alert("Thank you for applying! Our counsellors will review your application and contact you shortly.");
+      setSubmitError("Network error. Please check your connection and try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -72,15 +111,16 @@ export default function ApplyPage() {
     <div className="pb-0">
       {/* Hero Section */}
       <section className="relative h-72 text-white flex items-center justify-center overflow-hidden">
+        {/* Background: solid black + image with 50% opacity */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="https://images.pexels.com/photos/7092477/pexels-photo-7092477.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Student filling application"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/70" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl font-bold mb-4">Apply Now</h1>
@@ -145,17 +185,17 @@ export default function ApplyPage() {
                     type="text"
                     required
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    onChange={(e) => { setFormData({ ...formData, name: e.target.value }); setErrors({ ...errors, name: "" }); }}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Date of Birth *
+                    Date of Birth
                   </label>
                   <input
                     type="date"
-                    required
                     value={formData.dob}
                     onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
@@ -168,14 +208,15 @@ export default function ApplyPage() {
                   <select
                     required
                     value={formData.gender}
-                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    onChange={(e) => { setFormData({ ...formData, gender: e.target.value }); setErrors({ ...errors, gender: "" }); }}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.gender ? 'border-red-500' : 'border-gray-300'}`}
                   >
                     <option value="">Select</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
                   </select>
+                  {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -185,9 +226,10 @@ export default function ApplyPage() {
                     type="email"
                     required
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    onChange={(e) => { setFormData({ ...formData, email: e.target.value }); setErrors({ ...errors, email: "" }); }}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -197,17 +239,17 @@ export default function ApplyPage() {
                     type="tel"
                     required
                     value={formData.mobile}
-                    onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    onChange={(e) => { setFormData({ ...formData, mobile: e.target.value }); setErrors({ ...errors, mobile: "" }); }}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.mobile ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Current City & Country *
+                    Current City & Country
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
@@ -230,8 +272,8 @@ export default function ApplyPage() {
                   <select
                     required
                     value={formData.qualification}
-                    onChange={(e) => setFormData({ ...formData, qualification: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    onChange={(e) => { setFormData({ ...formData, qualification: e.target.value }); setErrors({ ...errors, qualification: "" }); }}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.qualification ? 'border-red-500' : 'border-gray-300'}`}
                   >
                     <option value="">Select</option>
                     <option value="12th">12th</option>
@@ -239,6 +281,7 @@ export default function ApplyPage() {
                     <option value="bachelor">Bachelor’s</option>
                     <option value="master">Master’s</option>
                   </select>
+                  {errors.qualification && <p className="text-red-500 text-sm mt-1">{errors.qualification}</p>}
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
@@ -249,9 +292,10 @@ export default function ApplyPage() {
                       type="text"
                       required
                       value={formData.institution}
-                      onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                      onChange={(e) => { setFormData({ ...formData, institution: e.target.value }); setErrors({ ...errors, institution: "" }); }}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.institution ? 'border-red-500' : 'border-gray-300'}`}
                     />
+                    {errors.institution && <p className="text-red-500 text-sm mt-1">{errors.institution}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -261,9 +305,10 @@ export default function ApplyPage() {
                       type="number"
                       required
                       value={formData.year}
-                      onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                      onChange={(e) => { setFormData({ ...formData, year: e.target.value }); setErrors({ ...errors, year: "" }); }}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.year ? 'border-red-500' : 'border-gray-300'}`}
                     />
+                    {errors.year && <p className="text-red-500 text-sm mt-1">{errors.year}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -323,8 +368,8 @@ export default function ApplyPage() {
                   <select
                     required
                     value={formData.preferredCountry}
-                    onChange={(e) => setFormData({ ...formData, preferredCountry: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    onChange={(e) => { setFormData({ ...formData, preferredCountry: e.target.value }); setErrors({ ...errors, preferredCountry: "" }); }}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.preferredCountry ? 'border-red-500' : 'border-gray-300'}`}
                   >
                     <option value="">Select</option>
                     <option value="uk">United Kingdom</option>
@@ -333,6 +378,7 @@ export default function ApplyPage() {
                     <option value="australia">Australia</option>
                     <option value="germany">Germany</option>
                   </select>
+                  {errors.preferredCountry && <p className="text-red-500 text-sm mt-1">{errors.preferredCountry}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -342,9 +388,10 @@ export default function ApplyPage() {
                     type="text"
                     required
                     value={formData.course}
-                    onChange={(e) => setFormData({ ...formData, course: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    onChange={(e) => { setFormData({ ...formData, course: e.target.value }); setErrors({ ...errors, course: "" }); }}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.course ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {errors.course && <p className="text-red-500 text-sm mt-1">{errors.course}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -353,8 +400,8 @@ export default function ApplyPage() {
                   <select
                     required
                     value={formData.level}
-                    onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    onChange={(e) => { setFormData({ ...formData, level: e.target.value }); setErrors({ ...errors, level: "" }); }}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.level ? 'border-red-500' : 'border-gray-300'}`}
                   >
                     <option value="">Select</option>
                     <option value="undergraduate">Undergraduate</option>
@@ -362,6 +409,7 @@ export default function ApplyPage() {
                     <option value="diploma">Diploma</option>
                     <option value="phd">PhD</option>
                   </select>
+                  {errors.level && <p className="text-red-500 text-sm mt-1">{errors.level}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -469,11 +517,18 @@ export default function ApplyPage() {
             </div>
           )}
 
+          {/* Error Display */}
+          {submitError && (
+            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 mt-4">
+              {submitError}
+            </div>
+          )}
+
           {/* Navigation Buttons */}
           <div className="flex justify-between mt-8">
             <button
               onClick={handleBack}
-              disabled={currentStep === 1}
+              disabled={currentStep === 1 || isSubmitting}
               className="px-6 py-3 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors flex items-center gap-2"
             >
               <FiArrowLeft className="w-5 h-5" />
@@ -490,9 +545,10 @@ export default function ApplyPage() {
             ) : (
               <button
                 onClick={handleSubmit}
-                className="px-6 py-3 bg-brand text-white rounded-lg hover:shadow-lg transition-all"
+                disabled={isSubmitting}
+                className="px-6 py-3 bg-brand text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Submit Application
+                {isSubmitting ? "Submitting..." : "Submit Application"}
               </button>
             )}
           </div>

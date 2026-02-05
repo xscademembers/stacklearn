@@ -9,14 +9,14 @@ export default function StudyAbroadStepsPage() {
       <section className="relative h-96 text-white flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
             src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600"
             alt="Airplane travel representing study abroad journey"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/60" />
         </div>
         {/* Soft light blobs */}
         <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none">
@@ -245,13 +245,13 @@ export default function StudyAbroadStepsPage() {
       <section className="relative py-20 text-white overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Students celebrating graduation"
+            src="https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Student with passport and globe"
             fill
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-accent/70" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-bold mb-4">Your Global Education Journey Starts Here</h2>

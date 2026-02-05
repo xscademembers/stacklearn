@@ -44,14 +44,14 @@ export default function BlogPage() {
       <section className="relative h-64 text-white flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
             src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1600"
             alt="Students studying and reading"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/60" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl font-bold mb-4">Resources & Insights</h1>
@@ -149,13 +149,13 @@ export default function BlogPage() {
       <section className="relative py-20 text-white overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Students celebrating graduation"
+            src="https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Students discussing ideas"
             fill
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-accent/70" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-bold mb-4">Ready to Start Your Study Abroad Journey?</h2>

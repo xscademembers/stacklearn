@@ -36,14 +36,14 @@ export default function TestPrepPage() {
       <section className="relative h-96 text-white flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
             src="https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Student studying for exam"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/60" />
         </div>
         {/* Soft light blobs */}
         <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none">
@@ -137,13 +137,13 @@ export default function TestPrepPage() {
       <section className="relative py-20 text-white overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/5427868/pexels-photo-5427868.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="https://images.pexels.com/photos/4144222/pexels-photo-4144222.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Students in exam preparation"
             fill
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-accent/70" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-bold mb-4">Start Your Test Prep Journey Today</h2>

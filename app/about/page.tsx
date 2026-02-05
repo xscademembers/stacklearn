@@ -2,22 +2,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiUsers, FiTarget, FiAward, FiGlobe } from "react-icons/fi";
 import ITProjectsSection from "@/components/home/ITProjectsSection";
+import BookConsultButton from "@/components/BookConsultButton";
 
 export default function AboutPage() {
   return (
     <div className="pb-0">
       {/* Hero Banner */}
       <section className="relative h-[500px] text-white flex items-center justify-center overflow-hidden">
-        {/* Background image for visual interest */}
+        {/* Background: solid black + image with 50% opacity */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Students celebrating graduation abroad"
+            src="https://images.pexels.com/photos/3184394/pexels-photo-3184394.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Team working together"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/60" />
         </div>
 
         {/* Soft light blobs on top of image */}
@@ -31,12 +32,9 @@ export default function AboutPage() {
           <p className="text-xl md:text-2xl mb-10 font-medium max-w-3xl mx-auto leading-relaxed">
             At Stack Learn, we guide students to achieve their international education goals through expert counselling, transparent processes, and personalized training.
           </p>
-          <Link
-            href="/contact"
-            className="inline-block px-10 py-5 bg-white text-primary-600 rounded-full font-bold text-lg hover:shadow-2xl hover:scale-110 transition-all duration-300 transform"
-          >
+          <BookConsultButton variant="white" className="text-lg font-bold">
             Book Free Counselling
-          </Link>
+          </BookConsultButton>
         </div>
       </section>
 
@@ -199,12 +197,9 @@ export default function AboutPage() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-brand text-white rounded-full font-semibold hover:shadow-xl transition-all"
-            >
+            <BookConsultButton>
               Meet Our Counsellors
-            </Link>
+            </BookConsultButton>
           </div>
         </div>
       </section>
@@ -332,7 +327,7 @@ export default function AboutPage() {
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-brand/60 flex items-center justify-center">
+              <div className="absolute inset-0 bg-brand/40 flex items-center justify-center">
                 <FiGlobe className="w-24 h-24 text-white opacity-90" />
               </div>
             </div>
@@ -342,15 +337,15 @@ export default function AboutPage() {
 
       {/* Closing CTA */}
       <section className="relative pt-20 pb-0 text-white overflow-hidden">
-        {/* Background image */}
+        {/* Background: solid black + image with 50% opacity */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Students celebrating graduation success"
+            src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Happy students celebrating success"
             fill
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-accent/70" />
         </div>
         <div className="absolute inset-0 z-[1] opacity-10 pointer-events-none">
           <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl animate-float"></div>
@@ -360,12 +355,9 @@ export default function AboutPage() {
           <h2 className="text-5xl md:text-6xl font-extrabold mb-6 drop-shadow-lg">
             Join thousands of successful students who trusted Stack Learn
           </h2>
-          <Link
-            href="/contact"
-            className="inline-block mt-6 px-10 py-5 bg-white text-primary-600 rounded-full font-bold text-lg hover:shadow-2xl hover:scale-110 transition-all duration-300 transform"
-          >
+          <BookConsultButton variant="white" className="mt-6 text-lg font-bold">
             Work With Us
-          </Link>
+          </BookConsultButton>
         </div>
       </section>
     </div>

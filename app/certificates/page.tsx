@@ -27,15 +27,16 @@ export default function CertificatesPage() {
     <div className="pb-0">
       {/* Hero Section */}
       <section className="relative h-72 text-white flex items-center justify-center overflow-hidden">
+        {/* Background: solid black + image with 50% opacity */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/5427868/pexels-photo-5427868.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="https://images.pexels.com/photos/8199519/pexels-photo-8199519.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Certificate and achievement"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/70" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl font-bold mb-4">Certificate Verification & Download</h1>

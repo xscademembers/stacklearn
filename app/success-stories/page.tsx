@@ -38,14 +38,14 @@ export default function SuccessStoriesPage() {
       <section className="relative h-96 text-white flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Students celebrating graduation success"
+            src="https://images.pexels.com/photos/7944099/pexels-photo-7944099.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Students celebrating achievement"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/60" />
         </div>
         {/* Soft light blobs */}
         <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none">
@@ -229,13 +229,13 @@ export default function SuccessStoriesPage() {
       <section className="relative py-20 text-white overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/1205651/pexels-photo-1205651.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Graduation celebration"
+            src="https://images.pexels.com/photos/8199562/pexels-photo-8199562.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Student success celebration"
             fill
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-accent/70" />
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-bold mb-4">Start Your Success Story Today</h2>

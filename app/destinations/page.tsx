@@ -1,12 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight } from "react-icons/fi";
+import BookConsultButton from "@/components/BookConsultButton";
 
 const countries = [
   {
     name: "United Kingdom",
     href: "/destinations/uk",
     image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800",
+    flag: "https://flagcdn.com/w40/gb.png",
     highlights: [
       "Post-study work visa up to 2 years",
       "Globally ranked universities",
@@ -17,6 +19,7 @@ const countries = [
     name: "United States",
     href: "/destinations/usa",
     image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800",
+    flag: "https://flagcdn.com/w40/us.png",
     highlights: [
       "World-class research opportunities",
       "Diverse course options",
@@ -27,6 +30,7 @@ const countries = [
     name: "Canada",
     href: "/destinations/canada",
     image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+    flag: "https://flagcdn.com/w40/ca.png",
     highlights: [
       "Post-graduation work permit",
       "Affordable education",
@@ -37,6 +41,7 @@ const countries = [
     name: "Australia",
     href: "/destinations/australia",
     image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+    flag: "https://flagcdn.com/w40/au.png",
     highlights: [
       "Post-study work visa up to 4 years",
       "High quality of life",
@@ -47,6 +52,7 @@ const countries = [
     name: "Germany",
     href: "/destinations/germany",
     image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
+    flag: "https://flagcdn.com/w40/de.png",
     highlights: [
       "Low or no tuition fees",
       "Excellent engineering programs",
@@ -62,14 +68,14 @@ export default function DestinationsPage() {
       <section className="relative h-96 text-white flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
             src="https://images.pexels.com/photos/346885/pexels-photo-346885.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="World travel and destinations"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-brand/60" />
         </div>
         {/* Soft light blobs */}
         <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none">
@@ -81,12 +87,9 @@ export default function DestinationsPage() {
           <p className="text-xl mb-8 max-w-3xl mx-auto">
             Discover the best countries to pursue your higher education. Compare study options, tuition costs, post-study work opportunities, and choose the perfect destination for your goals.
           </p>
-          <Link
-            href="/contact"
-            className="inline-block px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
-          >
+          <BookConsultButton variant="white">
             Talk to a Country Expert
-          </Link>
+          </BookConsultButton>
         </div>
       </section>
 
@@ -138,10 +141,13 @@ export default function DestinationsPage() {
                     className="object-cover group-hover:scale-110 transition-transform duration-300"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-black/60" />
-                  <h3 className="absolute bottom-4 left-4 right-4 text-white font-bold text-xl">
-                    Study in {country.name}
-                  </h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3">
+                    <Image src={country.flag} alt="" width={28} height={20} className="rounded-sm shadow-md" />
+                    <h3 className="text-white font-bold text-xl">
+                      Study in {country.name}
+                    </h3>
+                  </div>
                 </div>
                 <div className="p-6">
                   <ul className="space-y-2 mb-4">
@@ -167,13 +173,13 @@ export default function DestinationsPage() {
       <section className="relative py-20 text-white overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Students planning their journey"
             fill
-            className="object-cover"
+            className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-accent/70" />
         </div>
         <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none">
           <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl animate-float"></div>
@@ -184,12 +190,9 @@ export default function DestinationsPage() {
             Confused About Which Country to Choose?
           </h2>
           <p className="text-xl md:text-2xl mb-8 opacity-95">Speak with our expert counsellors to find the best fit for your goals.</p>
-          <Link
-            href="/contact"
-            className="inline-block mt-4 px-12 py-4 bg-white text-primary-600 rounded-full font-bold text-lg md:text-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 transform hover:bg-gray-50"
-          >
+          <BookConsultButton variant="white" className="mt-4 text-lg md:text-xl font-bold">
             Book Free Counselling
-          </Link>
+          </BookConsultButton>
         </div>
       </section>
     </div>

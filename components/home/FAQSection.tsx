@@ -45,18 +45,18 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="pt-20 pb-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl font-extrabold text-slate-900 mb-4">
+    <section className="py-16 md:py-24 bg-gray-50">
+      <div className="container mx-auto px-6 md:px-8">
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">
             Frequently Asked <span className="gradient-text">Questions</span>
           </h2>
-          <p className="text-xl text-slate-700 font-medium">
+          <p className="text-lg md:text-xl text-slate-700 font-medium max-w-2xl mx-auto">
             Find answers to the most common queries students ask before studying
             abroad.
           </p>
         </div>
-        <div className="max-w-3xl mx-auto space-y-4">
+        <div className="max-w-3xl mx-auto space-y-5">
           {faqs.map((faq, index) => (
             <div
               key={index}
@@ -83,11 +83,11 @@ export default function FAQSection() {
             </div>
           ))}
         </div>
-        <div className="text-center mt-8">
+        <div className="text-center mt-12">
           <p className="text-gray-600 mb-4">Didn’t find your question?</p>
           <Link
             href="/contact"
-            className="inline-block px-8 py-4 bg-brand text-white rounded-full font-bold hover:shadow-xl hover:shadow-brand/40 hover:scale-110 transition-all duration-300 transform"
+            className="inline-block px-10 py-5 bg-brand text-white rounded-full font-bold hover:shadow-xl hover:shadow-brand/40 hover:scale-105 transition-all duration-300 transform"
           >
             Talk to a Counsellor
           </Link>
