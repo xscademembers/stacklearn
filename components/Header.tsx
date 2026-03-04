@@ -21,6 +21,7 @@ const flags: Record<string, string> = {
   australia: "https://flagcdn.com/w40/au.png",
   canada: "https://flagcdn.com/w40/ca.png",
   germany: "https://flagcdn.com/w40/de.png",
+  ireland: "https://flagcdn.com/w40/ie.png",
 };
 
 export default function Header() {
@@ -56,14 +57,16 @@ export default function Header() {
     { name: "Study in Australia", href: "/destinations/australia", flag: flags.australia },
     { name: "Study in Canada", href: "/destinations/canada", flag: flags.canada },
     { name: "Study in Germany", href: "/destinations/germany", flag: flags.germany },
+    { name: "Study in Ireland", href: "/destinations/ireland", flag: flags.ireland },
   ];
 
   const services = [
-    { name: "Counselling & Admissions", href: "/services" },
-    { name: "Visa Assistance", href: "/services" },
-    { name: "SOP / LOR Writing", href: "/services" },
-    { name: "Accommodation", href: "/services" },
-    { name: "Loan Assistance", href: "/services" },
+    { name: "Profile Evaluation", href: "/services/profile-evaluation" },
+    { name: "University Admission Assistance", href: "/services/admission-assistance" },
+    { name: "SOP & LOR Writing Support", href: "/services/sop-lor" },
+    { name: "Student Visa Assistance", href: "/services/visa-assistance" },
+    { name: "Accommodation Assistance", href: "/services/accommodation" },
+    { name: "Education Loan Assistance", href: "/services/education-loan" },
   ];
 
   const trainings = [
@@ -83,10 +86,10 @@ export default function Header() {
   ];
 
   const testPrep = [
-    { name: "IELTS Preparation", href: "/test-prep#ielts" },
-    { name: "GRE Preparation", href: "/test-prep#gre" },
-    { name: "TOEFL Preparation", href: "/test-prep#toefl" },
-    { name: "GMAT Preparation", href: "/test-prep#gmat" },
+    { name: "IELTS", href: "/test-prep/ielts" },
+    { name: "GRE", href: "/test-prep/gre" },
+    { name: "TOEFL", href: "/test-prep/toefl" },
+    { name: "GMAT", href: "/test-prep/gmat" },
   ];
 
 

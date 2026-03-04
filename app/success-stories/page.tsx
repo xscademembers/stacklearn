@@ -70,6 +70,8 @@ export default function SuccessStoriesPage() {
               <option>USA</option>
               <option>Canada</option>
               <option>Australia</option>
+              <option>Germany</option>
+              <option>Ireland</option>
             </select>
             <select className="px-4 py-2 border border-gray-300 rounded-lg">
               <option>All Courses</option>

@@ -377,6 +377,7 @@ export default function ApplyPage() {
                     <option value="canada">Canada</option>
                     <option value="australia">Australia</option>
                     <option value="germany">Germany</option>
+                    <option value="ireland">Ireland</option>
                   </select>
                   {errors.preferredCountry && <p className="text-red-500 text-sm mt-1">{errors.preferredCountry}</p>}
                 </div>

@@ -1,48 +1,63 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 const faqs = [
   {
-    question: "What documents do I need to apply for study abroad?",
+    question: "How can StackLearn help me choose the right university and course?",
     answer:
-      "Typically, you’ll need academic transcripts, English proficiency test scores (IELTS/TOEFL), Statement of Purpose (SOP), Letters of Recommendation (LOR), passport copy, and financial proof. Requirements may vary by country and university.",
+      "We provide personalized study abroad counselling to match your academic profile, career goals, budget, and preferred country. Our experts shortlist the right universities and courses to maximize your admission success.",
   },
   {
-    question: "How long does the visa process take?",
+    question: "Does StackLearn assist with student visa applications and documentation?",
     answer:
-      "Visa processing times vary by country. Generally, UK visas take 3-4 weeks, USA takes 2-3 months, Canada takes 4-6 weeks, and Australia takes 4-8 weeks. Processing times can be longer during peak seasons.",
+      "Yes. We offer complete student visa assistance including documentation guidance, financial proof preparation, and interview support to improve your visa approval chances.",
   },
   {
-    question: "Can I work while studying abroad?",
+    question: "What services does StackLearn provide for studying abroad?",
     answer:
-      "Yes, most countries allow international students to work part-time (usually 20 hours per week) during studies and full-time during breaks. Post-study work permits are also available in most countries, allowing you to work after graduation.",
+      "We offer end to end study abroad services including profile evaluation, university shortlisting, SOP and LOR guidance, application submission, education loan assistance, visa processing, and pre departure support.",
   },
   {
-    question: "What is the minimum IELTS score required?",
+    question: "Do you help with scholarships and education loans?",
     answer:
-      "IELTS requirements vary by university and course. Generally, undergraduate programs require 6.0-6.5, while postgraduate programs require 6.5-7.0. Some competitive programs may require 7.5 or higher.",
+      "Yes. We guide students in identifying scholarship opportunities and securing suitable education loans to make international education financially manageable.",
   },
   {
-    question: "How much does it cost to study abroad?",
+    question: "When should I start planning my study abroad journey?",
     answer:
-      "Costs vary significantly by country and course. On average, tuition fees range from ₹10-25L per year, and living expenses range from ₹5-15L per year. Scholarships and financial aid can significantly reduce these costs.",
+      "Ideally, start 8 to 12 months before your intake to allow time for test preparation, university applications, and student visa processing.",
   },
   {
-    question: "Do I need to show proof of funds for visa?",
+    question: "What exams are required to study abroad?",
     answer:
-      "Yes, most countries require proof of sufficient funds to cover tuition fees and living expenses for at least the first year. This typically includes bank statements, education loans, or scholarship letters.",
+      "Most universities require IELTS or TOEFL for English proficiency. Some programs may also require GRE or GMAT depending on the course and country.",
+  },
+  {
+    question: "Which countries does StackLearn support?",
+    answer:
+      "We support students planning to study in top destinations including the UK, USA, Canada, Australia, Germany, and other leading global education hubs.",
+  },
+  {
+    question: "Do you provide accommodation and post arrival support?",
+    answer:
+      "Yes. We guide students with accommodation options, pre departure planning, and basic settlement support for a smooth transition abroad.",
+  },
+  {
+    question: "Is counselling at StackLearn free?",
+    answer:
+      "We offer an initial free counselling session and profile evaluation to help you plan your study abroad journey confidently.",
+  },
+  {
+    question: "How long does the student visa process take?",
+    answer:
+      "Student visa processing times vary by country, but with proper documentation and structured guidance, most visas are processed within a few weeks.",
   },
 ];
 
 export default function FAQSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const leftFaqs = faqs.slice(0, 5);
+  const rightFaqs = faqs.slice(5, 10);
 
   return (
     <section className="py-16 md:py-24 bg-gray-50">
@@ -52,37 +67,57 @@ export default function FAQSection() {
             Frequently Asked <span className="gradient-text">Questions</span>
           </h2>
           <p className="text-lg md:text-xl text-slate-700 font-medium max-w-2xl mx-auto">
-            Find answers to the most common queries students ask before studying
-            abroad.
+            Find answers to the most common queries students ask before studying abroad.
           </p>
         </div>
-        <div className="max-w-3xl mx-auto space-y-5">
-          {faqs.map((faq, index) => (
+
+        {/* Desktop: 5 left + 5 right, perfectly aligned by row */}
+        <div className="hidden md:grid md:grid-cols-2 gap-6 md:gap-8 auto-rows-fr">
+          {leftFaqs.map((faq, rowIndex) => (
             <div
-              key={index}
-              className="bg-white rounded-2xl shadow-lg hover:shadow-xl overflow-hidden border-2 border-transparent hover:border-brand-soft transition-all duration-300"
+              key={`left-${faq.question}`}
+              style={{ gridColumn: 1, gridRow: rowIndex + 1 }}
+              className="h-full bg-white rounded-2xl shadow-sm border border-slate-200 px-5 py-4 md:px-6 md:py-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand/10 flex flex-col"
             >
-              <button
-                onClick={() => toggleFAQ(index)}
-                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-page-soft transition-all duration-300"
-              >
-                <span className="font-bold text-slate-900 pr-4 text-lg">
-                  {index + 1}. {faq.question}
-                </span>
-                {openIndex === index ? (
-                  <FiChevronUp className="w-6 h-6 text-brand flex-shrink-0 transform transition-transform duration-300" />
-                ) : (
-                  <FiChevronDown className="w-6 h-6 text-gray-400 flex-shrink-0 transform transition-transform duration-300" />
-                )}
-              </button>
-              {openIndex === index && (
-                <div className="px-6 pb-5 text-slate-700 leading-relaxed animate-fadeIn">
-                  {faq.answer}
-                </div>
-              )}
+              <p className="font-semibold text-slate-900 mb-2 text-sm md:text-base">
+                {rowIndex + 1}. {faq.question}
+              </p>
+              <p className="text-xs md:text-sm text-slate-700 leading-relaxed flex-1">
+                {faq.answer}
+              </p>
+            </div>
+          ))}
+          {rightFaqs.map((faq, rowIndex) => (
+            <div
+              key={`right-${faq.question}`}
+              style={{ gridColumn: 2, gridRow: rowIndex + 1 }}
+              className="h-full bg-white rounded-2xl shadow-sm border border-slate-200 px-5 py-4 md:px-6 md:py-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand/10 flex flex-col"
+            >
+              <p className="font-semibold text-slate-900 mb-2 text-sm md:text-base">
+                {rowIndex + 1 + leftFaqs.length}. {faq.question}
+              </p>
+              <p className="text-xs md:text-sm text-slate-700 leading-relaxed flex-1">
+                {faq.answer}
+              </p>
             </div>
           ))}
         </div>
+
+        {/* Mobile: single column for readability */}
+        <div className="md:hidden space-y-4">
+          {faqs.map((faq, index) => (
+            <div
+              key={`mobile-${faq.question}`}
+              className="bg-white rounded-2xl shadow-sm border border-slate-200 px-5 py-4 text-left"
+            >
+              <p className="font-semibold text-slate-900 mb-2 text-sm">
+                {index + 1}. {faq.question}
+              </p>
+              <p className="text-xs text-slate-700 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="text-center mt-12">
           <p className="text-gray-600 mb-4">Didn’t find your question?</p>
           <Link

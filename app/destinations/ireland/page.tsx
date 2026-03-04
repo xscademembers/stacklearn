@@ -9,94 +9,91 @@ import BookConsultButton from "@/components/BookConsultButton";
 const keyReasons = [
   {
     title: "Globally Recognized Education System",
-    description: "High-quality universities delivering internationally respected degrees.",
+    description: "Irish universities ranked globally with strong academic credibility.",
   },
   {
-    title: "Affordable Tuition with High ROI",
-    description: "Competitive tuition fees with strong long-term returns on investment.",
+    title: "European Tech & Pharma Hub",
+    description: "Home to leading multinational companies and innovation-driven industries.",
   },
   {
-    title: "Post-Graduation Work Permit (PGWP)",
-    description: "Generous post-study work rights with career stability for up to 3 years.",
+    title: "One-Year Master\u2019s Programs",
+    description: "Fast-track degrees saving time and overall costs.",
   },
   {
-    title: "Pathways to Permanent Residency",
-    description: "Clear immigration routes supporting long-term settlement in Canada.",
+    title: "Two-Year Post-Study Work Visa",
+    description: "Master\u2019s graduates eligible for extended stay under the Third Level Graduate Programme.",
   },
   {
-    title: "Co-op & Industry Integration",
-    description: "Paid internships integrated with academic programs for real-world experience.",
+    title: "Strong Industry Integration",
+    description: "Internship-focused programs with high graduate employability rates.",
   },
   {
-    title: "Research & Innovation Excellence",
-    description: "Advanced research across technology, healthcare, and sustainability sectors.",
+    title: "English-Speaking EU Country",
+    description: "Study in Europe with no language barrier for Indian students.",
   },
   {
-    title: "Safe & Multicultural Environment",
-    description: "Inclusive society offering diversity, safety, and excellent quality of life.",
+    title: "Safe & Welcoming Environment",
+    description: "Friendly multicultural society with excellent quality of life.",
   },
 ];
 
 const courses = [
   "Computer Science",
   "Information Technology",
-  "Artificial Intelligence",
   "Data Science & Analytics",
-  "Engineering (Civil, Mech, Elec)",
-  "MBA",
-  "Finance",
-  "Health Sciences / Nursing",
-  "Project Management",
-  "Animation & Gaming",
+  "Cybersecurity",
+  "Pharmaceutical Sciences",
+  "Business Management",
+  "International Management",
+  "Civil Engineering",
+  "Economics",
+  "AI & Emerging Tech",
 ];
 
 const universities = [
-  { name: "Lakehead University", initials: "LU", color: "bg-blue-700" },
-  { name: "Ontario Tech University", initials: "OTU", color: "bg-blue-600" },
-  { name: "Conestoga College", initials: "CC", color: "bg-red-700" },
-  { name: "George Brown College", initials: "GBC", color: "bg-emerald-700" },
-  { name: "Fanshawe College", initials: "FC", color: "bg-purple-700" },
-  { name: "Durham College", initials: "DC", color: "bg-sky-700" },
-  { name: "Lambton College", initials: "LC", color: "bg-orange-600" },
-  { name: "University Canada West", initials: "UCW", color: "bg-indigo-600" },
-  { name: "University of Niagara Falls Canada", initials: "UNF", color: "bg-teal-700" },
+  { name: "Trinity College Dublin", initials: "TCD", color: "bg-blue-800" },
+  { name: "University College Dublin", initials: "UCD", color: "bg-blue-600" },
+  { name: "University College Cork", initials: "UCC", color: "bg-red-700" },
+  { name: "University of Galway", initials: "UoG", color: "bg-purple-700" },
+  { name: "University of Limerick", initials: "UL", color: "bg-emerald-700" },
+  { name: "Dublin City University", initials: "DCU", color: "bg-sky-700" },
+  { name: "Maynooth University", initials: "MU", color: "bg-indigo-600" },
+  { name: "Technological University Dublin", initials: "TUD", color: "bg-teal-700" },
+  { name: "Munster Technological University", initials: "MTU", color: "bg-orange-600" },
+  { name: "Atlantic Technological University", initials: "ATU", color: "bg-cyan-700" },
+  { name: "South East Technological University", initials: "SETU", color: "bg-rose-600" },
+  { name: "Technological University of the Shannon", initials: "TUS", color: "bg-amber-700" },
 ];
 
 const scholarships = [
   {
-    name: "Vanier Canada Graduate Scholarships",
-    description: "A prestigious federal scholarship awarding CAD 50,000 per year for up to three years to exceptional doctoral students who demonstrate outstanding academic achievement, research potential, and leadership skills.",
-    tag: "Doctoral",
-    tagColor: "bg-red-100 text-red-700",
+    name: "Government of Ireland International Education Scholarship (GOI-IES)",
+    description: "A prestigious Irish government scholarship awarded to high-achieving international students for one year of Bachelor\u2019s, Master\u2019s, or PhD study, offering a \u20AC10,000 stipend along with a full tuition fee waiver at participating Irish higher education institutions.",
+    tag: "Government Funded",
+    tagColor: "bg-emerald-100 text-emerald-700",
   },
   {
-    name: "Canada Graduate Scholarships",
-    description: "A Government of Canada initiative supporting high-achieving master\u2019s and doctoral students through substantial financial assistance to promote advanced research, innovation, and academic excellence.",
-    tag: "Government Funded",
+    name: "Irish Research Council (IRC) Postgraduate Scholarship",
+    description: "A competitive, fully funded scholarship supporting Master\u2019s (research) and PhD students across all disciplines, providing a stipend, tuition fee contribution, and research expenses for outstanding candidates.",
+    tag: "Research",
     tagColor: "bg-blue-100 text-blue-700",
   },
   {
-    name: "Ontario Graduate Scholarship (OGS)",
-    description: "A merit-based scholarship jointly funded by the Government of Ontario and participating universities, offering up to CAD 15,000 per year to academically outstanding graduate students.",
+    name: "Ireland Fellows Programme (IFP)",
+    description: "Funded by the Irish Government, this fully funded scholarship supports early- to mid-career professionals from eligible countries to pursue Master\u2019s degrees in Ireland, focusing on leadership development and sustainable development goals.",
+    tag: "Fully Funded",
+    tagColor: "bg-purple-100 text-purple-700",
+  },
+  {
+    name: "Higher Education Authority (HEA) Scholarships",
+    description: "Administered by Ireland\u2019s Higher Education Authority, these merit-based awards are offered in collaboration with Irish universities, targeting talented international students in technology, business, health sciences, and innovation.",
     tag: "Merit-Based",
     tagColor: "bg-amber-100 text-amber-700",
   },
   {
-    name: "Pierre Elliott Trudeau Foundation Doctoral Scholarships",
-    description: "A highly competitive program providing generous financial support, leadership training, and mentorship to doctoral candidates conducting impactful research in social sciences and humanities.",
-    tag: "Research",
-    tagColor: "bg-purple-100 text-purple-700",
-  },
-  {
-    name: "Canada-ASEAN Scholarships (SEED)",
-    description: "A government-funded initiative covering tuition, travel, living expenses, and health insurance for eligible international students pursuing academic collaboration in Canada.",
-    tag: "Exchange",
-    tagColor: "bg-emerald-100 text-emerald-700",
-  },
-  {
-    name: "Mitacs Globalink Research Internship",
-    description: "A competitive research internship program enabling high-performing undergraduate students from India to undertake 12-week fully funded research projects at Canadian universities.",
-    tag: "Internship",
+    name: "Erasmus+ Programme (Ireland Participation)",
+    description: "Supported by the European Union and facilitated by Irish institutions, this program offers funding opportunities for joint Master\u2019s degrees and academic mobility, enabling international students to study in Ireland as part of a multi-country European program.",
+    tag: "EU Program",
     tagColor: "bg-sky-100 text-sky-700",
   },
 ];
@@ -104,19 +101,19 @@ const scholarships = [
 const supportServices = [
   {
     title: "Training for Standardized Tests",
-    description: "We guide you for required English proficiency exams such as IELTS/PTE and other standardized tests needed for Canada university admissions.",
+    description: "We guide you for required English proficiency exams such as IELTS/PTE and other standardized tests needed for Ireland university admissions.",
     icon: FiBookOpen,
     href: "/test-prep",
   },
   {
     title: "Personalized Counselling",
-    description: "Our one-on-one counselling sessions focus on your academic background, career goals, and budget to create a clear Canada study plan.",
+    description: "Our one-on-one counselling sessions focus on your academic background, career goals, and budget to create a clear Ireland study plan.",
     icon: FiBriefcase,
     href: "/services/profile-evaluation",
   },
   {
     title: "Best-Fit University Selection",
-    description: "We help you shortlist Canadian universities based on rankings, course structure, tuition fees, and post-study work opportunities.",
+    description: "We help you shortlist Ireland universities based on rankings, course structure, tuition fees, and post-study work opportunities.",
     icon: FiGlobe,
     href: "/services/admission-assistance",
   },
@@ -134,44 +131,44 @@ const supportServices = [
   },
   {
     title: "Pre-Departure Orientation",
-    description: "Before you fly, we assist with accommodation guidance, travel preparation, and important information to help you settle confidently in Canada.",
+    description: "Before you fly, we assist with accommodation guidance, travel preparation, and important information to help you settle confidently in Ireland.",
     icon: FiClock,
     href: "/services/accommodation",
   },
 ];
 
 const otherDestinations = [
-  { short: "UK", href: "/destinations/uk", flag: "https://flagcdn.com/w40/gb.png" },
-  { short: "USA", href: "/destinations/usa", flag: "https://flagcdn.com/w40/us.png" },
-  { short: "Australia", href: "/destinations/australia", flag: "https://flagcdn.com/w40/au.png" },
-  { short: "Germany", href: "/destinations/germany", flag: "https://flagcdn.com/w40/de.png" },
-  { short: "Ireland", href: "/destinations/ireland", flag: "https://flagcdn.com/w40/ie.png" },
+  { name: "United Kingdom", short: "UK", href: "/destinations/uk", flag: "https://flagcdn.com/w40/gb.png" },
+  { name: "United States", short: "USA", href: "/destinations/usa", flag: "https://flagcdn.com/w40/us.png" },
+  { name: "Canada", short: "Canada", href: "/destinations/canada", flag: "https://flagcdn.com/w40/ca.png" },
+  { name: "Australia", short: "Australia", href: "/destinations/australia", flag: "https://flagcdn.com/w40/au.png" },
+  { name: "Germany", short: "Germany", href: "/destinations/germany", flag: "https://flagcdn.com/w40/de.png" },
 ];
 
 const faqs = [
   {
-    question: "What are the admission requirements and GPA for Master\u2019s programs?",
-    answer: "Universities typically require a four-year bachelor\u2019s degree with a minimum GPA (often 3.0 on a 4.0 scale), IELTS/TOEFL scores, and sometimes GRE/GMAT, especially for business or engineering programs.",
+    question: "What are the total costs, including tuition and living expenses?",
+    answer: "Tuition generally ranges from \u20AC10,000 to \u20AC30,000 annually. Living expenses are higher in Dublin at \u20AC2,300+ per month, while cities like Cork or Limerick are slightly more affordable. At Stack Learn, we provide transparent cost breakdowns and help you plan finances, scholarships, and education loan options.",
   },
   {
-    question: "How can I finance my studies and are there scholarships available?",
-    answer: "No universities are tuition-free, but scholarships, assistantships, and bursaries are available based on merit and financial need. International students must show proof of funds for tuition and living expenses.",
+    question: "What are the part-time work opportunities for international students?",
+    answer: "Students can work up to 20 hours per week during term time and up to 40 hours during holidays under the Stamp 2 visa conditions. Common roles include retail, hospitality, customer service, and entry-level positions in tech, pharma, and business sectors.",
   },
   {
-    question: "What are the rules for working part-time while studying and after graduation?",
-    answer: "Students can work on or off-campus (up to 24 hours/week during studies). The Post-Graduation Work Permit (PGWP) allows working for up to three years after graduation, depending on program length.",
+    question: "What is the 2-year post-study work visa (stay-back option)?",
+    answer: "A Master\u2019s (Level 9) graduate is eligible for a 24-month post-study work permit under the Third Level Graduate Programme. This is a major advantage for gaining experience and potentially securing a Critical Skills Employment Permit for long-term stay.",
   },
   {
-    question: "What is the total cost of living and tuition?",
-    answer: "Costs vary significantly by program and city. Expenses include tuition (CAD 24,000\u201342,000/year), accommodation, food, transportation, and health insurance. Cities like Toronto and Vancouver are more expensive.",
+    question: "What are the entry requirements and language scores for Indian students?",
+    answer: "Requirements typically include a Bachelor\u2019s degree from a recognized university (55\u201375%+ marks), a Statement of Purpose (SOP), and Letters of Recommendation. A minimum IELTS score of 6.0\u20136.5 (overall) is generally required.",
   },
   {
-    question: "How do I apply for a Canadian student visa (Study Permit)?",
-    answer: "You need an acceptance letter from a Designated Learning Institution (DLI), proof of funds (minimum CAD 22,895 for living), a GIC, biometrics and medical exam, and a Provincial Attestation Letter (PAL). Processing takes 6\u201310 weeks.",
+    question: "How bad is the accommodation crisis in Ireland?",
+    answer: "Accommodation can be challenging, especially in Dublin. Many students report shortages and high rent, with on-campus or nearby accommodation costing \u20AC800+ per month. We recommend starting your housing search early and exploring university-supported accommodation options.",
   },
 ];
 
-export default function CanadaPage() {
+export default function IrelandPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
@@ -181,36 +178,38 @@ export default function CanadaPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-slate-900" />
           <Image
-            src="https://images.pexels.com/photos/2335126/pexels-photo-2335126.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Canadian mountains and lake"
+            src="https://images.pexels.com/photos/2382681/pexels-photo-2382681.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Ireland countryside and cliffs"
             fill
             priority
             className="object-cover opacity-40"
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-red-400 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-emerald-400 rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-20 right-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-20 md:py-28 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center gap-4 mb-6">
-              <Image src="https://flagcdn.com/w80/ca.png" alt="Canada Flag" width={64} height={44} className="rounded shadow-lg" />
+              <Image src="https://flagcdn.com/w80/ie.png" alt="Ireland Flag" width={64} height={44} className="rounded shadow-lg" />
             </div>
-            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-red-200 mb-4">
+            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-emerald-200 mb-4">
               Study Destination
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
-              Study in <span className="text-accent">Canada</span>
+              Study in <span className="text-accent">Ireland</span>
             </h1>
             <p className="text-base md:text-lg text-white/85 leading-relaxed mb-8 max-w-3xl mx-auto">
-              Canada is a top global study destination, hosting approximately 800,000 international
-              students. It is highly favoured for its balance of high-quality education, safety, and
-              a clear, stable path to permanent residency.
+              Ireland is a fast-growing study destination known for its globally recognized education
+              system, strong industry connections, and one-year Master&apos;s programs. As a major
+              European hub for technology, pharmaceuticals, and finance, it offers excellent
+              internship opportunities and a two-year post-study work visa for master&apos;s
+              graduates.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <BookConsultButton variant="white" className="inline-flex items-center gap-2">
-                Talk to Canada Expert
+                Talk to Ireland Expert
                 <FiArrowRight className="w-4 h-4" />
               </BookConsultButton>
               <Link
@@ -230,10 +229,10 @@ export default function CanadaPage() {
         <div className="container mx-auto px-6 md:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {[
-              { label: "Tuition Range", value: "CAD 24K\u201360K/yr", sub: "Program dependent" },
-              { label: "Living Cost", value: "CAD 1,100\u20132,400/mo", sub: "City dependent" },
-              { label: "Visa Processing", value: "6\u201310 Weeks", sub: "Standard processing" },
-              { label: "Post-Study Work", value: "Up to 3 Years", sub: "PGWP" },
+              { label: "Tuition Range", value: "\u20AC10K\u2013\u20AC35K/yr", sub: "Program dependent" },
+              { label: "Living Cost", value: "\u20AC700\u2013\u20AC1,440/mo", sub: "City dependent" },
+              { label: "Visa Processing", value: "4\u20138 Weeks", sub: "Standard processing" },
+              { label: "Post-Study Work", value: "1\u20132 Years", sub: "Graduate Programme" },
             ].map((fact, index) => (
               <div
                 key={index}
@@ -248,32 +247,31 @@ export default function CanadaPage() {
         </div>
       </section>
 
-      {/* Why Canada? */}
+      {/* Why Ireland? */}
       <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-                Why Study in <span className="gradient-text">Canada?</span>
+                Why Study in <span className="gradient-text">Ireland?</span>
               </h2>
             </div>
             <p className="text-base md:text-lg text-slate-700 leading-relaxed mb-4">
-              Canada is one of the world&apos;s most sought-after study destinations, offering
-              globally recognized universities, strong academic standards, and research-driven
-              programs aligned with industry needs. Its affordable tuition compared to other top
-              destinations, combined with generous scholarships and co-op opportunities, makes it a
-              high-value investment for international students.
+              Ireland has rapidly established itself as a globally respected destination for
+              high-quality education and research excellence. Its universities are internationally
+              recognized for industry-aligned programs, particularly in technology, pharmaceuticals,
+              business, and data science.
             </p>
             <p className="text-base md:text-lg text-slate-700 leading-relaxed mb-10">
-              With the Post-Graduation Work Permit (PGWP) and clear pathways to permanent residency,
-              Canada provides excellent post-study work and long-term settlement prospects. Home to
-              over a million international students and known for its safe, inclusive, and
-              multicultural society, Canada delivers a balanced blend of quality education, career
-              growth, and quality of life.
+              For Indian students, studying in Ireland means earning a globally valued qualification
+              while gaining exposure to a dynamic European economy that hosts leading multinational
+              companies. With one-year Master&apos;s programs, strong internship pathways, and
+              generous post-study work options, Ireland offers a flexible and career-focused education
+              system designed for global success.
             </p>
 
             <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-6 text-center">
-              Key Reasons to Study in Canada
+              Key Reasons to Study in Ireland
             </h3>
             <div className="grid gap-4 md:grid-cols-2">
               {keyReasons.map((reason) => (
@@ -304,13 +302,14 @@ export default function CanadaPage() {
         <div className="container mx-auto px-6 md:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-              Popular <span className="gradient-text">Courses</span> in Canada
+              Popular <span className="gradient-text">Courses</span> in Ireland
             </h2>
             <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
-              Canada offers diverse programs across technology, business, health, and creative
-              fields, aligned with strong industry demand.
+              Ireland offers strong programs in tech, pharma, business, and engineering &mdash;
+              aligned with its thriving industry ecosystem.
             </p>
           </div>
+
           <div className="max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
             {courses.map((course) => (
               <div
@@ -332,11 +331,12 @@ export default function CanadaPage() {
               Partner <span className="gradient-text">Universities</span>
             </h2>
             <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
-              We work with recognized Canadian institutions offering quality programs aligned with
-              industry demands and career outcomes.
+              We work with recognized Irish institutions offering quality programs aligned with
+              industry demands and global career outcomes.
             </p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-5 max-w-4xl mx-auto">
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-5">
             {universities.map((uni) => (
               <div
                 key={uni.name}
@@ -351,6 +351,7 @@ export default function CanadaPage() {
               </div>
             ))}
           </div>
+
           <div className="text-center mt-10">
             <BookConsultButton variant="secondary" className="inline-flex items-center gap-2 text-sm">
               Explore More Universities
@@ -369,10 +370,12 @@ export default function CanadaPage() {
                 Tuition Fees & <span className="gradient-text">Living Costs</span>
               </h2>
               <p className="text-base md:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto">
-                The cost of studying in Canada depends on your chosen university, course, and city.
-                Scholarships and co-op programs can reduce the overall investment.
+                The cost of studying in Ireland depends on your chosen university, course, and city.
+                Scholarships can reduce the overall investment. Students should also budget for
+                accommodation, food, and transportation.
               </p>
             </div>
+
             <div className="grid gap-6 md:grid-cols-2">
               <div className="rounded-2xl bg-white border border-slate-200 overflow-hidden">
                 <div className="bg-brand px-6 py-4">
@@ -380,9 +383,9 @@ export default function CanadaPage() {
                 </div>
                 <div className="px-6 py-5 space-y-4">
                   {[
-                    { level: "Undergraduate Programs", range: "CAD 36,000 \u2013 42,000 / year" },
-                    { level: "Master\u2019s Programs", range: "CAD 24,000 \u2013 30,000 / year" },
-                    { level: "MBA & Specialized Courses", range: "CAD 30,000 \u2013 60,000+ / year" },
+                    { level: "Undergraduate Programs", range: "\u20AC10,000 \u2013 \u20AC25,000 / year" },
+                    { level: "Master\u2019s Programs", range: "\u20AC13,000 \u2013 \u20AC35,000 / year" },
+                    { level: "MBA & Specialized Courses", range: "\u20AC15,000 \u2013 \u20AC35,000+ / year" },
                   ].map((item) => (
                     <div key={item.level} className="flex items-start gap-3">
                       <span className="mt-1.5 h-2 w-2 rounded-full bg-brand flex-shrink-0" />
@@ -394,14 +397,15 @@ export default function CanadaPage() {
                   ))}
                 </div>
               </div>
+
               <div className="rounded-2xl bg-white border border-slate-200 overflow-hidden">
                 <div className="bg-accent px-6 py-4">
                   <h3 className="text-lg font-bold text-white">Monthly Living Expenses</h3>
                 </div>
                 <div className="px-6 py-5 space-y-4">
                   {[
-                    { city: "Vancouver, Toronto, Mississauga & Brampton", range: "CAD 1,600 \u2013 2,400+ / month" },
-                    { city: "Other Cities", range: "CAD 1,100 \u2013 1,800 / month" },
+                    { city: "Dublin", range: "\u20AC990 \u2013 \u20AC1,440 / month" },
+                    { city: "Cork, Galway, Limerick", range: "\u20AC700 \u2013 \u20AC1,150 / month" },
                   ].map((item) => (
                     <div key={item.city} className="flex items-start gap-3">
                       <span className="mt-1.5 h-2 w-2 rounded-full bg-accent flex-shrink-0" />
@@ -418,9 +422,10 @@ export default function CanadaPage() {
                 </div>
               </div>
             </div>
+
             <p className="mt-8 text-center text-sm md:text-base text-slate-600">
               At Stack Learn, we guide you in planning your tuition, living costs, and financial
-              documentation clearly &mdash; so you can begin your Canada journey with confidence.
+              documentation clearly &mdash; so you can begin your Ireland journey with confidence.
               <Link href="/services/education-loan" className="text-brand font-semibold hover:underline ml-1">
                 Explore education loan options &rarr;
               </Link>
@@ -435,14 +440,15 @@ export default function CanadaPage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-                Part-Time Work & <span className="gradient-text">Post-Study Work (PGWP)</span>
+                Part-Time Work & <span className="gradient-text">Post-Study Work (PSW)</span>
               </h2>
               <p className="text-base md:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto">
-                International students in Canada have the opportunity to gain valuable work
+                International students in Ireland have the opportunity to gain valuable work
                 experience alongside their academic journey, helping manage expenses and build
-                professional skills.
+                professional skills in a strong European job market.
               </p>
             </div>
+
             <div className="grid gap-6 md:grid-cols-2">
               <div className="rounded-2xl border border-slate-200 bg-page-soft px-6 py-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15">
                 <div className="flex items-center gap-3 mb-4">
@@ -453,10 +459,9 @@ export default function CanadaPage() {
                 </div>
                 <ul className="space-y-3">
                   {[
-                    "Up to 24 hours/week off-campus during regular academic sessions",
-                    "Full-time (unlimited hours) during official school breaks",
-                    "On-campus work: no hourly limit once program begins",
-                    "Most part-time jobs pay CAD 15\u201320 per hour",
+                    "Up to 20 hours per week during academic term time",
+                    "Up to 40 hours per week during scheduled holidays (Stamp 2 visa)",
+                    "Roles in retail, hospitality, caf\u00E9s, campus, customer service, tech & pharma sectors",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
                       <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-brand flex-shrink-0" />
@@ -465,23 +470,24 @@ export default function CanadaPage() {
                   ))}
                 </ul>
                 <p className="mt-4 text-xs text-slate-500 leading-relaxed">
-                  Common roles: retail, caf\u00E9 staff, customer service, warehouse, delivery,
-                  library/lab assistants, tutoring, and admin support.
+                  Part-time roles help manage living expenses while gaining valuable international
+                  work exposure in a strong European job market.
                 </p>
               </div>
+
               <div className="rounded-2xl border border-slate-200 bg-page-soft px-6 py-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-accent text-white flex-shrink-0">
                     <FiClock className="w-5 h-5" />
                   </span>
-                  <h3 className="text-lg font-bold text-slate-900">Post-Graduation Work Permit</h3>
+                  <h3 className="text-lg font-bold text-slate-900">Third Level Graduate Programme</h3>
                 </div>
                 <ul className="space-y-3">
                   {[
-                    "Programs of 2+ years: typically a 3-year PGWP",
-                    "Shorter programs: permit matches study duration",
-                    "Work full-time, switch employers freely, or become self-employed",
-                    "No employer sponsorship required during PGWP",
+                    "1 year for Bachelor\u2019s (Level 8) graduates",
+                    "2 years for Master\u2019s (Level 9) graduates",
+                    "2 years for PhD (Level 10) graduates",
+                    "Work full-time (up to 40 hours/week) across tech, pharma, finance & engineering",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
                       <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-accent flex-shrink-0" />
@@ -489,11 +495,12 @@ export default function CanadaPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-4 rounded-xl bg-red-50 border border-red-200 px-4 py-3">
-                  <p className="text-xs text-red-800 leading-relaxed">
-                    <strong>2026 Update:</strong> The Canadian government has frozen the
-                    PGWP-eligible program list for 2026 &mdash; no new fields of study have been
-                    added or removed. Must graduate from a Designated Learning Institution (DLI).
+                <div className="mt-4 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3">
+                  <p className="text-xs text-emerald-800 leading-relaxed">
+                    <strong>Career Pathway:</strong> Graduates can transition to a Critical Skills
+                    Employment Permit without requiring immediate sponsorship at the time of
+                    stay-back approval, making Ireland attractive for long-term European career
+                    opportunities.
                   </p>
                 </div>
               </div>
@@ -502,19 +509,19 @@ export default function CanadaPage() {
         </div>
       </section>
 
-      {/* Canadian Student Visa */}
+      {/* Ireland Student Visa */}
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-                Canadian Student Visa &mdash;{" "}
+                Ireland Student Visa &mdash;{" "}
                 <span className="gradient-text">Requirements & Process</span>
               </h2>
               <p className="text-base md:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto">
-                Applying for a student visa to Canada is straightforward when all documents are
-                prepared correctly. Once you receive your university admission, you can begin your
-                visa application.
+                Applying for a student visa to Ireland is a clear and structured process when
+                documentation is prepared accurately. Once you receive your Letter of Acceptance,
+                you can proceed with your visa application online.
               </p>
             </div>
 
@@ -523,13 +530,13 @@ export default function CanadaPage() {
                 <h3 className="text-lg font-bold text-slate-900 mb-5">Key Visa Requirements</h3>
                 <ul className="space-y-3">
                   {[
-                    "Acceptance Letter from a Designated Learning Institution (DLI)",
-                    "Proof of Funds: tuition + living costs (min CAD 22,895 for living)",
-                    "GIC (Guaranteed Investment Certificate) of CAD 22,895 recommended",
-                    "English Proficiency: IELTS/TOEFL scores (varies by institution)",
-                    "Biometrics & Medical Exam (required for most Indian applicants)",
-                    "Provincial Attestation Letter (PAL/TAL) \u2014 mandatory for most applicants",
-                    "Valid Passport, academic transcripts, SOP & supporting documents",
+                    "Letter of Acceptance from a recognized Irish institution",
+                    "Proof of Tuition Fee Payment (full or partial as required)",
+                    "Proof of Funds (\u20AC10,000/year minimum for living expenses + tuition)",
+                    "English Language Proficiency (IELTS/PTE/Duolingo)",
+                    "Private Medical Insurance",
+                    "Valid Passport",
+                    "Statement of Purpose and Academic Documents",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
                       <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-brand-soft text-brand flex-shrink-0 mt-0.5">
@@ -540,13 +547,16 @@ export default function CanadaPage() {
                   ))}
                 </ul>
               </div>
+
               <div className="rounded-2xl bg-white border border-slate-200 px-6 py-7">
-                <h3 className="text-lg font-bold text-slate-900 mb-5">Visa Processing Time (2026)</h3>
+                <h3 className="text-lg font-bold text-slate-900 mb-5">
+                  Visa Processing Time (2026)
+                </h3>
                 <div className="space-y-4">
                   {[
-                    { type: "Standard Processing", time: "6\u201310 weeks", note: "Approximately 1.5\u20132.5 months" },
-                    { type: "Biometric Appointment", time: "1\u20133 weeks", note: "Available in New Delhi, Mumbai, Bengaluru, Chennai, etc." },
-                    { type: "Passport Stamping", time: "1\u20133 weeks", note: "After application approval" },
+                    { type: "Standard Processing", time: "4\u20138 weeks", note: "From application submission and biometric enrolment" },
+                    { type: "Application Window", time: "3 months before start", note: "Submit well in advance" },
+                    { type: "Peak Season (May\u2013Sep)", time: "May extend", note: "Higher student volumes during this period" },
                   ].map((item) => (
                     <div key={item.type} className="rounded-xl bg-page-soft border border-slate-100 px-4 py-3">
                       <p className="text-sm font-bold text-slate-900">{item.type}</p>
@@ -556,18 +566,19 @@ export default function CanadaPage() {
                   ))}
                 </div>
                 <p className="mt-4 text-xs text-slate-500 leading-relaxed">
-                  No visa interview required in most cases. Apply at least 3\u20134 months before
-                  your program start date. Peak season: May\u2013August.
+                  Students must complete the online visa application (AVATS system), submit supporting
+                  documents, and attend a biometric appointment at a designated Visa Application
+                  Centre (VAC).
                 </p>
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-red-50 border border-red-200 px-6 py-5">
-              <p className="text-sm text-red-800 leading-relaxed">
-                <strong>2026 Policy Updates:</strong> Study permit cap of ~408,000 students, SDS
-                discontinued (all applications follow regular processing), PAL/TAL mandatory,
-                minimum proof of funds increased to CAD 22,895, PGWP program list frozen, and formal
-                IRCC approval required to change DLI.
+            <div className="mt-6 rounded-2xl bg-emerald-50 border border-emerald-200 px-6 py-5">
+              <p className="text-sm text-emerald-800 leading-relaxed">
+                Recent Irish regulations emphasize stronger financial documentation and genuine
+                student intent verification. However, Ireland continues to welcome Indian students,
+                offering positive visa outcomes and a streamlined process for eligible applicants
+                pursuing recognized programs.
               </p>
             </div>
 
@@ -590,15 +601,16 @@ export default function CanadaPage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-                Scholarships to <span className="gradient-text">Study in Canada</span>
+                Scholarships to <span className="gradient-text">Study in Ireland</span>
               </h2>
               <p className="text-base md:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto">
-                Scholarships for international students in Canada are offered by universities,
-                provincial governments, private organizations, and federal-funded programs. Many
-                provide merit-based entrance scholarships, research assistantships, and teaching
-                assistantships.
+                Students planning to study in Ireland can explore a range of scholarship
+                opportunities offered by the Irish Government and individual universities. Many
+                awards provide partial tuition fee reductions, while select government-funded
+                scholarships offer maximum tuition fee reduction along with living expense support.
               </p>
             </div>
+
             <div className="grid gap-5 md:grid-cols-2">
               {scholarships.map((scholarship) => (
                 <article
@@ -617,9 +629,11 @@ export default function CanadaPage() {
                 </article>
               ))}
             </div>
+
             <p className="mt-6 text-center text-xs text-slate-500">
               Note: Scholarship availability, eligibility, and funding amounts may change annually.
             </p>
+
             <div className="text-center mt-8 flex flex-col sm:flex-row gap-4 justify-center">
               <BookConsultButton variant="secondary" className="inline-flex items-center gap-2 text-sm">
                 Check Your Scholarship Eligibility
@@ -637,21 +651,22 @@ export default function CanadaPage() {
         </div>
       </section>
 
-      {/* How Stack Learn Supports Your Canada Journey */}
+      {/* How Stack Learn Supports Your Ireland Journey */}
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
                 How Stack Learn Supports Your{" "}
-                <span className="gradient-text">Canada Journey</span>
+                <span className="gradient-text">Ireland Journey</span>
               </h2>
               <p className="text-base md:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto">
-                Studying in Canada requires the right preparation and strategic planning. At Stack
-                Learn, we provide end-to-end guidance tailored specifically for Canada admissions
+                Studying in Ireland requires the right preparation and strategic planning. At Stack
+                Learn, we provide end-to-end guidance tailored specifically for Ireland admissions
                 and visa requirements.
               </p>
             </div>
+
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {supportServices.map((service) => {
                 const Icon = service.icon;
@@ -679,9 +694,10 @@ export default function CanadaPage() {
                 );
               })}
             </div>
+
             <p className="mt-10 text-center text-sm md:text-base text-slate-600">
               At Stack Learn, our approach is structured, transparent, and fully aligned with current
-              Canadian policies &mdash; helping you move forward with clarity and confidence.
+              Ireland policies &mdash; helping you move forward with clarity and confidence.
             </p>
           </div>
         </div>
@@ -692,9 +708,10 @@ export default function CanadaPage() {
         <div className="container mx-auto px-6 md:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-              Canada Study Abroad <span className="gradient-text">FAQs</span>
+              Ireland Study Abroad <span className="gradient-text">FAQs</span>
             </h2>
           </div>
+
           <div className="max-w-3xl mx-auto space-y-3">
             {faqs.map((faq, index) => (
               <div
@@ -744,6 +761,7 @@ export default function CanadaPage() {
               Considering other countries? Compare study options across our key destinations.
             </p>
           </div>
+
           <div className="flex flex-wrap gap-3 md:gap-4 justify-center">
             {otherDestinations.map((dest) => (
               <Link
@@ -759,8 +777,12 @@ export default function CanadaPage() {
               </Link>
             ))}
           </div>
+
           <div className="text-center mt-8">
-            <Link href="/destinations" className="inline-flex items-center gap-2 text-brand font-semibold hover:gap-3 transition-all duration-300">
+            <Link
+              href="/destinations"
+              className="inline-flex items-center gap-2 text-brand font-semibold hover:gap-3 transition-all duration-300"
+            >
               View All Destinations
               <FiArrowRight className="w-4 h-4" />
             </Link>
@@ -773,27 +795,27 @@ export default function CanadaPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-slate-900" />
           <Image
-            src="https://images.pexels.com/photos/2335126/pexels-photo-2335126.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Canadian mountains and lake"
+            src="https://images.pexels.com/photos/2382681/pexels-photo-2382681.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Ireland cliffs and coastline"
             fill
             className="object-cover opacity-35"
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-red-400 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-10 left-10 w-72 h-72 bg-emerald-400 rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-10 right-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
-            Start Your Journey to Study in Canada Today
+            Start Your Journey to Study in Ireland Today
           </h2>
           <p className="text-base md:text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-            Get expert guidance on Canadian university admissions, visa applications, scholarships,
-            and more. Take the first step toward your international education.
+            Get expert guidance on Irish university admissions, visa applications, scholarships, and
+            more. Take the first step toward your European education.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <BookConsultButton variant="white" className="text-base md:text-lg font-bold inline-flex items-center gap-2">
-              Speak with Canada Expert
+              Speak with Ireland Expert
               <FiArrowRight className="w-4 h-4" />
             </BookConsultButton>
             <Link

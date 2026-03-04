@@ -11,6 +11,7 @@ const updates = [
   { text: "Explore USA universities with 100% Scholarships!", href: "/destinations/usa" },
   { text: "Australia - High visa success rate!", href: "/destinations/australia" },
   { text: "Germany - Tuition-free education available!", href: "/destinations/germany" },
+  { text: "Ireland - Europe's tech hub with 2-year work visa!", href: "/destinations/ireland" },
 ];
 
 export default function DynamicScrollUpdates() {

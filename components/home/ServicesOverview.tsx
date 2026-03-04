@@ -5,47 +5,45 @@ import {
   FiEdit,
   FiDollarSign,
   FiHome,
-  FiBook,
-  FiCreditCard,
-  FiSend,
+  FiShield,
 } from "react-icons/fi";
 
 const services = [
   {
     icon: FiUser,
     title: "Profile Evaluation",
-    description: "Assess your academic background and goals.",
-    href: "/services/counselling",
+    description: "Detailed academic and career assessment to identify the best countries and universities for your profile.",
+    href: "/services/profile-evaluation",
   },
   {
     icon: FiFileText,
-    title: "Admissions Assistance",
-    description: "End-to-end support for university applications.",
-    href: "/services/counselling",
+    title: "Admission Assistance",
+    description: "Strategic university shortlisting, complete application submission, and offer letter tracking for top global universities.",
+    href: "/services/admission-assistance",
   },
   {
     icon: FiEdit,
     title: "SOP & LOR Writing",
-    description: "Professional writing support for impactful documents.",
+    description: "Professionally structured Statement of Purpose and Letter of Recommendation assistance to strengthen your application.",
     href: "/services/sop-lor",
   },
   {
-    icon: FiDollarSign,
-    title: "Scholarship Guidance",
-    description: "Find and apply for suitable funding opportunities.",
-    href: "/scholarships",
+    icon: FiShield,
+    title: "Student Visa Assistance",
+    description: "Complete student visa documentation support, financial guidance, and interview preparation.",
+    href: "/services/visa-assistance",
   },
   {
     icon: FiHome,
-    title: "Accommodation Support",
-    description: "Find verified student housing near universities.",
+    title: "Accommodation Assistance",
+    description: "Safe and affordable student accommodation guidance near your university campus.",
     href: "/services/accommodation",
   },
   {
-    icon: FiBook,
-    title: "Test Preparation",
-    description: "Coaching for IELTS, GRE, GMAT, and TOEFL.",
-    href: "/test-prep",
+    icon: FiDollarSign,
+    title: "Education Loan Assistance",
+    description: "Guidance on secured and unsecured education loans to fund your study abroad dream.",
+    href: "/services/education-loan",
   },
 ];
 
@@ -58,7 +56,7 @@ export default function ServicesOverview() {
             Our <span className="gradient-text">Services</span>
           </h2>
           <p className="text-lg md:text-xl text-slate-700 font-medium max-w-2xl mx-auto">
-            Comprehensive support for your study abroad journey
+            Complete overseas education services designed to support you at every stage
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -79,7 +77,7 @@ export default function ServicesOverview() {
                   <p className="text-slate-600 leading-relaxed">{service.description}</p>
                   <span className="inline-flex items-center gap-2 mt-5 text-brand font-semibold group-hover:gap-3 transition-all duration-300">
                     Learn More
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">&rarr;</span>
                   </span>
                 </div>
               </div>

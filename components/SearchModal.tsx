@@ -19,6 +19,7 @@ const searchableContent: SearchResult[] = [
   { title: "Study in Canada", description: "Post-graduation work permit and immigration pathways", href: "/destinations/canada", category: "Destinations" },
   { title: "Study in Australia", description: "High quality of life and strong job market", href: "/destinations/australia", category: "Destinations" },
   { title: "Study in Germany", description: "Tuition-free education at public universities", href: "/destinations/germany", category: "Destinations" },
+  { title: "Study in Ireland", description: "Europe's tech hub with two-year post-study work visa", href: "/destinations/ireland", category: "Destinations" },
   
   // Services
   { title: "Counselling & Admissions", description: "Expert guidance for university applications", href: "/services", category: "Services" },

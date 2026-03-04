@@ -1,234 +1,294 @@
 import Link from "next/link";
 import Image from "next/image";
-import {
-  FiUser,
-  FiFileText,
-  FiEdit,
-  FiDollarSign,
-  FiHome,
-  FiBook,
-  FiCreditCard,
-  FiSend,
-} from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
+import BookConsultButton from "@/components/BookConsultButton";
 
 const services = [
   {
-    icon: FiUser,
-    title: "Admissions Assistance",
-    description: "End-to-end support for university applications, documentation, and communication.",
-    href: "/services/counselling",
+    title: "Profile Evaluation",
+    body: "Detailed academic and career assessment to identify the best countries and universities for your profile.",
+    href: "/services/profile-evaluation",
   },
   {
-    icon: FiFileText,
-    title: "Visa Assistance",
-    description: "Expert guidance for visa documentation, interview preparation, and approvals.",
-    href: "/services/visa",
+    title: "University Admission Assistance",
+    body: "Strategic university shortlisting, complete application submission, and offer letter tracking for top global universities.",
+    href: "/services/admission-assistance",
   },
   {
-    icon: FiEdit,
-    title: "SOP & LOR Writing",
-    description: "Professional writing support to create impactful Statements of Purpose and Letters of Recommendation.",
+    title: "SOP & LOR Writing Support",
+    body: "Professionally structured Statement of Purpose and Letter of Recommendation assistance to strengthen your application.",
     href: "/services/sop-lor",
   },
   {
-    icon: FiDollarSign,
-    title: "Scholarship Guidance",
-    description: "Personalized help in finding and applying for suitable scholarships and funding opportunities.",
-    href: "/scholarships",
+    title: "Student Visa Assistance",
+    body: "Complete student visa documentation support, financial guidance, and interview preparation.",
+    href: "/services/visa-assistance",
   },
   {
-    icon: FiHome,
-    title: "Accommodation Support",
-    description: "Assistance in finding affordable and verified student housing near the university.",
+    title: "Accommodation Assistance",
+    body: "Safe and affordable student accommodation guidance near your university campus.",
     href: "/services/accommodation",
   },
   {
-    icon: FiBook,
-    title: "Test Preparation",
-    description: "Comprehensive coaching for IELTS, GRE, GMAT, and TOEFL exams.",
-    href: "/test-prep",
-  },
-  {
-    icon: FiCreditCard,
     title: "Education Loan Assistance",
-    description: "Guidance in securing education loans with trusted financial partners.",
-    href: "/services/loan",
-  },
-  {
-    icon: FiSend,
-    title: "Pre-Departure Counselling",
-    description: "Travel, insurance, and cultural orientation support before students fly abroad.",
-    href: "/services/pre-departure",
+    body: "Guidance on secured and unsecured education loans to fund your study abroad dream.",
+    href: "/services/education-loan",
   },
 ];
 
-const processSteps = [
-  { title: "Profile Counselling", desc: "Understanding goals and academic history." },
-  { title: "University Shortlisting", desc: "Matching courses and countries." },
-  { title: "Application Process", desc: "Guiding document preparation and submissions." },
-  { title: "Visa Assistance", desc: "Ensuring successful visa filing and interviews." },
-  { title: "Post-Departure Support", desc: "Helping with accommodation and transition abroad." },
+const steps = [
+  { num: "01", title: "Free Profile Evaluation & Career Discussion" },
+  { num: "02", title: "University & Course Shortlisting" },
+  { num: "03", title: "Application & Documentation Support" },
+  { num: "04", title: "Student Visa & Financial Assistance" },
+  { num: "05", title: "Pre-Departure & Accommodation Guidance" },
+];
+
+const whyPoints = [
+  "Personalized study abroad guidance",
+  "Strong knowledge of international admission processes",
+  "Strategic university selection approach",
+  "Transparent communication at every step",
+  "Complete support from admission to visa",
+];
+
+const faqs = [
+  {
+    q: "Which countries do you provide study abroad services for?",
+    a: "We support students planning to study in the UK, USA, Canada, Australia, Germany, Ireland, and selected European countries.",
+  },
+  {
+    q: "Do you provide complete admission and visa support?",
+    a: "Yes, we offer end-to-end overseas education services including admission assistance and student visa guidance.",
+  },
+  {
+    q: "Can I apply for education loans through StackLearn?",
+    a: "We provide complete education loan assistance and guide you through the documentation process.",
+  },
+  {
+    q: "When should I start my study abroad process?",
+    a: "Ideally, students should begin 6–8 months before their intended intake to allow sufficient time for test prep, applications, and visa processing.",
+  },
 ];
 
 export default function ServicesPage() {
   return (
-    <div className="pb-0">
+    <div>
       {/* Hero */}
-      <section className="relative h-96 text-white flex items-center justify-center overflow-hidden">
-        {/* Background image */}
+      <section className="relative text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600"
+            src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="Students in counselling session"
             fill
             priority
             className="object-cover opacity-50"
           />
         </div>
-        {/* Soft light blobs */}
-        <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-white rounded-full blur-3xl animate-float"></div>
-          <div className="absolute bottom-20 right-20 w-64 h-64 bg-white rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
-        </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-5xl font-bold mb-4">We Guide You Through Every Step</h1>
-          <p className="text-xl mb-8 max-w-3xl mx-auto">
-            From course selection to visa success, Stack Learn provides complete study abroad assistance under one roof.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-block px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
-          >
-            Book Free Counselling
-          </Link>
+        <div className="container mx-auto px-6 md:px-8 py-16 md:py-24 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-brand-soft mb-3">
+              Study Abroad Services
+            </p>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-3 leading-tight">
+              End-to-End Study Abroad Services for International Education
+            </h1>
+            <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4 max-w-4xl mx-auto">
+              Looking for trusted study abroad consultants to guide your overseas education journey?
+              At StackLearn, we provide complete study abroad services including profile evaluation,
+              university admission assistance, SOP &amp; LOR writing, student visa support,
+              accommodation guidance, and education loan assistance.
+            </p>
+            <p className="text-sm md:text-base text-white/80 leading-relaxed max-w-3xl mx-auto">
+              As a professional overseas education consultancy, we help students plan, apply, and
+              secure admission to top universities in the UK, USA, Canada, Australia, and other
+              leading destinations.
+            </p>
+            <div className="mt-8">
+              <BookConsultButton
+                variant="white"
+                className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
+              >
+                Book Your Free Study Abroad Consultation
+                <FiArrowRight className="w-4 h-4" />
+              </BookConsultButton>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
+      {/* Our Services */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="container mx-auto px-6 md:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+              Our Study Abroad <span className="gradient-text">Services</span>
+            </h2>
+            <p className="text-sm md:text-base text-slate-700 leading-relaxed">
+              We offer comprehensive overseas education services designed to support students at
+              every stage of their international education journey.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((service) => (
               <Link
-                key={index}
+                key={service.title}
                 href={service.href}
-                className="group p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:shadow-lg transition-all text-center"
+                className="group rounded-2xl border border-slate-200 bg-page-soft px-5 py-6 md:px-6 md:py-7 hover-lift flex flex-col hover:border-brand transition-colors duration-300"
               >
-                <div className="flex justify-center mb-4">
-                  <div className="p-3 bg-primary-100 rounded-lg group-hover:bg-primary-600 transition-colors">
-                    <service.icon className="w-8 h-8 text-primary-600 group-hover:text-white transition-colors" />
-                  </div>
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-soft text-brand text-sm font-bold group-hover:bg-brand group-hover:text-white transition-colors duration-300">
+                    ✓
+                  </span>
+                  <h3 className="text-sm md:text-base font-semibold text-slate-900 group-hover:text-brand transition-colors duration-300">
+                    {service.title}
+                  </h3>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 text-sm">{service.description}</p>
+                <p className="text-xs md:text-sm text-slate-700 leading-relaxed flex-1">
+                  {service.body}
+                </p>
+                <span className="inline-flex items-center gap-2 mt-3 text-brand font-semibold text-sm group-hover:gap-3 transition-all duration-300">
+                  Learn More <span className="group-hover:translate-x-1 transition-transform duration-300">&rarr;</span>
+                </span>
               </Link>
             ))}
           </div>
+
+          <p className="mt-8 text-center text-sm md:text-base text-slate-600">
+            Our services are tailored for students planning to study in the UK, USA, Canada,
+            Australia, Ireland, and Europe.
+          </p>
         </div>
       </section>
 
-      {/* Process Overview */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">Our Process</h2>
-          <div className="grid md:grid-cols-5 gap-6 max-w-6xl mx-auto">
-            {processSteps.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-brand rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
-                  {index + 1}
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-sm text-gray-600">{step.desc}</p>
-              </div>
-            ))}
+      {/* How Our Process Works */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="container mx-auto px-6 md:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+              How Our Study Abroad <span className="gradient-text">Process Works</span>
+            </h2>
+            <p className="text-sm md:text-base text-slate-700 leading-relaxed">
+              As experienced overseas education consultants, we follow a structured and transparent
+              process to ensure higher admission success rates and smoother visa approvals.
+            </p>
           </div>
-        </div>
-      </section>
 
-      {/* Value Highlights */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { title: "One-to-One Counselling", desc: "Dedicated mentor for every student" },
-              { title: "Global University Partnerships", desc: "Direct tie-ups with leading institutions" },
-              { title: "High Visa Success Rate", desc: "97% approval record" },
-              { title: "Affordable Service Packages", desc: "Transparent pricing, no hidden costs" },
-            ].map((highlight, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-xl text-center">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{highlight.title}</h3>
-                <p className="text-gray-600">{highlight.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Student Testimonials */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">What Our Students Say</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Sai Kumar",
-                destination: "MSc in Computer Science, UK",
-                quote:
-                  "Stack Learn made my visa process completely stress-free — they took care of every document and step.",
-              },
-              {
-                name: "Priya Sharma",
-                destination: "MBA, Canada",
-                quote:
-                  "From shortlisting universities to getting my offer letter, the team guided me like a mentor.",
-              },
-              {
-                name: "Rahul Patel",
-                destination: "MEng, Australia",
-                quote:
-                  "Their one-to-one counselling and transparent support helped me choose the right course and country.",
-              },
-            ].map((testimonial, index) => (
+          <div className="grid gap-6 md:grid-cols-5">
+            {steps.map((step) => (
               <div
-                key={index}
-                className="bg-white p-8 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between"
+                key={step.num}
+                className="rounded-2xl bg-white border border-slate-200 px-5 py-6 text-center hover-lift"
               >
-                <p className="text-gray-700 italic mb-6">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </p>
-                <div>
-                  <p className="font-bold text-gray-900">{testimonial.name}</p>
-                  <p className="text-sm text-primary-600">{testimonial.destination}</p>
+                <div className="w-12 h-12 rounded-full bg-brand text-white font-extrabold text-lg flex items-center justify-center mx-auto mb-3">
+                  {step.num}
                 </div>
+                <p className="text-xs md:text-sm font-semibold text-slate-900 leading-snug">
+                  {step.title}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="relative py-20 text-white overflow-hidden">
-        {/* Background image */}
+      {/* Why Choose StackLearn */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="container mx-auto px-6 md:px-8">
+          <div className="grid gap-10 lg:grid-cols-2 items-start">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
+                Why Choose StackLearn as Your{" "}
+                <span className="gradient-text">Study Abroad Consultants?</span>
+              </h2>
+              <p className="text-sm md:text-base text-slate-700 leading-relaxed mb-4">
+                Choosing the right overseas education consultancy can significantly impact your
+                admission and visa success.
+              </p>
+              <ul className="space-y-3 text-sm md:text-base text-slate-700">
+                {whyPoints.map((point) => (
+                  <li key={point} className="flex gap-2">
+                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-brand flex-shrink-0" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl bg-page-soft border border-slate-200 px-6 py-7 md:px-8 md:py-8 hover-lift">
+              <p className="text-sm md:text-base text-slate-700 leading-relaxed mb-4">
+                We don&apos;t just help you apply — we help you build a successful international
+                academic pathway. From your first counselling session to your first day on campus,
+                StackLearn stands as your trusted study abroad consultancy partner.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-xl bg-white border border-slate-100 px-4 py-4 text-center">
+                  <p className="text-2xl font-extrabold text-brand">98%</p>
+                  <p className="text-xs text-slate-600">Visa Success Rate</p>
+                </div>
+                <div className="rounded-xl bg-white border border-slate-100 px-4 py-4 text-center">
+                  <p className="text-2xl font-extrabold text-brand">500+</p>
+                  <p className="text-xs text-slate-600">Students Guided</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQs */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="container mx-auto px-6 md:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
+              Study Abroad Services <span className="gradient-text">FAQs</span>
+            </h2>
+          </div>
+          <div className="max-w-4xl mx-auto grid gap-4 md:grid-cols-2">
+            {faqs.map((item) => (
+              <div
+                key={item.q}
+                className="rounded-2xl bg-white border border-slate-200 px-5 py-4 md:px-6 md:py-5 hover-lift"
+              >
+                <p className="font-semibold text-slate-900 mb-1 text-sm md:text-base">
+                  {item.q}
+                </p>
+                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="relative py-16 md:py-20 text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Team collaboration"
+            src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Team helping students plan study abroad"
             fill
             className="object-cover opacity-50"
           />
         </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-4xl font-bold mb-4">Get Expert Support for Every Step</h2>
-          <Link
-            href="/contact"
-            className="inline-block mt-6 px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
-          >
-            Talk to Our Counsellors
-          </Link>
+        <div className="container mx-auto px-6 md:px-8 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4">
+              Start Your Study Abroad Journey with Expert Guidance
+            </h2>
+            <p className="text-sm md:text-base text-white/90 mb-6 max-w-2xl mx-auto">
+              Take the first step toward studying abroad with a trusted overseas education
+              consultancy. Talk to our study abroad experts today.
+            </p>
+            <BookConsultButton
+              variant="white"
+              className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
+            >
+              Schedule Your Free Study Abroad Consultation
+              <FiArrowRight className="w-4 h-4" />
+            </BookConsultButton>
+          </div>
         </div>
       </section>
     </div>

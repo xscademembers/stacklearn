@@ -90,8 +90,8 @@ export default function StudyAbroadStepsPage() {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-gray-900 mb-4">What and Where to Study</h2>
           <p className="text-center text-gray-600 mb-12">Find the right course and destination that fits your career goals.</p>
-          <div className="grid md:grid-cols-4 gap-6">
-            {["UK", "USA", "Canada", "Australia"].map((country, index) => (
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {["UK", "USA", "Canada", "Australia", "Germany", "Ireland"].map((country, index) => (
               <div key={index} className="bg-white p-6 rounded-xl shadow-md text-center">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">{country}</h3>
                 <p className="text-gray-600 text-sm mb-4">Top-ranked universities and diverse course options.</p>

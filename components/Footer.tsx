@@ -133,6 +133,21 @@ export default function Footer() {
                   Certificate Verification
                 </Link>
               </li>
+              <li>
+                <Link href="/refund-policy" className="hover:text-primary-400 transition-colors">
+                  Refund Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy" className="hover:text-primary-400 transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-of-use" className="hover:text-primary-400 transition-colors">
+                  Terms of Use
+                </Link>
+              </li>
             </ul>
           </div>
 
