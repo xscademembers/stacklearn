@@ -53,14 +53,16 @@ export default function ChatWindow() {
 
   return (
     <>
-      {/* Chat Icon */}
-      <button
-        onClick={() => setIsOpen(true)}
+      {/* WhatsApp Floating Icon */}
+      <a
+        href="https://wa.me/919606031842"
+        target="_blank"
+        rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-16 h-16 bg-brand text-white rounded-full shadow-2xl hover:shadow-brand/50 hover:scale-110 transition-all duration-300 z-40 flex items-center justify-center animate-float"
-        aria-label="Open chat"
+        aria-label="Chat on WhatsApp"
       >
-        <FiMessageCircle className="w-7 h-7" />
-      </button>
+        <FaWhatsapp className="w-8 h-8" />
+      </a>
 
       {/* Chat Window */}
       {isOpen && (
@@ -108,7 +110,7 @@ export default function ChatWindow() {
                   <button
                     key={index}
                     onClick={() => handleQuickOption(option)}
-                    className="w-full text-left px-4 py-2 bg-gray-100 hover:bg-primary-50 rounded-lg text-sm transition-colors"
+                    className="w-full text-left px-4 py-2 bg-gray-100 hover:bg-brand-soft rounded-lg text-sm transition-colors"
                   >
                     {option}
                   </button>
@@ -139,7 +141,7 @@ export default function ChatWindow() {
               href="https://wa.me/919606031842"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-bold shadow-md hover:shadow-lg"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors text-sm font-bold shadow-md hover:shadow-lg"
             >
               <FaWhatsapp className="w-5 h-5" />
               Chat on WhatsApp
@@ -188,7 +190,7 @@ export default function ChatWindow() {
                   <button
                     key={index}
                     onClick={() => handleQuickOption(option)}
-                    className="w-full text-left px-4 py-2 bg-gray-100 hover:bg-primary-50 rounded-lg text-sm"
+                    className="w-full text-left px-4 py-2 bg-gray-100 hover:bg-brand-soft rounded-lg text-sm"
                   >
                     {option}
                   </button>
@@ -217,7 +219,7 @@ export default function ChatWindow() {
               href="https://wa.me/919606031842"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg text-sm font-bold shadow-md hover:shadow-lg"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white rounded-lg text-sm font-bold shadow-md hover:shadow-lg"
             >
               <FaWhatsapp className="w-5 h-5" />
               Chat on WhatsApp

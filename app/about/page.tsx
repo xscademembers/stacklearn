@@ -8,7 +8,7 @@ export default function AboutPage() {
   return (
     <div className="pb-0">
       {/* Hero Banner */}
-      <section className="relative h-[500px] text-white flex items-center justify-center overflow-hidden">
+      <section className="relative h-[420px] md:h-[500px] text-white flex items-center justify-center overflow-hidden">
         {/* Background: solid black + image with 50% opacity */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
@@ -27,9 +27,11 @@ export default function AboutPage() {
           <div className="absolute bottom-20 right-20 w-64 h-64 bg-white rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
         </div>
 
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-6xl md:text-7xl font-extrabold mb-6 drop-shadow-lg">Turning Global Dreams Into Reality</h1>
-          <p className="text-xl md:text-2xl mb-10 font-medium max-w-3xl mx-auto leading-relaxed">
+        <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-6 drop-shadow-lg">
+            Turning Global Dreams Into Reality
+          </h1>
+          <p className="text-base md:text-xl mb-10 font-medium max-w-3xl mx-auto leading-relaxed">
             At Stack Learn, we guide students to achieve their international education goals through expert counselling, transparent processes, and personalized training.
           </p>
           <BookConsultButton variant="white" className="text-lg font-bold">
@@ -40,8 +42,8 @@ export default function AboutPage() {
 
       {/* Our Journey (Timeline) */}
       <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-slate-900 mb-12">
+        <div className="container mx-auto px-4 md:px-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center text-slate-900 mb-12">
             Our <span className="gradient-text">Journey</span>
           </h2>
           <div className="max-w-4xl mx-auto border-l-2 border-brand-soft pl-6 space-y-8 md:space-y-10">
@@ -76,9 +78,9 @@ export default function AboutPage() {
                 key={index}
                 className="relative pl-6 pb-2 group"
               >
-                <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white border-2 border-primary-500 group-hover:bg-primary-500 transition-all" />
+                <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white border-2 border-brand group-hover:bg-brand transition-all" />
                 <div className="flex flex-col md:flex-row md:items-baseline md:gap-6">
-                  <span className="text-sm font-semibold uppercase tracking-wide text-primary-600">
+                  <span className="text-sm font-semibold uppercase tracking-wide text-brand">
                     {item.year}
                   </span>
                   <div>
@@ -124,8 +126,8 @@ export default function AboutPage() {
 
       {/* Core Values */}
       <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-5xl font-extrabold text-center text-slate-900 mb-16">
+        <div className="container mx-auto px-4 md:px-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center text-slate-900 mb-16">
             Our Core <span className="gradient-text">Values</span>
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
@@ -139,7 +141,7 @@ export default function AboutPage() {
                 <div className="w-16 h-16 bg-brand rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
                   <FiAward className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-primary-600 transition-colors duration-300">{value.title}</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-brand transition-colors duration-300">{value.title}</h3>
                 <p className="text-slate-700 leading-relaxed">{value.desc}</p>
               </div>
             ))}
@@ -152,8 +154,8 @@ export default function AboutPage() {
 
       {/* Meet the Team */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-slate-900 mb-12">
+        <div className="container mx-auto px-4 md:px-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center text-slate-900 mb-12">
             Meet the <span className="gradient-text">Team</span>
           </h2>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto text-center mb-12">
@@ -186,10 +188,10 @@ export default function AboutPage() {
                   {member.name.charAt(0)}
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-1">{member.name}</h3>
-                <p className="text-sm font-medium text-primary-600 mb-3">{member.role}</p>
+                <p className="text-sm font-medium text-brand mb-3">{member.role}</p>
                 <button
                   type="button"
-                  className="inline-flex items-center justify-center text-sm font-semibold text-slate-700 hover:text-primary-600 transition-colors"
+                  className="inline-flex items-center justify-center text-sm font-semibold text-slate-700 hover:text-brand transition-colors"
                 >
                   View LinkedIn
                 </button>
@@ -224,7 +226,7 @@ export default function AboutPage() {
             ].map((partner, index) => (
               <div
                 key={index}
-                className="w-full h-20 bg-white rounded-xl border border-slate-200 flex items-center justify-center text-sm font-semibold text-slate-700 hover:border-primary-400 hover:shadow-md transition-all duration-300"
+                className="w-full h-20 bg-white rounded-xl border border-slate-200 flex items-center justify-center text-sm font-semibold text-slate-700 hover:border-brand hover:shadow-md transition-all duration-300"
               >
                 {partner}
               </div>
@@ -235,8 +237,8 @@ export default function AboutPage() {
 
       {/* Achievements & Recognitions (Future) */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-slate-900 mb-12">
+        <div className="container mx-auto px-4 md:px-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center text-slate-900 mb-12">
             Achievements & <span className="gradient-text">Recognitions</span>
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -271,7 +273,7 @@ export default function AboutPage() {
 
       {/* Corporate & Training Divisions */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl font-bold text-gray-900 mb-6">
@@ -351,8 +353,8 @@ export default function AboutPage() {
           <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl animate-float"></div>
           <div className="absolute bottom-10 right-10 w-64 h-64 bg-white rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
         </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-5xl md:text-6xl font-extrabold mb-6 drop-shadow-lg">
+        <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-6 drop-shadow-lg">
             Join thousands of successful students who trusted Stack Learn
           </h2>
           <BookConsultButton variant="white" className="mt-6 text-lg font-bold">

@@ -76,18 +76,18 @@ export default function BranchesPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">{branch.name}</h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <FiMapPin className="w-5 h-5 text-primary-600 flex-shrink-0 mt-1" />
+                    <FiMapPin className="w-5 h-5 text-brand flex-shrink-0 mt-1" />
                     <p className="text-gray-600">{branch.address}</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <FiPhone className="w-5 h-5 text-primary-600" />
-                    <a href={`tel:${branch.phone}`} className="text-gray-600 hover:text-primary-600">
+                    <FiPhone className="w-5 h-5 text-brand" />
+                    <a href={`tel:${branch.phone}`} className="text-gray-600 hover:text-brand">
                       {branch.phone}
                     </a>
                   </div>
                   <div className="flex items-center gap-3">
-                    <FiMail className="w-5 h-5 text-primary-600" />
-                    <a href={`mailto:${branch.email}`} className="text-gray-600 hover:text-primary-600">
+                    <FiMail className="w-5 h-5 text-brand" />
+                    <a href={`mailto:${branch.email}`} className="text-gray-600 hover:text-brand">
                       {branch.email}
                     </a>
                   </div>
@@ -97,13 +97,13 @@ export default function BranchesPage() {
                     href="https://maps.google.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full text-center px-4 py-2 border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
+                    className="block w-full text-center px-4 py-2 border border-brand text-brand rounded-lg hover:bg-brand-soft transition-colors"
                   >
                     Get Directions
                   </a>
                   <a
                     href={`tel:${branch.phone}`}
-                    className="block w-full text-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                    className="block w-full text-center px-4 py-2 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors"
                   >
                     Contact Now
                   </a>
@@ -156,7 +156,7 @@ export default function BranchesPage() {
           <p className="text-xl mb-8">Get online counselling from anywhere in India.</p>
           <Link
             href="/contact"
-            className="inline-block px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
+            className="inline-block px-8 py-4 bg-white text-brand rounded-full font-semibold hover:shadow-xl transition-all"
           >
             Book Online Counselling
           </Link>

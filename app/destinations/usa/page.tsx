@@ -50,17 +50,17 @@ const courses = [
 ];
 
 const universities = [
-  { name: "Arizona State University", initials: "ASU", color: "bg-red-700" },
-  { name: "Northeastern University", initials: "NEU", color: "bg-red-600" },
-  { name: "Stevens Institute of Technology", initials: "SIT", color: "bg-blue-800" },
-  { name: "Illinois Institute of Technology", initials: "IIT", color: "bg-red-800" },
-  { name: "George Mason University", initials: "GMU", color: "bg-emerald-700" },
-  { name: "Texas Tech University", initials: "TTU", color: "bg-red-600" },
-  { name: "New Jersey Institute of Technology", initials: "NJIT", color: "bg-blue-700" },
-  { name: "Missouri University of Science & Technology", initials: "MST", color: "bg-emerald-600" },
-  { name: "University of Massachusetts Boston", initials: "UMB", color: "bg-blue-600" },
-  { name: "University of North Texas", initials: "UNT", color: "bg-green-700" },
-  { name: "University of Dayton", initials: "UD", color: "bg-red-700" },
+  { name: "Arizona State University", initials: "ASU", color: "bg-slate-900" },
+  { name: "Northeastern University", initials: "NEU", color: "bg-accent" },
+  { name: "Stevens Institute of Technology", initials: "SIT", color: "bg-slate-800" },
+  { name: "Illinois Institute of Technology", initials: "IIT", color: "bg-slate-900" },
+  { name: "George Mason University", initials: "GMU", color: "bg-brand" },
+  { name: "Texas Tech University", initials: "TTU", color: "bg-accent" },
+  { name: "New Jersey Institute of Technology", initials: "NJIT", color: "bg-slate-800" },
+  { name: "Missouri University of Science & Technology", initials: "MST", color: "bg-brand" },
+  { name: "University of Massachusetts Boston", initials: "UMB", color: "bg-slate-700" },
+  { name: "University of North Texas", initials: "UNT", color: "bg-brand" },
+  { name: "University of Dayton", initials: "UD", color: "bg-slate-900" },
 ];
 
 const scholarships = [
@@ -68,31 +68,31 @@ const scholarships = [
     name: "Fulbright-Nehru Fellowship",
     description: "Administered by the United States-India Educational Foundation under the flagship Fulbright Program, this prestigious award supports Indian students pursuing Master\u2019s degrees, doctoral research, or professional development programs. It covers tuition, living expenses, airfare, and health insurance.",
     tag: "Fully Funded",
-    tagColor: "bg-blue-100 text-blue-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Hubert H. Humphrey Fellowship",
     description: "A non-degree leadership program funded by the U.S. Department of State, designed for mid-career professionals to enhance leadership skills through academic study and professional collaboration in the U.S.",
     tag: "Leadership",
-    tagColor: "bg-purple-100 text-purple-700",
+    tagColor: "bg-slate-100 text-slate-700",
   },
   {
     name: "International Visitor Leadership Program (IVLP)",
     description: "Sponsored by the U.S. Department of State, this fully funded short-term exchange program invites emerging leaders to engage in professional meetings and cultural exchange programs across the United States.",
     tag: "Exchange Program",
-    tagColor: "bg-emerald-100 text-emerald-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Global Undergraduate Exchange Program (UGRAD)",
     description: "Funded by the U.S. Department of State, this program provides one-semester, non-degree study opportunities in the U.S. for outstanding undergraduate students from around the world, including India.",
     tag: "Undergraduate",
-    tagColor: "bg-amber-100 text-amber-700",
+    tagColor: "bg-accent-soft text-accent",
   },
   {
     name: "Fulbright FLTA Program",
     description: "Part of the Fulbright Program, this initiative enables young English teachers from India to teach their native language in U.S. institutions while enhancing their teaching skills and cultural exchange experience.",
     tag: "Teaching",
-    tagColor: "bg-sky-100 text-sky-700",
+    tagColor: "bg-slate-100 text-slate-600",
   },
 ];
 
@@ -184,15 +184,15 @@ export default function USAPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-red-400 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-20 right-20 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-20 right-20 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-20 md:py-28 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center gap-4 mb-6">
               <Image src="https://flagcdn.com/w80/us.png" alt="USA Flag" width={64} height={44} className="rounded shadow-lg" />
             </div>
-            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-red-200 mb-4">
+            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-white/70 mb-4">
               Study Destination
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
@@ -491,8 +491,8 @@ export default function USAPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-4 rounded-xl bg-blue-50 border border-blue-200 px-4 py-3">
-                  <p className="text-xs text-blue-800 leading-relaxed">
+                <div className="mt-4 rounded-xl bg-brand-soft border border-brand/20 px-4 py-3">
+                  <p className="text-xs text-slate-800 leading-relaxed">
                     <strong>STEM Advantage:</strong> STEM-designated programs provide up to 3 years
                     of post-study work, making the USA especially attractive for technology,
                     engineering, and data science students.
@@ -574,8 +574,8 @@ export default function USAPage() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-amber-50 border border-amber-200 px-6 py-5">
-              <p className="text-sm text-amber-800 leading-relaxed">
+            <div className="mt-6 rounded-2xl bg-accent-soft border border-accent/20 px-6 py-5">
+              <p className="text-sm text-slate-800 leading-relaxed">
                 <strong>2025/2026 Policy Updates:</strong> Mandatory interview for nearly all student
                 visas, full disclosure of social media accounts, new visa integrity security fee,
                 stricter checks on funds and documentation, and country-specific travel/visa
@@ -804,8 +804,8 @@ export default function USAPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-red-400 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-10 right-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
+          <div className="absolute top-10 left-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-10 right-10 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">

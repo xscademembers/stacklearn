@@ -47,18 +47,18 @@ const courses = [
 ];
 
 const universities = [
-  { name: "SRH Berlin University of Applied Sciences", initials: "SRH", color: "bg-blue-700" },
-  { name: "Hochschule Fresenius", initials: "HF", color: "bg-indigo-600" },
-  { name: "International School of Management (ISM)", initials: "ISM", color: "bg-purple-700" },
-  { name: "PFH \u2013 Private University of Applied Sciences", initials: "PFH", color: "bg-red-700" },
-  { name: "IU International University", initials: "IU", color: "bg-sky-700" },
-  { name: "University of Europe for Applied Sciences", initials: "UE", color: "bg-emerald-700" },
-  { name: "Macromedia University", initials: "MU", color: "bg-orange-600" },
-  { name: "FOM University", initials: "FOM", color: "bg-teal-700" },
-  { name: "Steinbeis University", initials: "SU", color: "bg-amber-700" },
-  { name: "Steinbeis School of Management & Innovation", initials: "SMI", color: "bg-rose-600" },
-  { name: "GISMA Business School", initials: "GBS", color: "bg-cyan-700" },
-  { name: "FHM University", initials: "FHM", color: "bg-violet-600" },
+  { name: "SRH Berlin University of Applied Sciences", initials: "SRH", color: "bg-slate-800" },
+  { name: "Hochschule Fresenius", initials: "HF", color: "bg-slate-800" },
+  { name: "International School of Management (ISM)", initials: "ISM", color: "bg-slate-700" },
+  { name: "PFH \u2013 Private University of Applied Sciences", initials: "PFH", color: "bg-slate-900" },
+  { name: "IU International University", initials: "IU", color: "bg-slate-600" },
+  { name: "University of Europe for Applied Sciences", initials: "UE", color: "bg-brand" },
+  { name: "Macromedia University", initials: "MU", color: "bg-accent" },
+  { name: "FOM University", initials: "FOM", color: "bg-brand" },
+  { name: "Steinbeis University", initials: "SU", color: "bg-accent" },
+  { name: "Steinbeis School of Management & Innovation", initials: "SMI", color: "bg-slate-800" },
+  { name: "GISMA Business School", initials: "GBS", color: "bg-slate-500" },
+  { name: "FHM University", initials: "FHM", color: "bg-slate-700" },
 ];
 
 const scholarships = [
@@ -66,31 +66,31 @@ const scholarships = [
     name: "DAAD Scholarships",
     description: "One of the most prestigious German government-funded programs, DAAD offers fully and partially funded scholarships for Master\u2019s, PhD, and research programs, covering monthly stipends, health insurance, travel allowance, and sometimes tuition support.",
     tag: "Government Funded",
-    tagColor: "bg-yellow-100 text-yellow-800",
+    tagColor: "bg-accent-soft text-accent",
   },
   {
     name: "Deutschlandstipendium",
     description: "Co-funded by the German Federal Government and private sponsors, this merit-based scholarship provides financial support to high-achieving students enrolled at participating German universities, regardless of nationality.",
     tag: "Merit-Based",
-    tagColor: "bg-blue-100 text-blue-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Erasmus+ Programme (Germany)",
     description: "Funded by the European Union, Erasmus+ supports international students pursuing joint Master\u2019s degrees or exchange programs in Germany, offering tuition support, travel grants, and monthly stipends.",
     tag: "EU Program",
-    tagColor: "bg-sky-100 text-sky-700",
+    tagColor: "bg-slate-100 text-slate-600",
   },
   {
     name: "Heinrich B\u00F6ll Foundation Scholarships",
     description: "Supported by a German political foundation, this scholarship assists international Master\u2019s and PhD students with strong academic records and social engagement, providing monthly financial aid and additional allowances.",
     tag: "Foundation",
-    tagColor: "bg-emerald-100 text-emerald-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Konrad-Adenauer-Stiftung (KAS) Scholarships",
     description: "Funded by a German political foundation, KAS offers financial and mentoring support to international postgraduate and doctoral students who demonstrate academic excellence, leadership potential, and interest in public policy.",
     tag: "Leadership",
-    tagColor: "bg-purple-100 text-purple-700",
+    tagColor: "bg-slate-100 text-slate-700",
   },
 ];
 
@@ -182,15 +182,15 @@ export default function GermanyPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-yellow-400 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-20 right-20 w-72 h-72 bg-red-400 rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-20 right-20 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-20 md:py-28 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center gap-4 mb-6">
               <Image src="https://flagcdn.com/w80/de.png" alt="Germany Flag" width={64} height={44} className="rounded shadow-lg" />
             </div>
-            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-yellow-200 mb-4">
+            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-white/70 mb-4">
               Study Destination
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
@@ -489,8 +489,8 @@ export default function GermanyPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-4 rounded-xl bg-yellow-50 border border-yellow-200 px-4 py-3">
-                  <p className="text-xs text-yellow-800 leading-relaxed">
+                <div className="mt-4 rounded-xl bg-accent-soft border border-accent/20 px-4 py-3">
+                  <p className="text-xs text-slate-800 leading-relaxed">
                     <strong>High Demand Sectors:</strong> Engineering, IT, healthcare, and renewable
                     energy offer strong career opportunities for international graduates planning
                     long-term careers in Europe.
@@ -566,8 +566,8 @@ export default function GermanyPage() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-yellow-50 border border-yellow-200 px-6 py-5">
-              <p className="text-sm text-yellow-800 leading-relaxed">
+            <div className="mt-6 rounded-2xl bg-accent-soft border border-accent/20 px-6 py-5">
+              <p className="text-sm text-slate-800 leading-relaxed">
                 German regulations emphasize strict financial proof through the blocked account
                 system and mandatory APS verification for Indian applicants. Germany maintains
                 steady student visa approval rates for genuine applicants who meet academic and
@@ -795,8 +795,8 @@ export default function GermanyPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-yellow-400 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-10 right-10 w-72 h-72 bg-red-400 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
+          <div className="absolute top-10 left-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-10 right-10 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">

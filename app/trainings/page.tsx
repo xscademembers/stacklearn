@@ -143,7 +143,7 @@ export default function TrainingsPage() {
                 <p className="text-gray-600 mb-4">{training.description}</p>
                 <Link
                   href={`/trainings/${training.title.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="inline-flex items-center text-primary-600 font-semibold hover:gap-2 transition-all"
+                  className="inline-flex items-center text-brand font-semibold hover:gap-2 transition-all"
                 >
                   View Details
                   <FiArrowRight className="ml-2" />
@@ -219,7 +219,7 @@ export default function TrainingsPage() {
           <p className="text-xl mb-8">Join thousands of professionals who have transformed their careers with Stack Learn.</p>
           <Link
             href="/contact"
-            className="inline-block px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
+            className="inline-block px-8 py-4 bg-white text-brand rounded-full font-semibold hover:shadow-xl transition-all"
           >
             Enroll Now
           </Link>

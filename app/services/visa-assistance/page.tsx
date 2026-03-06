@@ -149,7 +149,7 @@ export default function VisaAssistancePage() {
               <ul className="space-y-2">
                 {rejectionReasons.map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm md:text-base text-slate-800">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-accent flex-shrink-0" />
                     <span>{item}</span>
                   </li>
                 ))}

@@ -55,11 +55,11 @@ export default function CertificatesPage() {
               placeholder="Enter Student Name or Certificate ID"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 px-6 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+              className="flex-1 px-6 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
             />
             <button
               onClick={handleSearch}
-              className="px-8 py-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
+              className="px-8 py-4 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors flex items-center gap-2"
             >
               <FiSearch className="w-5 h-5" />
               Search
@@ -87,7 +87,7 @@ export default function CertificatesPage() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <button className="flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                  <button className="flex items-center gap-2 px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors">
                     <FiDownload className="w-5 h-5" />
                     Download Certificate
                   </button>
@@ -120,33 +120,33 @@ export default function CertificatesPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Student Name *</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Course Name *</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Issue Date *</label>
                     <input
                       type="date"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Certificate File *</label>
                     <input
                       type="file"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                     />
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <button className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                  <button className="px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors">
                     Generate Certificate
                   </button>
                   <button className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">

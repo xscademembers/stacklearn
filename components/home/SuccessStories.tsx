@@ -80,7 +80,7 @@ export default function SuccessStories() {
                           src={story.image}
                           alt={story.name}
                           fill
-                          className="rounded-full object-cover ring-4 ring-primary-100 group-hover:ring-primary-300 transition-all duration-300"
+                          className="rounded-full object-cover ring-4 ring-brand-soft group-hover:ring-brand/30 transition-all duration-300"
                           sizes="112px"
                         />
                       </div>
@@ -91,7 +91,7 @@ export default function SuccessStories() {
                     <h3 className="text-2xl font-extrabold text-slate-900 mb-2">
                       {story.name}
                     </h3>
-                    <p className="text-primary-600 font-bold mb-4 text-lg">
+                    <p className="text-brand font-bold mb-4 text-lg">
                       {story.course} | {story.university}, {story.destination}
                     </p>
                     <p className="text-slate-700 italic text-lg mb-6 leading-relaxed">
@@ -99,7 +99,7 @@ export default function SuccessStories() {
                     </p>
                     <Link
                       href="/success-stories"
-                      className="inline-flex items-center gap-2 text-primary-600 font-bold hover:text-primary-700 hover:gap-3 transition-all duration-300"
+                      className="inline-flex items-center gap-2 text-brand font-bold hover:text-brand-strong hover:gap-3 transition-all duration-300"
                     >
                       Read Full Story
                       <span className="hover:translate-x-1 transition-transform duration-300">→</span>
@@ -111,14 +111,14 @@ export default function SuccessStories() {
           </div>
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 bg-white rounded-full p-3 shadow-lg hover:bg-primary-50 transition-colors z-10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 bg-white rounded-full p-3 shadow-lg hover:bg-brand-soft transition-colors z-10"
             aria-label="Previous story"
           >
             <FiChevronLeft className="w-6 h-6 text-gray-700" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 bg-white rounded-full p-3 shadow-lg hover:bg-primary-50 transition-colors z-10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 bg-white rounded-full p-3 shadow-lg hover:bg-brand-soft transition-colors z-10"
             aria-label="Next story"
           >
             <FiChevronRight className="w-6 h-6 text-gray-700" />
@@ -130,7 +130,7 @@ export default function SuccessStories() {
                 onClick={() => setCurrentIndex(index)}
                 className={`w-2 h-2 rounded-full transition-all ${
                   index === currentIndex
-                    ? "bg-primary-600 w-8"
+                    ? "bg-brand w-8"
                     : "bg-gray-300"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}

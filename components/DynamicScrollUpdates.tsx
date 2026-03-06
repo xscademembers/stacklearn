@@ -24,9 +24,9 @@ export default function DynamicScrollUpdates() {
             <Link
               key={index}
               href={update.href}
-              className="inline-flex items-center mx-4 hover:text-yellow-300 transition-colors group"
+              className="inline-flex items-center mx-4 hover:text-accent transition-colors group"
             >
-              <span className="text-yellow-300 mr-2 group-hover:scale-125 transition-transform">★</span>
+              <span className="text-accent mr-2 group-hover:scale-125 transition-transform">★</span>
               <span className="text-sm font-semibold">{update.text}</span>
               <span className="text-white/30 mx-4">|</span>
             </Link>
@@ -38,9 +38,9 @@ export default function DynamicScrollUpdates() {
             <Link
               key={`dup-${index}`}
               href={update.href}
-              className="inline-flex items-center mx-4 hover:text-yellow-300 transition-colors group"
+              className="inline-flex items-center mx-4 hover:text-accent transition-colors group"
             >
-              <span className="text-yellow-300 mr-2 group-hover:scale-125 transition-transform">★</span>
+              <span className="text-accent mr-2 group-hover:scale-125 transition-transform">★</span>
               <span className="text-sm font-semibold">{update.text}</span>
               <span className="text-white/30 mx-4">|</span>
             </Link>

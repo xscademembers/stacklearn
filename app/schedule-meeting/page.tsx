@@ -37,8 +37,8 @@ export default function ScheduleMeetingPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center pb-0">
         <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FiCheck className="w-8 h-8 text-green-600" />
+          <div className="w-16 h-16 bg-brand-soft rounded-full flex items-center justify-center mx-auto mb-4">
+            <FiCheck className="w-8 h-8 text-brand" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Your Meeting is Confirmed!</h2>
             <p className="text-gray-600 mb-6">
@@ -60,7 +60,7 @@ export default function ScheduleMeetingPage() {
             </button>
             <Link
               href="/"
-              className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-center"
+              className="flex-1 px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors text-center"
             >
               Return to Home
             </Link>
@@ -100,7 +100,7 @@ export default function ScheduleMeetingPage() {
           {/* Calendar & Time Selection */}
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <FiCalendar className="w-6 h-6 text-primary-600" />
+              <FiCalendar className="w-6 h-6 text-brand" />
               Select Date & Time
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
@@ -112,7 +112,7 @@ export default function ScheduleMeetingPage() {
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                 />
               </div>
               <div>
@@ -125,8 +125,8 @@ export default function ScheduleMeetingPage() {
                       onClick={() => setSelectedTime(time)}
                       className={`px-4 py-2 border rounded-lg transition-colors ${
                         selectedTime === time
-                          ? "bg-primary-600 text-white border-primary-600"
-                          : "border-gray-300 hover:border-primary-300"
+                          ? "bg-brand text-white border-brand"
+                          : "border-gray-300 hover:border-brand"
                       }`}
                     >
                       {time}
@@ -149,7 +149,7 @@ export default function ScheduleMeetingPage() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   />
                 </div>
                 <div>
@@ -159,7 +159,7 @@ export default function ScheduleMeetingPage() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   />
                 </div>
                 <div>
@@ -169,7 +169,7 @@ export default function ScheduleMeetingPage() {
                     required
                     value={formData.mobile}
                     onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   />
                 </div>
                 <div>
@@ -178,7 +178,7 @@ export default function ScheduleMeetingPage() {
                     required
                     value={formData.purpose}
                     onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   >
                     <option value="">Select</option>
                     <option value="counselling">Study Abroad Counselling</option>
@@ -194,7 +194,7 @@ export default function ScheduleMeetingPage() {
                     required
                     value={formData.mode}
                     onChange={(e) => setFormData({ ...formData, mode: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   >
                     <option value="">Select</option>
                     <option value="online">Online</option>
@@ -208,7 +208,7 @@ export default function ScheduleMeetingPage() {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                     placeholder="e.g., I want to discuss scholarships for UK universities."
                   />
                 </div>

@@ -51,22 +51,22 @@ const courses = [
 ];
 
 const universities = [
-  { name: "Greenwich University", initials: "GU", color: "bg-blue-600" },
-  { name: "Coventry University", initials: "CU", color: "bg-indigo-600" },
-  { name: "Buckinghamshire New University", initials: "BNU", color: "bg-purple-600" },
-  { name: "University of Roehampton", initials: "UR", color: "bg-pink-600" },
-  { name: "University of Leicester", initials: "UL", color: "bg-red-600" },
-  { name: "University of Wolverhampton", initials: "UW", color: "bg-orange-600" },
-  { name: "University of Hull", initials: "UH", color: "bg-amber-600" },
-  { name: "Aston London Campus", initials: "ALC", color: "bg-yellow-600" },
-  { name: "University of East London", initials: "UEL", color: "bg-lime-600" },
-  { name: "Edinburgh Napier University", initials: "ENU", color: "bg-emerald-600" },
-  { name: "Anglia Ruskin University", initials: "ARU", color: "bg-teal-600" },
-  { name: "University of Law", initials: "UoL", color: "bg-cyan-600" },
-  { name: "De Montfort University", initials: "DMU", color: "bg-sky-600" },
-  { name: "Teesside University", initials: "TU", color: "bg-blue-700" },
-  { name: "University of Sunderland", initials: "US", color: "bg-violet-600" },
-  { name: "Aston University", initials: "AU", color: "bg-fuchsia-600" },
+  { name: "Greenwich University", initials: "GU", color: "bg-slate-700" },
+  { name: "Coventry University", initials: "CU", color: "bg-slate-800" },
+  { name: "Buckinghamshire New University", initials: "BNU", color: "bg-slate-700" },
+  { name: "University of Roehampton", initials: "UR", color: "bg-slate-600" },
+  { name: "University of Leicester", initials: "UL", color: "bg-accent" },
+  { name: "University of Wolverhampton", initials: "UW", color: "bg-accent" },
+  { name: "University of Hull", initials: "UH", color: "bg-accent" },
+  { name: "Aston London Campus", initials: "ALC", color: "bg-accent" },
+  { name: "University of East London", initials: "UEL", color: "bg-brand" },
+  { name: "Edinburgh Napier University", initials: "ENU", color: "bg-brand" },
+  { name: "Anglia Ruskin University", initials: "ARU", color: "bg-brand" },
+  { name: "University of Law", initials: "UoL", color: "bg-slate-500" },
+  { name: "De Montfort University", initials: "DMU", color: "bg-slate-600" },
+  { name: "Teesside University", initials: "TU", color: "bg-slate-800" },
+  { name: "University of Sunderland", initials: "US", color: "bg-slate-700" },
+  { name: "Aston University", initials: "AU", color: "bg-slate-600" },
 ];
 
 const scholarships = [
@@ -74,31 +74,31 @@ const scholarships = [
     name: "Chevening Scholarship",
     description: "A prestigious UK government scholarship awarded to outstanding professionals with strong leadership potential. It supports one-year Master\u2019s programs and is managed through British embassies and high commissions worldwide.",
     tag: "Government Funded",
-    tagColor: "bg-blue-100 text-blue-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Commonwealth Scholarship",
     description: "Designed for students from Commonwealth countries, this scholarship supports postgraduate studies in the UK and focuses on academic excellence and development impact.",
     tag: "Postgraduate",
-    tagColor: "bg-purple-100 text-purple-700",
+    tagColor: "bg-slate-100 text-slate-700",
   },
   {
     name: "GREAT Scholarship",
     description: "Jointly funded by the UK Government and the British Council, this program offers postgraduate scholarships across multiple UK universities in various disciplines.",
     tag: "British Council",
-    tagColor: "bg-emerald-100 text-emerald-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Charles Wallace India Trust (CWIT)",
     description: "Supports Indian students in the early or mid-stage of their careers, particularly in arts, heritage conservation, and humanities fields.",
     tag: "Arts & Humanities",
-    tagColor: "bg-amber-100 text-amber-700",
+    tagColor: "bg-accent-soft text-accent",
   },
   {
     name: "Scotland\u2019s Saltire Scholarships",
     description: "Funded by the Scottish Government in partnership with Scottish universities, this scholarship supports students in technology, healthcare, renewable energy, science, and creative industries.",
     tag: "Scotland",
-    tagColor: "bg-sky-100 text-sky-700",
+    tagColor: "bg-slate-100 text-slate-600",
   },
 ];
 
@@ -186,7 +186,7 @@ export default function UKPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-20 right-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-20 md:py-28 relative z-10">
@@ -194,7 +194,7 @@ export default function UKPage() {
             <div className="flex items-center justify-center gap-4 mb-6">
               <Image src="https://flagcdn.com/w80/gb.png" alt="UK Flag" width={64} height={44} className="rounded shadow-lg" />
             </div>
-            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-blue-200 mb-4">
+            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-white/70 mb-4">
               Study Destination
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
@@ -482,8 +482,8 @@ export default function UKPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3">
-                  <p className="text-xs text-amber-800 leading-relaxed">
+                <div className="mt-4 rounded-xl bg-accent-soft border border-accent/20 px-4 py-3">
+                  <p className="text-xs text-slate-800 leading-relaxed">
                     <strong>Note:</strong> From January 1, 2027, the duration for non-PhD graduates is
                     expected to reduce to 18 months. PhD graduates will continue to receive 3 years.
                   </p>
@@ -556,8 +556,8 @@ export default function UKPage() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-blue-50 border border-blue-200 px-6 py-5">
-              <p className="text-sm text-blue-800 leading-relaxed">
+            <div className="mt-6 rounded-2xl bg-brand-soft border border-brand/20 px-6 py-5">
+              <p className="text-sm text-slate-800 leading-relaxed">
                 Recent UK regulations have strengthened financial proof and English language
                 requirements. Additionally, dependent visa rules have changed for certain courses.
                 However, India continues to remain one of the largest student markets for the UK,
@@ -784,7 +784,7 @@ export default function UKPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-10 left-10 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-10 right-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 text-center relative z-10">

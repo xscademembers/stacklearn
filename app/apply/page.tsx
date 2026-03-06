@@ -142,9 +142,9 @@ export default function ApplyPage() {
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
                       currentStep > index + 1
-                        ? "bg-green-500 text-white"
+                        ? "bg-brand text-white"
                         : currentStep === index + 1
-                        ? "bg-primary-600 text-white"
+                        ? "bg-brand text-white"
                         : "bg-gray-300 text-gray-600"
                     }`}
                   >
@@ -161,7 +161,7 @@ export default function ApplyPage() {
                 {index < steps.length - 1 && (
                   <div
                     className={`h-1 flex-1 mx-2 ${
-                      currentStep > index + 1 ? "bg-green-500" : "bg-gray-300"
+                      currentStep > index + 1 ? "bg-brand" : "bg-gray-300"
                     }`}
                   />
                 )}
@@ -186,9 +186,9 @@ export default function ApplyPage() {
                     required
                     value={formData.name}
                     onChange={(e) => { setFormData({ ...formData, name: e.target.value }); setErrors({ ...errors, name: "" }); }}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.name ? 'border-accent' : 'border-gray-300'}`}
                   />
-                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                  {errors.name && <p className="text-accent text-sm mt-1">{errors.name}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -198,7 +198,7 @@ export default function ApplyPage() {
                     type="date"
                     value={formData.dob}
                     onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   />
                 </div>
                 <div>
@@ -209,14 +209,14 @@ export default function ApplyPage() {
                     required
                     value={formData.gender}
                     onChange={(e) => { setFormData({ ...formData, gender: e.target.value }); setErrors({ ...errors, gender: "" }); }}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.gender ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.gender ? 'border-accent' : 'border-gray-300'}`}
                   >
                     <option value="">Select</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
                   </select>
-                  {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
+                  {errors.gender && <p className="text-accent text-sm mt-1">{errors.gender}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -227,9 +227,9 @@ export default function ApplyPage() {
                     required
                     value={formData.email}
                     onChange={(e) => { setFormData({ ...formData, email: e.target.value }); setErrors({ ...errors, email: "" }); }}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.email ? 'border-accent' : 'border-gray-300'}`}
                   />
-                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                  {errors.email && <p className="text-accent text-sm mt-1">{errors.email}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -240,9 +240,9 @@ export default function ApplyPage() {
                     required
                     value={formData.mobile}
                     onChange={(e) => { setFormData({ ...formData, mobile: e.target.value }); setErrors({ ...errors, mobile: "" }); }}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.mobile ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.mobile ? 'border-accent' : 'border-gray-300'}`}
                   />
-                  {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
+                  {errors.mobile && <p className="text-accent text-sm mt-1">{errors.mobile}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -252,7 +252,7 @@ export default function ApplyPage() {
                     type="text"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                     placeholder="City, Country"
                   />
                 </div>
@@ -273,7 +273,7 @@ export default function ApplyPage() {
                     required
                     value={formData.qualification}
                     onChange={(e) => { setFormData({ ...formData, qualification: e.target.value }); setErrors({ ...errors, qualification: "" }); }}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.qualification ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.qualification ? 'border-accent' : 'border-gray-300'}`}
                   >
                     <option value="">Select</option>
                     <option value="12th">12th</option>
@@ -281,7 +281,7 @@ export default function ApplyPage() {
                     <option value="bachelor">Bachelor’s</option>
                     <option value="master">Master’s</option>
                   </select>
-                  {errors.qualification && <p className="text-red-500 text-sm mt-1">{errors.qualification}</p>}
+                  {errors.qualification && <p className="text-accent text-sm mt-1">{errors.qualification}</p>}
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
@@ -293,9 +293,9 @@ export default function ApplyPage() {
                       required
                       value={formData.institution}
                       onChange={(e) => { setFormData({ ...formData, institution: e.target.value }); setErrors({ ...errors, institution: "" }); }}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.institution ? 'border-red-500' : 'border-gray-300'}`}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.institution ? 'border-accent' : 'border-gray-300'}`}
                     />
-                    {errors.institution && <p className="text-red-500 text-sm mt-1">{errors.institution}</p>}
+                    {errors.institution && <p className="text-accent text-sm mt-1">{errors.institution}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -306,9 +306,9 @@ export default function ApplyPage() {
                       required
                       value={formData.year}
                       onChange={(e) => { setFormData({ ...formData, year: e.target.value }); setErrors({ ...errors, year: "" }); }}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.year ? 'border-red-500' : 'border-gray-300'}`}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.year ? 'border-accent' : 'border-gray-300'}`}
                     />
-                    {errors.year && <p className="text-red-500 text-sm mt-1">{errors.year}</p>}
+                    {errors.year && <p className="text-accent text-sm mt-1">{errors.year}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -319,7 +319,7 @@ export default function ApplyPage() {
                       required
                       value={formData.gpa}
                       onChange={(e) => setFormData({ ...formData, gpa: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                     />
                   </div>
                   <div>
@@ -329,7 +329,7 @@ export default function ApplyPage() {
                     <select
                       value={formData.englishTest}
                       onChange={(e) => setFormData({ ...formData, englishTest: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                     >
                       <option value="">Select</option>
                       <option value="ielts">IELTS</option>
@@ -347,7 +347,7 @@ export default function ApplyPage() {
                         type="text"
                         value={formData.score}
                         onChange={(e) => setFormData({ ...formData, score: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                       />
                     </div>
                   )}
@@ -369,7 +369,7 @@ export default function ApplyPage() {
                     required
                     value={formData.preferredCountry}
                     onChange={(e) => { setFormData({ ...formData, preferredCountry: e.target.value }); setErrors({ ...errors, preferredCountry: "" }); }}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.preferredCountry ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.preferredCountry ? 'border-accent' : 'border-gray-300'}`}
                   >
                     <option value="">Select</option>
                     <option value="uk">United Kingdom</option>
@@ -379,7 +379,7 @@ export default function ApplyPage() {
                     <option value="germany">Germany</option>
                     <option value="ireland">Ireland</option>
                   </select>
-                  {errors.preferredCountry && <p className="text-red-500 text-sm mt-1">{errors.preferredCountry}</p>}
+                  {errors.preferredCountry && <p className="text-accent text-sm mt-1">{errors.preferredCountry}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -390,9 +390,9 @@ export default function ApplyPage() {
                     required
                     value={formData.course}
                     onChange={(e) => { setFormData({ ...formData, course: e.target.value }); setErrors({ ...errors, course: "" }); }}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.course ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.course ? 'border-accent' : 'border-gray-300'}`}
                   />
-                  {errors.course && <p className="text-red-500 text-sm mt-1">{errors.course}</p>}
+                  {errors.course && <p className="text-accent text-sm mt-1">{errors.course}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -402,7 +402,7 @@ export default function ApplyPage() {
                     required
                     value={formData.level}
                     onChange={(e) => { setFormData({ ...formData, level: e.target.value }); setErrors({ ...errors, level: "" }); }}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 ${errors.level ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.level ? 'border-accent' : 'border-gray-300'}`}
                   >
                     <option value="">Select</option>
                     <option value="undergraduate">Undergraduate</option>
@@ -410,7 +410,7 @@ export default function ApplyPage() {
                     <option value="diploma">Diploma</option>
                     <option value="phd">PhD</option>
                   </select>
-                  {errors.level && <p className="text-red-500 text-sm mt-1">{errors.level}</p>}
+                  {errors.level && <p className="text-accent text-sm mt-1">{errors.level}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -420,7 +420,7 @@ export default function ApplyPage() {
                     required
                     value={formData.intake}
                     onChange={(e) => setFormData({ ...formData, intake: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   >
                     <option value="">Select</option>
                     <option value="jan-2026">January 2026</option>
@@ -436,7 +436,7 @@ export default function ApplyPage() {
                     type="text"
                     value={formData.universities}
                     onChange={(e) => setFormData({ ...formData, universities: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   />
                 </div>
                 <div>
@@ -447,7 +447,7 @@ export default function ApplyPage() {
                     required
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   >
                     <option value="">Select</option>
                     <option value="below-10l">Below ₹10L</option>
@@ -478,7 +478,7 @@ export default function ApplyPage() {
                     <input
                       type="file"
                       required={index < 3}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                     />
                   </div>
                 ))}
@@ -520,7 +520,7 @@ export default function ApplyPage() {
 
           {/* Error Display */}
           {submitError && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 mt-4">
+            <div className="p-4 bg-accent-soft border border-accent rounded-lg text-accent mt-4">
               {submitError}
             </div>
           )}

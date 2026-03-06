@@ -117,7 +117,7 @@ export default function LeadsPopup() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
                   placeholder="Enter your name"
                 />
               </div>
@@ -132,7 +132,7 @@ export default function LeadsPopup() {
                   onChange={(e) =>
                     setFormData({ ...formData, mobile: e.target.value })
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
                   placeholder="+91 9876543210"
                 />
               </div>
@@ -145,7 +145,7 @@ export default function LeadsPopup() {
                   onChange={(e) =>
                     setFormData({ ...formData, destination: e.target.value })
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
                 >
                   <option value="">Select a country</option>
                   <option value="uk">United Kingdom</option>
@@ -178,9 +178,9 @@ export default function LeadsPopup() {
           </>
         ) : (
           <div className="text-center py-4">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-brand-soft rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
-                className="w-8 h-8 text-green-600"
+                className="w-8 h-8 text-brand"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

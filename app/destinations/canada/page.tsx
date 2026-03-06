@@ -51,15 +51,15 @@ const courses = [
 ];
 
 const universities = [
-  { name: "Lakehead University", initials: "LU", color: "bg-blue-700" },
-  { name: "Ontario Tech University", initials: "OTU", color: "bg-blue-600" },
-  { name: "Conestoga College", initials: "CC", color: "bg-red-700" },
-  { name: "George Brown College", initials: "GBC", color: "bg-emerald-700" },
-  { name: "Fanshawe College", initials: "FC", color: "bg-purple-700" },
-  { name: "Durham College", initials: "DC", color: "bg-sky-700" },
-  { name: "Lambton College", initials: "LC", color: "bg-orange-600" },
-  { name: "University Canada West", initials: "UCW", color: "bg-indigo-600" },
-  { name: "University of Niagara Falls Canada", initials: "UNF", color: "bg-teal-700" },
+  { name: "Lakehead University", initials: "LU", color: "bg-slate-800" },
+  { name: "Ontario Tech University", initials: "OTU", color: "bg-slate-700" },
+  { name: "Conestoga College", initials: "CC", color: "bg-slate-900" },
+  { name: "George Brown College", initials: "GBC", color: "bg-brand" },
+  { name: "Fanshawe College", initials: "FC", color: "bg-slate-700" },
+  { name: "Durham College", initials: "DC", color: "bg-slate-600" },
+  { name: "Lambton College", initials: "LC", color: "bg-accent" },
+  { name: "University Canada West", initials: "UCW", color: "bg-slate-800" },
+  { name: "University of Niagara Falls Canada", initials: "UNF", color: "bg-brand" },
 ];
 
 const scholarships = [
@@ -67,37 +67,37 @@ const scholarships = [
     name: "Vanier Canada Graduate Scholarships",
     description: "A prestigious federal scholarship awarding CAD 50,000 per year for up to three years to exceptional doctoral students who demonstrate outstanding academic achievement, research potential, and leadership skills.",
     tag: "Doctoral",
-    tagColor: "bg-red-100 text-red-700",
+    tagColor: "bg-accent-soft text-accent",
   },
   {
     name: "Canada Graduate Scholarships",
     description: "A Government of Canada initiative supporting high-achieving master\u2019s and doctoral students through substantial financial assistance to promote advanced research, innovation, and academic excellence.",
     tag: "Government Funded",
-    tagColor: "bg-blue-100 text-blue-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Ontario Graduate Scholarship (OGS)",
     description: "A merit-based scholarship jointly funded by the Government of Ontario and participating universities, offering up to CAD 15,000 per year to academically outstanding graduate students.",
     tag: "Merit-Based",
-    tagColor: "bg-amber-100 text-amber-700",
+    tagColor: "bg-accent-soft text-accent",
   },
   {
     name: "Pierre Elliott Trudeau Foundation Doctoral Scholarships",
     description: "A highly competitive program providing generous financial support, leadership training, and mentorship to doctoral candidates conducting impactful research in social sciences and humanities.",
     tag: "Research",
-    tagColor: "bg-purple-100 text-purple-700",
+    tagColor: "bg-slate-100 text-slate-700",
   },
   {
     name: "Canada-ASEAN Scholarships (SEED)",
     description: "A government-funded initiative covering tuition, travel, living expenses, and health insurance for eligible international students pursuing academic collaboration in Canada.",
     tag: "Exchange",
-    tagColor: "bg-emerald-100 text-emerald-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Mitacs Globalink Research Internship",
     description: "A competitive research internship program enabling high-performing undergraduate students from India to undertake 12-week fully funded research projects at Canadian universities.",
     tag: "Internship",
-    tagColor: "bg-sky-100 text-sky-700",
+    tagColor: "bg-slate-100 text-slate-600",
   },
 ];
 
@@ -189,7 +189,7 @@ export default function CanadaPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-red-400 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-20 right-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-20 md:py-28 relative z-10">
@@ -197,7 +197,7 @@ export default function CanadaPage() {
             <div className="flex items-center justify-center gap-4 mb-6">
               <Image src="https://flagcdn.com/w80/ca.png" alt="Canada Flag" width={64} height={44} className="rounded shadow-lg" />
             </div>
-            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-red-200 mb-4">
+            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-white/70 mb-4">
               Study Destination
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
@@ -489,8 +489,8 @@ export default function CanadaPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-4 rounded-xl bg-red-50 border border-red-200 px-4 py-3">
-                  <p className="text-xs text-red-800 leading-relaxed">
+                <div className="mt-4 rounded-xl bg-accent-soft border border-accent/20 px-4 py-3">
+                  <p className="text-xs text-slate-800 leading-relaxed">
                     <strong>2026 Update:</strong> The Canadian government has frozen the
                     PGWP-eligible program list for 2026 &mdash; no new fields of study have been
                     added or removed. Must graduate from a Designated Learning Institution (DLI).
@@ -562,8 +562,8 @@ export default function CanadaPage() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-red-50 border border-red-200 px-6 py-5">
-              <p className="text-sm text-red-800 leading-relaxed">
+            <div className="mt-6 rounded-2xl bg-accent-soft border border-accent/20 px-6 py-5">
+              <p className="text-sm text-slate-800 leading-relaxed">
                 <strong>2026 Policy Updates:</strong> Study permit cap of ~408,000 students, SDS
                 discontinued (all applications follow regular processing), PAL/TAL mandatory,
                 minimum proof of funds increased to CAD 22,895, PGWP program list frozen, and formal
@@ -780,8 +780,8 @@ export default function CanadaPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-red-400 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-10 right-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
+          <div className="absolute top-10 left-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-10 right-10 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">

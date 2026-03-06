@@ -20,8 +20,8 @@ export default function Error({
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full text-center">
         <div className="mb-8">
-          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FiAlertCircle className="w-10 h-10 text-red-600" />
+          <div className="w-20 h-20 bg-accent-soft rounded-full flex items-center justify-center mx-auto mb-4">
+            <FiAlertCircle className="w-10 h-10 text-accent" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Something went wrong!</h1>
           <p className="text-gray-600 mb-6">
@@ -31,7 +31,7 @@ export default function Error({
         <div className="flex gap-4 justify-center">
           <button
             onClick={reset}
-            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold"
+            className="px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors font-semibold"
           >
             Try Again
           </button>

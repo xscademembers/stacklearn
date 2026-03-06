@@ -31,7 +31,7 @@ export default function StudyAbroadStepsPage() {
           <div className="flex gap-4 justify-center">
             <Link
               href="/contact"
-              className="px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
+              className="px-8 py-4 bg-white text-brand rounded-full font-semibold hover:shadow-xl transition-all"
             >
               Book Free Counselling
             </Link>
@@ -68,7 +68,7 @@ export default function StudyAbroadStepsPage() {
               </div>
               <Link
                 href="/destinations"
-                className="inline-block mt-6 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="inline-block mt-6 px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors"
               >
                 Explore Destinations
               </Link>
@@ -97,7 +97,7 @@ export default function StudyAbroadStepsPage() {
                 <p className="text-gray-600 text-sm mb-4">Top-ranked universities and diverse course options.</p>
                 <Link
                   href={`/destinations/${country.toLowerCase()}`}
-                  className="text-primary-600 font-semibold hover:underline"
+                  className="text-brand font-semibold hover:underline"
                 >
                   View Details →
                 </Link>
@@ -161,14 +161,14 @@ export default function StudyAbroadStepsPage() {
                   "Confirm Accommodation",
                 ].map((item, index) => (
                   <div key={index} className="flex items-center gap-3">
-                    <FiCheck className="w-6 h-6 text-green-600" />
+                    <FiCheck className="w-6 h-6 text-brand" />
                     <span className="text-lg text-gray-700">{item}</span>
                   </div>
                 ))}
               </div>
               <Link
                 href="/services/visa"
-                className="inline-block mt-6 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="inline-block mt-6 px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors"
               >
                 Get Visa Assistance
               </Link>
@@ -190,8 +190,8 @@ export default function StudyAbroadStepsPage() {
               "Emergency Contacts",
             ].map((item, index) => (
               <div key={index} className="bg-gray-50 p-6 rounded-xl text-center">
-                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-primary-600 font-bold">{index + 1}</span>
+                <div className="w-12 h-12 bg-brand-soft rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-brand font-bold">{index + 1}</span>
                 </div>
                 <h3 className="font-semibold text-gray-900">{item}</h3>
               </div>
@@ -217,14 +217,14 @@ export default function StudyAbroadStepsPage() {
                   "Stay in touch with Stack Learn support teams",
                 ].map((point, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <FiCheck className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
+                    <FiCheck className="w-6 h-6 text-brand flex-shrink-0 mt-1" />
                     <span className="text-gray-700">{point}</span>
                   </li>
                 ))}
               </ul>
               <Link
                 href="/contact"
-                className="inline-block mt-6 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="inline-block mt-6 px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors"
               >
                 Stay Connected
               </Link>
@@ -257,7 +257,7 @@ export default function StudyAbroadStepsPage() {
           <h2 className="text-4xl font-bold mb-4">Your Global Education Journey Starts Here</h2>
           <Link
             href="/contact"
-            className="inline-block mt-6 px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
+            className="inline-block mt-6 px-8 py-4 bg-white text-brand rounded-full font-semibold hover:shadow-xl transition-all"
           >
             Book Free Counselling
           </Link>

@@ -42,52 +42,52 @@ export default function Footer() {
             <h3 className="text-white font-bold mb-6 text-lg">Quick Links</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/" className="hover:text-primary-400 transition-colors duration-300 hover:translate-x-1 inline-block transform">
+                <Link href="/" className="hover:text-brand transition-colors duration-300 hover:translate-x-1 inline-block transform">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-primary-400 transition-colors">
+                <Link href="/about" className="hover:text-brand transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-primary-400 transition-colors">
+                <Link href="/services" className="hover:text-brand transition-colors">
                   Services
                 </Link>
               </li>
               <li>
-                <Link href="/trainings" className="hover:text-primary-400 transition-colors">
+                <Link href="/trainings" className="hover:text-brand transition-colors">
                   Trainings
                 </Link>
               </li>
               <li>
-                <Link href="/destinations" className="hover:text-primary-400 transition-colors">
+                <Link href="/destinations" className="hover:text-brand transition-colors">
                   Destinations
                 </Link>
               </li>
               <li>
-                <Link href="/study-abroad-steps" className="hover:text-primary-400 transition-colors">
+                <Link href="/study-abroad-steps" className="hover:text-brand transition-colors">
                   Study Abroad Steps
                 </Link>
               </li>
               <li>
-                <Link href="/success-stories" className="hover:text-primary-400 transition-colors">
+                <Link href="/success-stories" className="hover:text-brand transition-colors">
                   Success Stories
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-primary-400 transition-colors">
+                <Link href="/blog" className="hover:text-brand transition-colors">
                   Blog / Resources
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-primary-400 transition-colors">
+                <Link href="/contact" className="hover:text-brand transition-colors">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/branches" className="hover:text-primary-400 transition-colors">
+                <Link href="/branches" className="hover:text-brand transition-colors">
                   Branches
                 </Link>
               </li>
@@ -99,52 +99,52 @@ export default function Footer() {
             <h3 className="text-white font-bold mb-6 text-lg">Resources</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/scholarships" className="hover:text-primary-400 transition-colors">
+                <Link href="/scholarships" className="hover:text-brand transition-colors">
                   Scholarships
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-primary-400 transition-colors">
+                <Link href="/blog" className="hover:text-brand transition-colors">
                   Guides & FAQs
                 </Link>
               </li>
               <li>
-                <Link href="/test-prep" className="hover:text-primary-400 transition-colors">
+                <Link href="/test-prep" className="hover:text-brand transition-colors">
                   Test Preparation
                 </Link>
               </li>
               <li>
-                <Link href="/study-abroad-steps" className="hover:text-primary-400 transition-colors">
+                <Link href="/study-abroad-steps" className="hover:text-brand transition-colors">
                   Study Abroad Process
                 </Link>
               </li>
               <li>
-                <Link href="/apply" className="hover:text-primary-400 transition-colors">
+                <Link href="/apply" className="hover:text-brand transition-colors">
                   Application Process
                 </Link>
               </li>
               <li>
-                <Link href="/payment" className="hover:text-primary-400 transition-colors">
+                <Link href="/payment" className="hover:text-brand transition-colors">
                   Payment Gateway
                 </Link>
               </li>
               <li>
-                <Link href="/certificates" className="hover:text-primary-400 transition-colors">
+                <Link href="/certificates" className="hover:text-brand transition-colors">
                   Certificate Verification
                 </Link>
               </li>
               <li>
-                <Link href="/refund-policy" className="hover:text-primary-400 transition-colors">
+                <Link href="/refund-policy" className="hover:text-brand transition-colors">
                   Refund Policy
                 </Link>
               </li>
               <li>
-                <Link href="/privacy-policy" className="hover:text-primary-400 transition-colors">
+                <Link href="/privacy-policy" className="hover:text-brand transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms-of-use" className="hover:text-primary-400 transition-colors">
+                <Link href="/terms-of-use" className="hover:text-brand transition-colors">
                   Terms of Use
                 </Link>
               </li>
@@ -163,7 +163,7 @@ export default function Footer() {
                 <p className="font-bold text-white mb-2 text-base">Phone</p>
                 <a
                   href="tel:+919606031842"
-                  className="text-gray-300 hover:text-primary-400 transition-colors duration-300 font-medium"
+                  className="text-gray-300 hover:text-brand transition-colors duration-300 font-medium"
                 >
                   +91-9606031842
                 </a>
@@ -172,7 +172,7 @@ export default function Footer() {
                 <p className="font-bold text-white mb-2 text-base">Email</p>
                 <a
                   href="mailto:info@stacklearn.com"
-                  className="text-gray-300 hover:text-primary-400 transition-colors duration-300 font-medium"
+                  className="text-gray-300 hover:text-brand transition-colors duration-300 font-medium"
                 >
                   info@stacklearn.com
                 </a>
@@ -189,7 +189,7 @@ export default function Footer() {
                   href="https://wa.me/919606031842"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 hover:scale-105 transition-all duration-300 transform text-sm font-semibold"
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white rounded-full hover:bg-brand-strong hover:scale-105 transition-all duration-300 transform text-sm font-semibold"
                 >
                   <FaWhatsapp className="w-5 h-5" />
                   Chat on WhatsApp
@@ -211,7 +211,7 @@ export default function Footer() {
                 href="https://wa.me/919606031842"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-green-400 transition-colors"
+                className="text-gray-400 hover:text-brand transition-colors"
                 aria-label="WhatsApp"
               >
                 <FaWhatsapp className="w-5 h-5" />
@@ -220,7 +220,7 @@ export default function Footer() {
                 href="https://instagram.com/stacklearn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-pink-400 transition-colors"
+                className="text-gray-400 hover:text-slate-300 transition-colors"
                 aria-label="Instagram"
               >
                 <FiInstagram className="w-5 h-5" />
@@ -229,7 +229,7 @@ export default function Footer() {
                 href="https://linkedin.com/company/stacklearn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-primary-400 transition-colors"
+                className="text-gray-400 hover:text-brand transition-colors"
                 aria-label="LinkedIn"
               >
                 <FiLinkedin className="w-5 h-5" />
@@ -238,7 +238,7 @@ export default function Footer() {
                 href="https://facebook.com/stacklearn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-primary-500 transition-colors"
+                className="text-gray-400 hover:text-brand transition-colors"
                 aria-label="Facebook"
               >
                 <FiFacebook className="w-5 h-5" />
@@ -247,7 +247,7 @@ export default function Footer() {
                 href="https://youtube.com/@stacklearn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-red-500 transition-colors"
+                className="text-gray-400 hover:text-accent transition-colors"
                 aria-label="YouTube"
               >
                 <FiYoutube className="w-5 h-5" />

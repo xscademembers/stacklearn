@@ -67,7 +67,7 @@ export default function BlogHighlights() {
         <div className="text-center mt-8">
           <Link
             href="/blog"
-            className="inline-block px-8 py-3 border-2 border-primary-600 text-primary-600 rounded-full font-semibold hover:bg-primary-600 hover:text-white transition-all"
+            className="inline-block px-8 py-3 border-2 border-brand text-brand rounded-full font-semibold hover:bg-brand hover:text-white transition-all"
           >
             View All Articles
           </Link>

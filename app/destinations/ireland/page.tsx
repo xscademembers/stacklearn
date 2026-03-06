@@ -51,18 +51,18 @@ const courses = [
 ];
 
 const universities = [
-  { name: "Trinity College Dublin", initials: "TCD", color: "bg-blue-800" },
-  { name: "University College Dublin", initials: "UCD", color: "bg-blue-600" },
-  { name: "University College Cork", initials: "UCC", color: "bg-red-700" },
-  { name: "University of Galway", initials: "UoG", color: "bg-purple-700" },
-  { name: "University of Limerick", initials: "UL", color: "bg-emerald-700" },
-  { name: "Dublin City University", initials: "DCU", color: "bg-sky-700" },
-  { name: "Maynooth University", initials: "MU", color: "bg-indigo-600" },
-  { name: "Technological University Dublin", initials: "TUD", color: "bg-teal-700" },
-  { name: "Munster Technological University", initials: "MTU", color: "bg-orange-600" },
-  { name: "Atlantic Technological University", initials: "ATU", color: "bg-cyan-700" },
-  { name: "South East Technological University", initials: "SETU", color: "bg-rose-600" },
-  { name: "Technological University of the Shannon", initials: "TUS", color: "bg-amber-700" },
+  { name: "Trinity College Dublin", initials: "TCD", color: "bg-slate-800" },
+  { name: "University College Dublin", initials: "UCD", color: "bg-slate-700" },
+  { name: "University College Cork", initials: "UCC", color: "bg-slate-900" },
+  { name: "University of Galway", initials: "UoG", color: "bg-slate-700" },
+  { name: "University of Limerick", initials: "UL", color: "bg-brand" },
+  { name: "Dublin City University", initials: "DCU", color: "bg-slate-600" },
+  { name: "Maynooth University", initials: "MU", color: "bg-slate-800" },
+  { name: "Technological University Dublin", initials: "TUD", color: "bg-brand" },
+  { name: "Munster Technological University", initials: "MTU", color: "bg-accent" },
+  { name: "Atlantic Technological University", initials: "ATU", color: "bg-slate-500" },
+  { name: "South East Technological University", initials: "SETU", color: "bg-slate-800" },
+  { name: "Technological University of the Shannon", initials: "TUS", color: "bg-accent" },
 ];
 
 const scholarships = [
@@ -70,31 +70,31 @@ const scholarships = [
     name: "Government of Ireland International Education Scholarship (GOI-IES)",
     description: "A prestigious Irish government scholarship awarded to high-achieving international students for one year of Bachelor\u2019s, Master\u2019s, or PhD study, offering a \u20AC10,000 stipend along with a full tuition fee waiver at participating Irish higher education institutions.",
     tag: "Government Funded",
-    tagColor: "bg-emerald-100 text-emerald-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Irish Research Council (IRC) Postgraduate Scholarship",
     description: "A competitive, fully funded scholarship supporting Master\u2019s (research) and PhD students across all disciplines, providing a stipend, tuition fee contribution, and research expenses for outstanding candidates.",
     tag: "Research",
-    tagColor: "bg-blue-100 text-blue-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Ireland Fellows Programme (IFP)",
     description: "Funded by the Irish Government, this fully funded scholarship supports early- to mid-career professionals from eligible countries to pursue Master\u2019s degrees in Ireland, focusing on leadership development and sustainable development goals.",
     tag: "Fully Funded",
-    tagColor: "bg-purple-100 text-purple-700",
+    tagColor: "bg-slate-100 text-slate-700",
   },
   {
     name: "Higher Education Authority (HEA) Scholarships",
     description: "Administered by Ireland\u2019s Higher Education Authority, these merit-based awards are offered in collaboration with Irish universities, targeting talented international students in technology, business, health sciences, and innovation.",
     tag: "Merit-Based",
-    tagColor: "bg-amber-100 text-amber-700",
+    tagColor: "bg-accent-soft text-accent",
   },
   {
     name: "Erasmus+ Programme (Ireland Participation)",
     description: "Supported by the European Union and facilitated by Irish institutions, this program offers funding opportunities for joint Master\u2019s degrees and academic mobility, enabling international students to study in Ireland as part of a multi-country European program.",
     tag: "EU Program",
-    tagColor: "bg-sky-100 text-sky-700",
+    tagColor: "bg-slate-100 text-slate-600",
   },
 ];
 
@@ -186,7 +186,7 @@ export default function IrelandPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-emerald-400 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-20 right-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-20 md:py-28 relative z-10">
@@ -194,7 +194,7 @@ export default function IrelandPage() {
             <div className="flex items-center justify-center gap-4 mb-6">
               <Image src="https://flagcdn.com/w80/ie.png" alt="Ireland Flag" width={64} height={44} className="rounded shadow-lg" />
             </div>
-            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-emerald-200 mb-4">
+            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-white/70 mb-4">
               Study Destination
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
@@ -495,8 +495,8 @@ export default function IrelandPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-4 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3">
-                  <p className="text-xs text-emerald-800 leading-relaxed">
+                <div className="mt-4 rounded-xl bg-brand-soft border border-brand/20 px-4 py-3">
+                  <p className="text-xs text-slate-800 leading-relaxed">
                     <strong>Career Pathway:</strong> Graduates can transition to a Critical Skills
                     Employment Permit without requiring immediate sponsorship at the time of
                     stay-back approval, making Ireland attractive for long-term European career
@@ -573,8 +573,8 @@ export default function IrelandPage() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-emerald-50 border border-emerald-200 px-6 py-5">
-              <p className="text-sm text-emerald-800 leading-relaxed">
+            <div className="mt-6 rounded-2xl bg-brand-soft border border-brand/20 px-6 py-5">
+              <p className="text-sm text-slate-800 leading-relaxed">
                 Recent Irish regulations emphasize stronger financial documentation and genuine
                 student intent verification. However, Ireland continues to welcome Indian students,
                 offering positive visa outcomes and a streamlined process for eligible applicants
@@ -802,7 +802,7 @@ export default function IrelandPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-emerald-400 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-10 left-10 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-10 right-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 text-center relative z-10">

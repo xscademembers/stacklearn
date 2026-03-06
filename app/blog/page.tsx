@@ -73,7 +73,7 @@ export default function BlogPage() {
             {categories.map((category, index) => (
               <button
                 key={index}
-                className="px-6 py-2 border border-gray-300 rounded-full hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-colors"
+                className="px-6 py-2 border border-gray-300 rounded-full hover:bg-brand hover:text-white hover:border-brand transition-colors"
               >
                 {category}
               </button>
@@ -102,14 +102,14 @@ export default function BlogPage() {
                   />
                 </div>
                 <div className="p-6">
-                  <span className="text-sm text-primary-600 font-semibold">{blog.category}</span>
-                  <h3 className="text-xl font-bold text-gray-900 mt-2 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2">
+                  <span className="text-sm text-brand font-semibold">{blog.category}</span>
+                  <h3 className="text-xl font-bold text-gray-900 mt-2 mb-3 group-hover:text-brand transition-colors line-clamp-2">
                     {blog.title}
                   </h3>
                   <p className="text-gray-600 mb-4 line-clamp-2">{blog.excerpt}</p>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500">{blog.date}</span>
-                    <span className="text-primary-600 font-semibold group-hover:underline">
+                    <span className="text-brand font-semibold group-hover:underline">
                       Read More →
                     </span>
                   </div>
@@ -162,7 +162,7 @@ export default function BlogPage() {
           <p className="text-xl mb-8">Book a free session with our counsellors and plan your next step.</p>
           <Link
             href="/contact"
-            className="inline-block px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
+            className="inline-block px-8 py-4 bg-white text-brand rounded-full font-semibold hover:shadow-xl transition-all"
           >
             Book Free Counselling
           </Link>

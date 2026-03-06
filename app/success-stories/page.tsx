@@ -35,7 +35,7 @@ export default function SuccessStoriesPage() {
   return (
     <div className="pb-0">
       {/* Hero */}
-      <section className="relative h-96 text-white flex items-center justify-center overflow-hidden">
+      <section className="relative h-[320px] md:h-96 text-white flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
@@ -52,9 +52,9 @@ export default function SuccessStoriesPage() {
           <div className="absolute top-20 left-20 w-64 h-64 bg-white rounded-full blur-3xl animate-float"></div>
           <div className="absolute bottom-20 right-20 w-64 h-64 bg-white rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
         </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-5xl font-bold mb-4">Real Students, Real Success</h1>
-          <p className="text-xl mb-8 max-w-3xl mx-auto">
+        <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Real Students, Real Success</h1>
+          <p className="text-base md:text-xl mb-8 max-w-3xl mx-auto">
             Meet our students who turned their study abroad dreams into reality.
           </p>
         </div>
@@ -62,9 +62,9 @@ export default function SuccessStoriesPage() {
 
       {/* Filters */}
       <section className="py-12 bg-white border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap gap-4 justify-center">
-            <select className="px-4 py-2 border border-gray-300 rounded-lg">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex flex-wrap gap-3 md:gap-4 justify-center">
+            <select className="px-4 py-2 border border-gray-300 rounded-lg w-full sm:w-auto">
               <option>All Countries</option>
               <option>UK</option>
               <option>USA</option>
@@ -73,13 +73,13 @@ export default function SuccessStoriesPage() {
               <option>Germany</option>
               <option>Ireland</option>
             </select>
-            <select className="px-4 py-2 border border-gray-300 rounded-lg">
+            <select className="px-4 py-2 border border-gray-300 rounded-lg w-full sm:w-auto">
               <option>All Courses</option>
               <option>Engineering</option>
               <option>Business</option>
               <option>IT</option>
             </select>
-            <select className="px-4 py-2 border border-gray-300 rounded-lg">
+            <select className="px-4 py-2 border border-gray-300 rounded-lg w-full sm:w-auto">
               <option>All Years</option>
               <option>2024</option>
               <option>2025</option>
@@ -87,9 +87,9 @@ export default function SuccessStoriesPage() {
             <input
               type="text"
               placeholder="Search by name or university"
-              className="px-4 py-2 border border-gray-300 rounded-lg"
+              className="px-4 py-2 border border-gray-300 rounded-lg w-full sm:w-64"
             />
-            <button className="px-6 py-2 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors">
+            <button className="px-6 py-2 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors w-full sm:w-auto">
               Apply Filter
             </button>
           </div>
@@ -98,8 +98,8 @@ export default function SuccessStoriesPage() {
 
       {/* Stories Grid */}
       <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid gap-8 md:grid-cols-3">
             {stories.map((story, index) => (
               <div key={index} className="bg-white rounded-xl shadow-md overflow-hidden">
                 <div className="relative w-full h-64 overflow-hidden">
@@ -113,7 +113,7 @@ export default function SuccessStoriesPage() {
                 </div>
                 <div className="p-6">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">{story.name}</h3>
-                  <p className="text-primary-600 font-semibold mb-4">
+                  <p className="text-brand font-semibold mb-4">
                     {story.course} | {story.university}, {story.country}
                   </p>
                   <p className="text-gray-600 italic mb-6">
@@ -121,7 +121,7 @@ export default function SuccessStoriesPage() {
                   </p>
                   <Link
                     href={`/success-stories/${story.name.toLowerCase().replace(/\s+/g, "-")}`}
-                    className="inline-block text-primary-600 font-semibold hover:underline"
+                    className="inline-block text-brand font-semibold hover:underline"
                   >
                     Read Full Story →
                   </Link>
@@ -134,8 +134,8 @@ export default function SuccessStoriesPage() {
 
       {/* Stats */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid gap-8 text-center sm:grid-cols-2 md:grid-cols-4">
             {[
               { label: "Successful Admissions", value: "500+" },
               { label: "Scholarships Secured", value: "100+" },
@@ -153,9 +153,9 @@ export default function SuccessStoriesPage() {
 
       {/* Video Testimonials */}
       <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Video Testimonials</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="container mx-auto px-4 md:px-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">Video Testimonials</h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-2">
             {[
               { name: "Arjun Mehta", info: "MSc Data Science • University of Edinburgh, UK", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" },
               { name: "Sneha Reddy", info: "MBA • University of Toronto, Canada", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" },
@@ -190,9 +190,9 @@ export default function SuccessStoriesPage() {
 
       {/* Submit Your Story */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto bg-gray-50 p-8 rounded-xl shadow-md">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">Submit Your Story</h2>
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-3xl mx-auto bg-gray-50 p-6 md:p-8 rounded-xl shadow-md">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 text-center">Submit Your Story</h2>
             <p className="text-gray-600 mb-8 text-center">
               Share your Stack Learn journey and inspire other students planning to study abroad.
             </p>
@@ -244,7 +244,7 @@ export default function SuccessStoriesPage() {
           <p className="text-xl mb-8">Join thousands of students who achieved their study abroad goals with Stack Learn.</p>
           <Link
             href="/contact"
-            className="inline-block px-8 py-4 bg-white text-primary-600 rounded-full font-semibold hover:shadow-xl transition-all"
+            className="inline-block px-8 py-4 bg-white text-brand rounded-full font-semibold hover:shadow-xl transition-all"
           >
             Book Free Counselling
           </Link>

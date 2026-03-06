@@ -51,18 +51,18 @@ const courses = [
 ];
 
 const universities = [
-  { name: "University of Western Australia", initials: "UWA", color: "bg-blue-800" },
-  { name: "University of Wollongong", initials: "UOW", color: "bg-blue-600" },
-  { name: "Deakin University", initials: "DU", color: "bg-sky-700" },
-  { name: "University of Tasmania", initials: "UTAS", color: "bg-emerald-700" },
-  { name: "Flinders University", initials: "FU", color: "bg-yellow-600" },
-  { name: "Western Sydney University", initials: "WSU", color: "bg-red-700" },
-  { name: "La Trobe University", initials: "LTU", color: "bg-purple-700" },
-  { name: "James Cook University", initials: "JCU", color: "bg-teal-700" },
-  { name: "Charles Darwin University", initials: "CDU", color: "bg-orange-600" },
-  { name: "Central Queensland University", initials: "CQU", color: "bg-indigo-600" },
-  { name: "Southern Cross University", initials: "SCU", color: "bg-cyan-700" },
-  { name: "Federation University Australia", initials: "FED", color: "bg-rose-700" },
+  { name: "University of Western Australia", initials: "UWA", color: "bg-slate-800" },
+  { name: "University of Wollongong", initials: "UOW", color: "bg-slate-700" },
+  { name: "Deakin University", initials: "DU", color: "bg-slate-600" },
+  { name: "University of Tasmania", initials: "UTAS", color: "bg-brand" },
+  { name: "Flinders University", initials: "FU", color: "bg-accent" },
+  { name: "Western Sydney University", initials: "WSU", color: "bg-slate-900" },
+  { name: "La Trobe University", initials: "LTU", color: "bg-slate-700" },
+  { name: "James Cook University", initials: "JCU", color: "bg-brand" },
+  { name: "Charles Darwin University", initials: "CDU", color: "bg-accent" },
+  { name: "Central Queensland University", initials: "CQU", color: "bg-slate-800" },
+  { name: "Southern Cross University", initials: "SCU", color: "bg-slate-500" },
+  { name: "Federation University Australia", initials: "FED", color: "bg-slate-800" },
 ];
 
 const scholarships = [
@@ -70,31 +70,31 @@ const scholarships = [
     name: "Australia Awards Scholarships",
     description: "A prestigious Australian Government scholarship covering full tuition fees, living allowance, travel costs, and health insurance for undergraduate or postgraduate studies.",
     tag: "Government Funded",
-    tagColor: "bg-blue-100 text-blue-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Destination Australia Scholarship",
     description: "Funded by the Australian Government, this scholarship supports students studying in regional Australia, offering financial assistance to promote education outside major cities.",
     tag: "Regional Focus",
-    tagColor: "bg-emerald-100 text-emerald-700",
+    tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Research Training Program (RTP)",
     description: "Sponsored by the Australian Government, RTP supports Master\u2019s by Research and PhD students with tuition fee offsets and stipends to cover living expenses.",
     tag: "Research",
-    tagColor: "bg-purple-100 text-purple-700",
+    tagColor: "bg-slate-100 text-slate-700",
   },
   {
     name: "Endeavour Leadership Program",
     description: "Designed to strengthen educational ties, this program supports high-achieving international students undertaking study, research, or professional development in Australia.",
     tag: "Leadership",
-    tagColor: "bg-amber-100 text-amber-700",
+    tagColor: "bg-accent-soft text-accent",
   },
   {
     name: "University-Specific Merit Scholarships",
     description: "Many leading Australian universities, including Group of Eight institutions, offer merit-based scholarships based on academic performance and leadership potential.",
     tag: "Merit-Based",
-    tagColor: "bg-sky-100 text-sky-700",
+    tagColor: "bg-slate-100 text-slate-600",
   },
 ];
 
@@ -186,7 +186,7 @@ export default function AustraliaPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-20 right-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-20 md:py-28 relative z-10">
@@ -194,7 +194,7 @@ export default function AustraliaPage() {
             <div className="flex items-center justify-center gap-4 mb-6">
               <Image src="https://flagcdn.com/w80/au.png" alt="Australia Flag" width={64} height={44} className="rounded shadow-lg" />
             </div>
-            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-blue-200 mb-4">
+            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-white/70 mb-4">
               Study Destination
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
@@ -482,8 +482,8 @@ export default function AustraliaPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-4 rounded-xl bg-blue-50 border border-blue-200 px-4 py-3">
-                  <p className="text-xs text-blue-800 leading-relaxed">
+                <div className="mt-4 rounded-xl bg-brand-soft border border-brand/20 px-4 py-3">
+                  <p className="text-xs text-slate-800 leading-relaxed">
                     During this period, graduates can work full-time, switch employers freely, gain
                     professional experience, and strengthen eligibility for skilled migration
                     pathways &mdash; without requiring immediate employer sponsorship.
@@ -556,8 +556,8 @@ export default function AustraliaPage() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-blue-50 border border-blue-200 px-6 py-5">
-              <p className="text-sm text-blue-800 leading-relaxed">
+            <div className="mt-6 rounded-2xl bg-brand-soft border border-brand/20 px-6 py-5">
+              <p className="text-sm text-slate-800 leading-relaxed">
                 <strong>Important:</strong> Recent Australian regulations emphasize genuine student
                 intent, financial evidence, and English language requirements. Australia continues to
                 remain a popular destination for Indian students, with streamlined online visa
@@ -774,7 +774,7 @@ export default function AustraliaPage() {
           />
         </div>
         <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-10 left-10 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" />
           <div className="absolute bottom-10 right-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 text-center relative z-10">

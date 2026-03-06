@@ -136,7 +136,7 @@ export default function ScholarshipsPage() {
             {scholarships.map((scholarship, index) => (
               <div key={index} className="bg-white rounded-xl shadow-md p-6">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{scholarship.title}</h3>
-                <p className="text-primary-600 font-semibold mb-4">{scholarship.provider}</p>
+                <p className="text-brand font-semibold mb-4">{scholarship.provider}</p>
                 <p className="text-gray-600 mb-4">{scholarship.eligibility}</p>
                 <div className="flex justify-between items-center mb-4">
                   <div>
@@ -238,7 +238,7 @@ export default function ScholarshipsPage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href="/success-stories" className="text-primary-600 font-semibold hover:underline">
+            <Link href="/success-stories" className="text-brand font-semibold hover:underline">
               Read More Success Stories →
             </Link>
           </div>

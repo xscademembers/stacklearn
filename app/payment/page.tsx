@@ -29,8 +29,8 @@ export default function PaymentPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center pb-0">
         <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FiCheck className="w-8 h-8 text-green-600" />
+          <div className="w-16 h-16 bg-brand-soft rounded-full flex items-center justify-center mx-auto mb-4">
+            <FiCheck className="w-8 h-8 text-brand" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Payment Successful ✅</h2>
           <p className="text-gray-600 mb-6">
@@ -48,7 +48,7 @@ export default function PaymentPage() {
             </button>
             <Link
               href="/"
-              className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-center"
+              className="flex-1 px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors text-center"
             >
               Back to Home
             </Link>
@@ -61,7 +61,7 @@ export default function PaymentPage() {
   return (
     <div className="pb-0">
       {/* Hero Section */}
-      <section className="relative h-72 text-white flex items-center justify-center overflow-hidden">
+      <section className="relative h-64 md:h-72 text-white flex items-center justify-center overflow-hidden">
         {/* Background: solid black + image with 50% opacity */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
@@ -73,14 +73,16 @@ export default function PaymentPage() {
             className="object-cover opacity-50"
           />
         </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-5xl font-bold mb-4">Make a Secure Payment</h1>
-          <p className="text-xl max-w-2xl mx-auto">Pay your fees safely using our trusted payment gateway.</p>
+        <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Make a Secure Payment</h1>
+          <p className="text-base md:text-xl max-w-2xl mx-auto">
+            Pay your fees safely using our trusted payment gateway.
+          </p>
         </div>
       </section>
 
       <div className="bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-2xl mx-auto">
 
           {/* Payment Form */}
@@ -94,7 +96,7 @@ export default function PaymentPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                 />
               </div>
               <div>
@@ -104,7 +106,7 @@ export default function PaymentPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                 />
               </div>
               <div>
@@ -114,7 +116,7 @@ export default function PaymentPage() {
                   required
                   value={formData.mobile}
                   onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                 />
               </div>
               <div>
@@ -123,7 +125,7 @@ export default function PaymentPage() {
                   required
                   value={formData.purpose}
                   onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                 >
                   <option value="">Select</option>
                   <option value="counselling">Counselling Fee</option>
@@ -139,7 +141,7 @@ export default function PaymentPage() {
                   required
                   value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   placeholder="Enter amount"
                 />
               </div>
@@ -149,7 +151,7 @@ export default function PaymentPage() {
                   value={formData.remarks}
                   onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                 />
               </div>
               <button
@@ -170,11 +172,11 @@ export default function PaymentPage() {
                   onClick={() => setPaymentMethod("card")}
                   className={`p-6 border-2 rounded-xl text-center transition-all ${
                     paymentMethod === "card"
-                      ? "border-primary-600 bg-primary-50"
-                      : "border-gray-300 hover:border-primary-300"
+                      ? "border-brand bg-brand-soft"
+                      : "border-gray-300 hover:border-brand"
                   }`}
                 >
-                  <FiCreditCard className="w-12 h-12 text-primary-600 mx-auto mb-4" />
+                  <FiCreditCard className="w-12 h-12 text-brand mx-auto mb-4" />
                   <h3 className="font-semibold text-gray-900 mb-2">Credit / Debit Card</h3>
                   <p className="text-sm text-gray-600">Pay securely with Visa, MasterCard, or Rupay.</p>
                 </button>
@@ -182,11 +184,11 @@ export default function PaymentPage() {
                   onClick={() => setPaymentMethod("upi")}
                   className={`p-6 border-2 rounded-xl text-center transition-all ${
                     paymentMethod === "upi"
-                      ? "border-primary-600 bg-primary-50"
-                      : "border-gray-300 hover:border-primary-300"
+                      ? "border-brand bg-brand-soft"
+                      : "border-gray-300 hover:border-brand"
                   }`}
                 >
-                  <FaWhatsapp className="w-12 h-12 text-green-600 mx-auto mb-4" />
+                  <FaWhatsapp className="w-12 h-12 text-brand mx-auto mb-4" />
                   <h3 className="font-semibold text-gray-900 mb-2">UPI Payment</h3>
                   <p className="text-sm text-gray-600">Pay instantly using Google Pay, PhonePe, or Paytm.</p>
                 </button>
@@ -194,11 +196,11 @@ export default function PaymentPage() {
                   onClick={() => setPaymentMethod("netbanking")}
                   className={`p-6 border-2 rounded-xl text-center transition-all ${
                     paymentMethod === "netbanking"
-                      ? "border-primary-600 bg-primary-50"
-                      : "border-gray-300 hover:border-primary-300"
+                      ? "border-brand bg-brand-soft"
+                      : "border-gray-300 hover:border-brand"
                   }`}
                 >
-                  <FiCreditCard className="w-12 h-12 text-primary-600 mx-auto mb-4" />
+                  <FiCreditCard className="w-12 h-12 text-brand mx-auto mb-4" />
                   <h3 className="font-semibold text-gray-900 mb-2">Net Banking</h3>
                   <p className="text-sm text-gray-600">Transfer directly from your bank account.</p>
                 </button>
@@ -206,7 +208,7 @@ export default function PaymentPage() {
               {paymentMethod && (
                 <button
                   onClick={handleSubmit}
-                  className="w-full mt-6 px-6 py-4 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+                  className="w-full mt-6 px-6 py-4 bg-brand text-white rounded-lg font-semibold hover:bg-brand-strong transition-colors"
                 >
                   Proceed
                 </button>
