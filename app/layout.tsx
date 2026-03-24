@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import dynamic from "next/dynamic";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ChatWindow from "@/components/ChatWindow";
-import DynamicScrollUpdates from "@/components/DynamicScrollUpdates";
-import LeadsPopup from "@/components/LeadsPopup";
+
+const ChatWindow = dynamic(() => import("@/components/ChatWindow"), {
+  ssr: false,
+});
+const DynamicScrollUpdates = dynamic(
+  () => import("@/components/DynamicScrollUpdates"),
+  { ssr: false }
+);
+const LeadsPopup = dynamic(() => import("@/components/LeadsPopup"), {
+  ssr: false,
+});
 
 const inter = Inter({ subsets: ["latin"] });
 
