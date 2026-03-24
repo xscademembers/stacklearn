@@ -35,17 +35,21 @@ const keyReasons = [
     title: "IELTS Waiver Options",
     description: "Many universities may consider MOI certificates or alternative English proficiency proofs in select cases.",
   },
+  {
+    title: "Excellent Quality of Life & Student-Friendly Cities",
+    description: "Safe environment, high living standards, and a multicultural society with strong lifestyle and career opportunities.",
+  },
 ];
 
 const courses = [
   "Information Technology (AI & Cybersecurity)",
   "Computer Science",
   "Nursing & Healthcare",
-  "MBA",
+  "MBA (Master of Business Administration)",
   "Business Analytics / Data Analytics",
   "Civil Engineering",
   "Mechanical Engineering",
-  "Accounting",
+  "Accounting (Accountancy)",
   "Psychology",
   "Social Work",
 ];
@@ -68,32 +72,38 @@ const universities = [
 const scholarships = [
   {
     name: "Australia Awards Scholarships",
-    description: "A prestigious Australian Government scholarship covering full tuition fees, living allowance, travel costs, and health insurance for undergraduate or postgraduate studies.",
+    description: "Funded by the Australian Government, this prestigious fully funded scholarship supports undergraduate or postgraduate studies and generally covers tuition, living expenses, travel, and health insurance.",
     tag: "Government Funded",
     tagColor: "bg-brand-soft text-brand",
   },
   {
     name: "Destination Australia Scholarship",
-    description: "Funded by the Australian Government, this scholarship supports students studying in regional Australia, offering financial assistance to promote education outside major cities.",
+    description: "An Australian Government initiative encouraging study in regional Australia, typically offering financial support of up to AUD 15,000 per year for eligible students.",
     tag: "Regional Focus",
     tagColor: "bg-brand-soft text-brand",
   },
   {
-    name: "Research Training Program (RTP)",
-    description: "Sponsored by the Australian Government, RTP supports Master\u2019s by Research and PhD students with tuition fee offsets and stipends to cover living expenses.",
+    name: "Australian Government Research Training Program (RTP)",
+    description: "Supports international students in research-based Master's and PhD programs with tuition coverage, living stipend, and research-related funding support.",
     tag: "Research",
     tagColor: "bg-slate-100 text-slate-700",
   },
   {
-    name: "Endeavour Leadership Program",
-    description: "Designed to strengthen educational ties, this program supports high-achieving international students undertaking study, research, or professional development in Australia.",
-    tag: "Leadership",
+    name: "University of Western Australia Global Excellence Scholarship",
+    description: "Merit-based scholarship for high-achieving international students, with tuition fee reductions that can range from AUD 5,000 to AUD 48,000 depending on program duration.",
+    tag: "University Specific",
     tagColor: "bg-accent-soft text-accent",
   },
   {
-    name: "University-Specific Merit Scholarships",
-    description: "Many leading Australian universities, including Group of Eight institutions, offer merit-based scholarships based on academic performance and leadership potential.",
-    tag: "Merit-Based",
+    name: "Deakin Vice-Chancellor's International Scholarship",
+    description: "Awarded to outstanding international students, this scholarship can cover 50% to 100% of tuition fees for selected programs based on academic and leadership profile.",
+    tag: "High Achievers",
+    tagColor: "bg-slate-100 text-slate-600",
+  },
+  {
+    name: "La Trobe International Scholarship",
+    description: "Merit-based scholarship for international students offering tuition fee reductions typically between 15% and 25%, depending on academic performance.",
+    tag: "Merit Based",
     tagColor: "bg-slate-100 text-slate-600",
   },
 ];
@@ -204,7 +214,13 @@ export default function AustraliaPage() {
               Australia is a top-3 global study destination offering world-class education, high
               living standards, and a welcoming, multicultural environment. With 95% of universities
               globally ranked and over 22,000 courses available, it is ideal for diverse academic
-              pursuits.
+              pursuits. Key advantages include post-study work rights (Subclass 485), safe cities,
+              and pathways to permanent residency.
+            </p>
+            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-8 max-w-3xl mx-auto">
+              At Stack Learn, we guide you with strategic university selection, application support,
+              and complete Australia student visa assistance &mdash; ensuring a confident start to
+              your international journey.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <BookConsultButton variant="white" className="inline-flex items-center gap-2">
@@ -212,11 +228,13 @@ export default function AustraliaPage() {
                 <FiArrowRight className="w-4 h-4" />
               </BookConsultButton>
               <Link
-                href="/destinations"
+                href="https://9356bd51-32b1-4639-9cc0-0661ac5d0a2d.usrfiles.com/ugd/9356bd_b6b995f87bf94938a94db8ec3c04a642.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-4 border-2 border-white/40 text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 inline-flex items-center gap-2 justify-center"
               >
-                All Destinations
-                <FiGlobe className="w-4 h-4" />
+                Download Brochure
+                <FiArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -613,6 +631,10 @@ export default function AustraliaPage() {
             </div>
             <p className="mt-6 text-center text-xs text-slate-500">
               Note: Scholarship availability, eligibility, and funding amounts may change annually.
+            </p>
+            <p className="mt-3 text-center text-xs md:text-sm text-slate-600">
+              At Stack Learn, we assess your academic profile and guide you toward the most suitable
+              scholarship opportunities to improve your chances of financial support.
             </p>
             <div className="text-center mt-8 flex flex-col sm:flex-row gap-4 justify-center">
               <BookConsultButton variant="secondary" className="inline-flex items-center gap-2 text-sm">

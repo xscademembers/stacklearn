@@ -70,10 +70,10 @@ export default function Header() {
   ];
 
   const trainings = [
-    { name: "Technical Trainings", href: "/trainings#technical" },
-    { name: "Non-Technical Trainings", href: "/trainings#non-technical" },
-    { name: "Study Abroad Trainings", href: "/trainings#study-abroad" },
-    { name: "Corporate Trainings", href: "/trainings#corporate" },
+    { name: "Technical Trainings", href: "/trainings/technical" },
+    { name: "Non-Technical Trainings", href: "/trainings/non-technical" },
+    { name: "Study Abroad Trainings", href: "/trainings/study-abroad" },
+    { name: "Corporate Trainings", href: "/trainings/corporate" },
   ];
 
   const studyAbroadSteps = [
@@ -225,8 +225,8 @@ export default function Header() {
                 onMouseEnter={() => setOpenDropdown("resources")}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
-                <Link
-                  href="/trainings"
+                <button
+                  type="button"
                   className={`flex items-center px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
                     isActive("/trainings") || isActive("/study-abroad-steps") || isActive("/test-prep") || isActive("/scholarships") || isActive("/success-stories") || isActive("/blog") || isActive("/branches") || isActive("/contact")
                       ? "text-brand bg-brand-soft"
@@ -235,9 +235,9 @@ export default function Header() {
                 >
                   Resources
                   <FiChevronDown className={`ml-1 w-4 h-4 transition-transform duration-300 ${openDropdown === "resources" ? "rotate-180" : ""}`} />
-                </Link>
+                </button>
                 <div
-                  className={`absolute top-full right-0 mt-1 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 transition-all duration-300 ${
+                  className={`absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 transition-all duration-300 ${
                     openDropdown === "resources"
                       ? "opacity-100 visible translate-y-0"
                       : "opacity-0 invisible -translate-y-2"
@@ -245,13 +245,12 @@ export default function Header() {
                 >
                   {/* Trainings with submenu */}
                   <div className="relative group/trainings">
-                    <Link
-                      href="/trainings"
-                      className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-soft hover:text-brand transition-colors duration-200 font-semibold"
+                    <span
+                      className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-soft hover:text-brand transition-colors duration-200 font-semibold cursor-default"
                     >
                       <span>Trainings</span>
                       <FiChevronRight className="w-4 h-4" />
-                    </Link>
+                    </span>
                     <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 opacity-0 invisible group-hover/trainings:opacity-100 group-hover/trainings:visible transition-all duration-200">
                       {trainings.map((item) => (
                         <Link
@@ -442,17 +441,21 @@ export default function Header() {
               >
                 Services
               </Link>
-              <Link
-                href="/trainings"
-                className={`block px-4 py-3 rounded-lg font-semibold transition-colors ${
-                  isActive("/trainings")
-                    ? "text-brand bg-brand-soft"
-                    : "text-slate-700 hover:bg-brand-soft"
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Trainings
-              </Link>
+              <div className="px-4 pt-3 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400">Trainings</div>
+              {trainings.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`block px-6 py-2.5 rounded-lg font-medium text-sm transition-colors ${
+                    isActive(item.href)
+                      ? "text-brand bg-brand-soft"
+                      : "text-slate-700 hover:bg-brand-soft"
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
               <Link
                 href="/study-abroad-steps"
                 className={`block px-4 py-3 rounded-lg font-semibold transition-colors ${

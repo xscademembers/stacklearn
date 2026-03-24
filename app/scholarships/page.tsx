@@ -3,51 +3,27 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FiSearch, FiArrowRight } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 import BookConsultButton from "@/components/BookConsultButton";
-
-const scholarships = [
-  {
-    title: "Chevening Scholarship",
-    provider: "UK Government",
-    eligibility: "Master’s students from eligible countries",
-    amount: "Full tuition + living expenses",
-    deadline: "June 2025",
-    country: "uk",
-  },
-  {
-    title: "GREAT Scholarship",
-    provider: "British Council",
-    eligibility: "Indian students pursuing Master’s",
-    amount: "£10,000",
-    deadline: "May 2025",
-    country: "uk",
-  },
-  {
-    title: "Fulbright Scholarship",
-    provider: "US Government",
-    eligibility: "Graduate students and researchers",
-    amount: "Full funding",
-    deadline: "October 2025",
-    country: "usa",
-  },
-  {
-    title: "Vanier Canada Graduate Scholarship",
-    provider: "Government of Canada",
-    eligibility: "PhD students",
-    amount: "$50,000/year",
-    deadline: "November 2025",
-    country: "canada",
-  },
-];
+import ScholarshipInterestPopup from "@/components/ScholarshipInterestPopup";
+import { allScholarships, scholarshipsByCountry } from "@/lib/scholarships-data";
 
 export default function ScholarshipsPage() {
+  const router = useRouter();
   const [filters, setFilters] = useState({
     country: "",
-    degree: "",
-    deadline: "",
-    funding: "",
     search: "",
+  });
+  const [selectedScholarshipSlug, setSelectedScholarshipSlug] = useState<string | null>(null);
+
+  const selectedScholarship = allScholarships.find((item) => item.slug === selectedScholarshipSlug) ?? null;
+  const filteredScholarships = allScholarships.filter((item) => {
+    const countryMatch = !filters.country || item.country === filters.country;
+    const searchMatch =
+      !filters.search ||
+      item.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+      item.countryLabel.toLowerCase().includes(filters.search.toLowerCase());
+    return countryMatch && searchMatch;
   });
 
   return (
@@ -84,47 +60,26 @@ export default function ScholarshipsPage() {
       {/* Filters */}
       <section className="py-12 bg-white border-b">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4" role="search">
             <select
               value={filters.country}
               onChange={(e) => setFilters({ ...filters, country: e.target.value })}
               className="px-4 py-2 border border-gray-300 rounded-lg"
             >
               <option value="">All Countries</option>
-              <option value="uk">UK</option>
-              <option value="usa">USA</option>
-              <option value="canada">Canada</option>
-              <option value="australia">Australia</option>
-            </select>
-            <select
-              value={filters.degree}
-              onChange={(e) => setFilters({ ...filters, degree: e.target.value })}
-              className="px-4 py-2 border border-gray-300 rounded-lg"
-            >
-              <option value="">All Degree Levels</option>
-              <option value="bachelor">Bachelor’s</option>
-              <option value="master">Master’s</option>
-              <option value="phd">PhD</option>
-            </select>
-            <select
-              value={filters.deadline}
-              onChange={(e) => setFilters({ ...filters, deadline: e.target.value })}
-              className="px-4 py-2 border border-gray-300 rounded-lg"
-            >
-              <option value="">All Deadlines</option>
-              <option value="ongoing">Ongoing</option>
-              <option value="upcoming">Upcoming</option>
+              {scholarshipsByCountry.map((countryItem) => (
+                <option key={countryItem.country} value={countryItem.country}>
+                  {countryItem.countryLabel}
+                </option>
+              ))}
             </select>
             <input
               type="text"
-              placeholder="Search by scholarship name"
+              placeholder="Search by scholarship or country"
               value={filters.search}
               onChange={(e) => setFilters({ ...filters, search: e.target.value })}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg"
             />
-            <button className="px-6 py-2 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors">
-              Apply Filters
-            </button>
           </div>
         </div>
       </section>
@@ -132,33 +87,43 @@ export default function ScholarshipsPage() {
       {/* Scholarships Grid */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
+          <header className="mb-8 text-center">
+            <h2 className="text-3xl font-bold text-gray-900">Scholarships Available in Various Countries</h2>
+            <p className="mt-2 text-gray-600">
+              View scholarship expertise points and open full details for each option.
+            </p>
+          </header>
           <div className="grid md:grid-cols-2 gap-8">
-            {scholarships.map((scholarship, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{scholarship.title}</h3>
-                <p className="text-brand font-semibold mb-4">{scholarship.provider}</p>
-                <p className="text-gray-600 mb-4">{scholarship.eligibility}</p>
-                <div className="flex justify-between items-center mb-4">
-                  <div>
-                    <p className="text-sm text-gray-500">Funding Amount</p>
-                    <p className="text-lg font-semibold text-gray-900">{scholarship.amount}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Deadline</p>
-                    <p className="text-lg font-semibold text-gray-900">{scholarship.deadline}</p>
-                  </div>
-                </div>
-                <Link
-                  href={`/scholarships/${scholarship.title.toLowerCase().replace(/\s+/g, "-")}`}
+            {filteredScholarships.map((scholarship) => (
+              <article key={scholarship.slug} className="bg-white rounded-xl shadow-md p-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">{scholarship.name}</h3>
+                <p className="text-brand font-semibold mb-4">{scholarship.countryLabel}</p>
+                <p className="text-gray-600 mb-4">{scholarship.details}</p>
+                <button
+                  type="button"
+                  onClick={() => setSelectedScholarshipSlug(scholarship.slug)}
                   className="inline-block w-full text-center px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors"
                 >
                   View Details
-                </Link>
-              </div>
+                </button>
+              </article>
             ))}
           </div>
         </div>
       </section>
+
+      {selectedScholarship ? (
+        <ScholarshipInterestPopup
+          isOpen
+          scholarshipName={selectedScholarship.name}
+          countryLabel={selectedScholarship.countryLabel}
+          onContinue={() => {
+            const targetSlug = selectedScholarship.slug;
+            setSelectedScholarshipSlug(null);
+            router.push(`/scholarships/${targetSlug}`);
+          }}
+        />
+      ) : null}
 
       {/* How to Apply for Scholarships */}
       <section className="py-20 bg-white">

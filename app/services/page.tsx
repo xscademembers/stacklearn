@@ -158,7 +158,7 @@ export default function ServicesPage() {
 
           <p className="mt-8 text-center text-sm md:text-base text-slate-600">
             Our services are tailored for students planning to study in the UK, USA, Canada,
-            Australia, Ireland, and Europe.
+            Australia, Ireland, and Germany.
           </p>
         </div>
       </section>

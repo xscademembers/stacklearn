@@ -18,6 +18,7 @@ const benefits = [
   "Improve weak areas before applying",
   "Understand country-wise eligibility",
   "Plan finances effectively",
+  "Increase chances of admission and scholarships",
 ];
 
 const processSteps = [
@@ -34,6 +35,7 @@ const outcomes = [
   "Exam and improvement strategy",
   "Scholarship possibilities",
   "Step-by-step application roadmap",
+  "Estimated budget and financial planning (tuition + living expenses)",
 ];
 
 const faqs = [

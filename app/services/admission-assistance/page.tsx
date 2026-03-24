@@ -78,7 +78,7 @@ export default function AdmissionAssistancePage() {
               What We <span className="gradient-text">Do</span>
             </h2>
             <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-              Our Admission Assistance service covers the complete university application journey &mdash; from initial planning to final offer confirmation. We ensure your profile is positioned correctly and your applications are submitted professionally.
+              Our Admission Assistance service covers the complete university application journey &mdash; from initial planning to final offer confirmation. Many students struggle with documentation, deadlines, and understanding eligibility requirements. That&apos;s where we step in.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
@@ -90,7 +90,7 @@ export default function AdmissionAssistancePage() {
             ))}
           </div>
           <p className="mt-6 text-center text-sm md:text-base text-slate-600 max-w-3xl mx-auto">
-            We make sure nothing is missed and every application reflects your strengths clearly.
+            We ensure your profile is positioned correctly and your applications are submitted professionally. We make sure nothing is missed and every application reflects your strengths clearly.
           </p>
         </div>
       </section>

@@ -35,12 +35,17 @@ const keyReasons = [
     title: "Internships & Career Advancement",
     description: "Strong internship pathways supporting global career advancement.",
   },
+  {
+    title: "Flexible Education System",
+    description: "The US education system allows students to explore multiple subjects before choosing a specialization with flexible course structures and electives.",
+  },
 ];
 
 const courses = [
   "Computer Science",
   "Data Science & AI",
   "Business Analytics",
+  "Cybersecurity & Information Security",
   "Engineering Courses",
   "MBA",
   "Business Management",
@@ -61,37 +66,44 @@ const universities = [
   { name: "University of Massachusetts Boston", initials: "UMB", color: "bg-slate-700" },
   { name: "University of North Texas", initials: "UNT", color: "bg-brand" },
   { name: "University of Dayton", initials: "UD", color: "bg-slate-900" },
+  { name: "James Madison University", initials: "JMU", color: "bg-slate-800" },
 ];
 
 const scholarships = [
   {
-    name: "Fulbright-Nehru Fellowship",
-    description: "Administered by the United States-India Educational Foundation under the flagship Fulbright Program, this prestigious award supports Indian students pursuing Master\u2019s degrees, doctoral research, or professional development programs. It covers tuition, living expenses, airfare, and health insurance.",
-    tag: "Fully Funded",
+    name: "Fulbright-Nehru Master's Fellowship",
+    description: "Administered by the United States-India Educational Foundation, this prestigious scholarship supports Indian students pursuing Master's degrees in the USA and typically covers tuition, living expenses, airfare, and health insurance.",
+    tag: "Government Supported",
     tagColor: "bg-brand-soft text-brand",
   },
   {
-    name: "Hubert H. Humphrey Fellowship",
-    description: "A non-degree leadership program funded by the U.S. Department of State, designed for mid-career professionals to enhance leadership skills through academic study and professional collaboration in the U.S.",
-    tag: "Leadership",
+    name: "Inlaks Shivdasani Foundation Scholarship",
+    description: "Supports exceptional Indian students pursuing postgraduate studies at leading global universities, including the USA, with funding toward tuition, living allowance, and travel up to a defined limit.",
+    tag: "Postgraduate",
     tagColor: "bg-slate-100 text-slate-700",
   },
   {
-    name: "International Visitor Leadership Program (IVLP)",
-    description: "Sponsored by the U.S. Department of State, this fully funded short-term exchange program invites emerging leaders to engage in professional meetings and cultural exchange programs across the United States.",
-    tag: "Exchange Program",
+    name: "Tata Scholarship (Selected US Universities)",
+    description: "Funded by the Tata Education and Development Trust, this scholarship supports talented Indian students at selected institutions with financial assistance toward tuition and living expenses.",
+    tag: "Need + Merit",
     tagColor: "bg-brand-soft text-brand",
   },
   {
-    name: "Global Undergraduate Exchange Program (UGRAD)",
-    description: "Funded by the U.S. Department of State, this program provides one-semester, non-degree study opportunities in the U.S. for outstanding undergraduate students from around the world, including India.",
-    tag: "Undergraduate",
+    name: "AAUW International Fellowships",
+    description: "Offered by the American Association of University Women for international female students pursuing graduate and doctoral studies, supporting tuition, living, and academic expenses.",
+    tag: "Women Scholars",
     tagColor: "bg-accent-soft text-accent",
   },
   {
-    name: "Fulbright FLTA Program",
-    description: "Part of the Fulbright Program, this initiative enables young English teachers from India to teach their native language in U.S. institutions while enhancing their teaching skills and cultural exchange experience.",
-    tag: "Teaching",
+    name: "Joint Japan/World Bank Graduate Scholarship Program",
+    description: "Supports students from developing countries in eligible development-focused master's programs with coverage for tuition, monthly stipend, travel, and health insurance.",
+    tag: "Development Focus",
+    tagColor: "bg-slate-100 text-slate-600",
+  },
+  {
+    name: "University Merit-Based Scholarships",
+    description: "Many institutions such as Arizona State University, Northeastern University, and Illinois Institute of Technology offer merit awards, commonly ranging from $2,000 to $20,000 per year based on profile strength.",
+    tag: "University Specific",
     tagColor: "bg-slate-100 text-slate-600",
   },
 ];
@@ -200,9 +212,15 @@ export default function USAPage() {
             </h1>
             <p className="text-base md:text-lg text-white/85 leading-relaxed mb-8 max-w-3xl mx-auto">
               The USA is the world&apos;s top study abroad destination, hosting over 1.1 million
-              international students due to its elite, flexible university system, high-paying career
-              opportunities, and diverse culture. It offers unparalleled research, internships, and
-              STEM OPT work, providing high ROI despite high tuition.
+              international students (with India as a top source) due to its elite, flexible
+              university system, high-paying career opportunities, and diverse culture. It offers
+              unparalleled research, internships, and STEM OPT work, providing high ROI despite high
+              tuition.
+            </p>
+            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-8 max-w-3xl mx-auto">
+              At Stack Learn, we guide you with strategic university selection, application support,
+              and complete USA student visa assistance &mdash; ensuring a confident start to your
+              international journey.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <BookConsultButton variant="white" className="inline-flex items-center gap-2">
@@ -210,11 +228,13 @@ export default function USAPage() {
                 <FiArrowRight className="w-4 h-4" />
               </BookConsultButton>
               <Link
-                href="/destinations"
+                href="https://9356bd51-32b1-4639-9cc0-0661ac5d0a2d.usrfiles.com/ugd/9356bd_b0a8ebca4da545498549f437ae3002d6.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-4 border-2 border-white/40 text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 inline-flex items-center gap-2 justify-center"
               >
-                All Destinations
-                <FiGlobe className="w-4 h-4" />
+                Download Brochure
+                <FiArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -528,6 +548,12 @@ export default function USAPage() {
                 five years of social media history and set profiles to public. The process requires an
                 interview at a U.S. embassy/consulate in India.
               </p>
+              <p className="text-sm md:text-base text-slate-700 leading-relaxed mt-3">
+                As of early 2026, appointment wait times in India can range from 1 to 3 months, with
+                relatively faster and more consistent slots often available in New Delhi compared to
+                Mumbai or Kolkata. Visa processing after interview is typically around 5 to 7 working
+                days in straightforward cases.
+              </p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -563,6 +589,7 @@ export default function USAPage() {
                     { type: "Interview Wait Time", time: "2\u201312 weeks", note: "Depends on U.S. Embassy/Consulate workload in India" },
                     { type: "Application Filing", time: "120 days before start", note: "DS-160 and appointment booking" },
                     { type: "Passport Return", time: "3\u201310 business days", note: "After interview approval" },
+                    { type: "Administrative Processing", time: "Varies by case", note: "Additional review can add weeks or months" },
                   ].map((item) => (
                     <div key={item.type} className="rounded-xl bg-page-soft border border-slate-100 px-4 py-3">
                       <p className="text-sm font-bold text-slate-900">{item.type}</p>
@@ -634,6 +661,10 @@ export default function USAPage() {
 
             <p className="mt-6 text-center text-xs text-slate-500">
               Note: Scholarship availability, eligibility, and funding amounts may change annually.
+            </p>
+            <p className="mt-3 text-center text-xs md:text-sm text-slate-600">
+              At Stack Learn, we assess your academic profile and guide you toward the most suitable
+              scholarship opportunities to improve your chances of financial support.
             </p>
 
             <div className="text-center mt-8 flex flex-col sm:flex-row gap-4 justify-center">

@@ -35,6 +35,10 @@ const keyReasons = [
     title: "IELTS Waiver Available",
     description: "Many reputed universities offer programs on MOI Certificate.",
   },
+  {
+    title: "Diverse Course Specializations",
+    description: "UK universities offer a wide range of specialized and industry-focused programs.",
+  },
 ];
 
 const courses = [
@@ -72,32 +76,38 @@ const universities = [
 const scholarships = [
   {
     name: "Chevening Scholarship",
-    description: "A prestigious UK government scholarship awarded to outstanding professionals with strong leadership potential. It supports one-year Master\u2019s programs and is managed through British embassies and high commissions worldwide.",
+    description: "Funded by the UK Government, this prestigious award supports one-year Master's programs and typically covers tuition fees, living allowance, travel, and visa costs for high-potential future leaders.",
     tag: "Government Funded",
     tagColor: "bg-brand-soft text-brand",
   },
   {
-    name: "Commonwealth Scholarship",
-    description: "Designed for students from Commonwealth countries, this scholarship supports postgraduate studies in the UK and focuses on academic excellence and development impact.",
+    name: "Commonwealth Master's Scholarship",
+    description: "Funded by the Commonwealth Scholarship Commission, this scholarship supports eligible students from Commonwealth countries and generally covers tuition, airfare, and living expenses for postgraduate study.",
     tag: "Postgraduate",
     tagColor: "bg-slate-100 text-slate-700",
   },
   {
-    name: "GREAT Scholarship",
-    description: "Jointly funded by the UK Government and the British Council, this program offers postgraduate scholarships across multiple UK universities in various disciplines.",
+    name: "GREAT Scholarships",
+    description: "Jointly funded by the British Council and participating universities, these scholarships usually provide around \u00A310,000 toward tuition fees for one-year postgraduate programs.",
     tag: "British Council",
     tagColor: "bg-brand-soft text-brand",
   },
   {
-    name: "Charles Wallace India Trust (CWIT)",
-    description: "Supports Indian students in the early or mid-stage of their careers, particularly in arts, heritage conservation, and humanities fields.",
-    tag: "Arts & Humanities",
+    name: "Coventry University Vice-Chancellor's International Scholarship",
+    description: "Offered to strong international postgraduate applicants, this scholarship commonly provides tuition fee reductions in the range of about \u00A32,000 to \u00A35,000 based on profile strength.",
+    tag: "University Specific",
     tagColor: "bg-accent-soft text-accent",
   },
   {
-    name: "Scotland\u2019s Saltire Scholarships",
-    description: "Funded by the Scottish Government in partnership with Scottish universities, this scholarship supports students in technology, healthcare, renewable energy, science, and creative industries.",
-    tag: "Scotland",
+    name: "University of Leicester International Scholarships",
+    description: "Merit-based scholarships for eligible undergraduate and postgraduate students, typically offering tuition fee discounts around \u00A33,000 to \u00A35,000.",
+    tag: "Merit Based",
+    tagColor: "bg-slate-100 text-slate-600",
+  },
+  {
+    name: "Anglia Ruskin International Merit Scholarship",
+    description: "Available for selected undergraduate and postgraduate programs, this scholarship usually offers fee reductions between \u00A32,000 and \u00A34,000 based on academic profile.",
+    tag: "International Merit",
     tagColor: "bg-slate-100 text-slate-600",
   },
 ];
@@ -202,14 +212,31 @@ export default function UKPage() {
             </h1>
             <p className="text-base md:text-lg text-white/85 leading-relaxed mb-8 max-w-3xl mx-auto">
               The United Kingdom is a globally respected destination known for academic excellence,
-              one-year Master&apos;s programs, sandwich programs, and strong post-study work
-              opportunities. With industry-focused courses and internationally recognized degrees, it
-              remains a top choice for Indian students seeking global career growth.
+              one-year Master&apos;s programs, second-year placement or professional practice courses,
+              sandwich programs, and strong post-study work opportunities. With industry-focused
+              courses and internationally recognized degrees, it remains a top choice for Indian
+              students seeking global career growth.
             </p>
-            <BookConsultButton variant="white" className="inline-flex items-center gap-2">
-              Talk to UK Expert
-              <FiArrowRight className="w-4 h-4" />
-            </BookConsultButton>
+            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-8 max-w-3xl mx-auto">
+              At Stack Learn, we guide you with strategic university selection, application support,
+              and complete UK student visa assistance to ensure a confident start to your
+              international journey.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <BookConsultButton variant="white" className="inline-flex items-center gap-2">
+                Talk to UK Expert
+                <FiArrowRight className="w-4 h-4" />
+              </BookConsultButton>
+              <Link
+                href="https://9356bd51-32b1-4639-9cc0-0661ac5d0a2d.usrfiles.com/ugd/9356bd_11abd7a209004407852a00e504efdb3b.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-4 border-2 border-white/40 text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 inline-flex items-center gap-2 justify-center"
+              >
+                Download Brochure
+                <FiArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -589,7 +616,8 @@ export default function UKPage() {
               <p className="text-base md:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto">
                 Students planning to study in the UK can explore various scholarship opportunities
                 offered by the UK Government and universities. Some awards provide partial tuition
-                fee waivers, while select programs may cover up to 100% of tuition fees.
+                fee waivers, while select programs may cover up to 100% of tuition fees, with
+                limited living support in some research-based cases.
               </p>
             </div>
 
@@ -614,6 +642,10 @@ export default function UKPage() {
 
             <p className="mt-6 text-center text-xs text-slate-500">
               Note: Scholarship availability, eligibility, and funding amounts may change annually.
+            </p>
+            <p className="mt-3 text-center text-xs md:text-sm text-slate-600">
+              At Stack Learn, we assess your academic profile and guide you toward the most suitable
+              scholarship opportunities to improve your chances of financial support.
             </p>
 
             <div className="text-center mt-8 flex flex-col sm:flex-row gap-4 justify-center">

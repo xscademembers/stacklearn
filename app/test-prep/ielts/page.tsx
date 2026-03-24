@@ -6,7 +6,7 @@ import { FiArrowRight } from "react-icons/fi";
 export const metadata: Metadata = {
   title: "IELTS Coaching | StackLearn Test Preparation",
   description:
-    "Structured IELTS coaching with expert trainers, flexible modes, mock tests, and personalized feedback to help you achieve your target band score.",
+    "Expert IELTS coaching with structured listening, reading, writing, and speaking preparation, mock tests, and personalized feedback for your target band score.",
 };
 
 export default function IELTSPage() {
@@ -30,11 +30,11 @@ export default function IELTSPage() {
               IELTS TEST PREPARATION
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-3">
-              IELTS Coaching for Study Abroad
+              IELTS Coaching for Study Abroad Success
             </h1>
             <p className="text-base md:text-lg text-white/90 leading-relaxed mb-6">
-              Build the English proficiency and confidence you need to secure admissions, scholarships,
-              and student visas at top universities worldwide.
+              Achieve your target IELTS band with expert coaching, structured practice, and
+              real-exam simulations at StackLearn.
             </p>
             <BookConsultButton
               variant="white"
@@ -53,7 +53,7 @@ export default function IELTSPage() {
           <div className="grid gap-10 lg:grid-cols-[1.4fr_minmax(0,1fr)] items-start">
             <div>
               <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-                What is <span className="gradient-text">IELTS?</span>
+                What is the <span className="gradient-text">IELTS?</span>
               </h2>
               <p className="text-slate-700 text-sm md:text-base leading-relaxed mb-4">
                 IELTS (International English Language Testing System) is one of the most widely
@@ -61,19 +61,23 @@ export default function IELTSPage() {
                 evaluates your ability to communicate in English across four key skills — listening,
                 reading, writing, and speaking.
               </p>
+              <p className="text-slate-700 text-sm md:text-base leading-relaxed mb-4">
+                Universities in countries like the UK, USA, Canada, Australia, and Europe accept
+                IELTS scores as proof of English proficiency for admission into undergraduate,
+                postgraduate, and professional programs.
+              </p>
               <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-                Universities in the UK, USA, Canada, Australia, and Europe accept IELTS scores as proof
-                of English proficiency for admission into undergraduate, postgraduate, and professional
-                programs. A strong IELTS score can boost your chances of acceptance and increase
+                IELTS is designed to measure real-world communication skills and academic readiness.
+                Whether you are preparing for university entry or student visa requirements, a strong
+                IELTS score can significantly boost your chances of acceptance and increase
                 scholarship eligibility.
               </p>
             </div>
             <div className="rounded-2xl bg-page-soft border border-slate-200 px-6 py-6 md:px-7 md:py-7 hover-lift">
               <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-                IELTS is designed to measure real‑world communication skills and academic readiness.
-                Whether you are preparing for university entry or student visa requirements, StackLearn
-                helps you build the right strategy, practice plan, and confidence to reach your target
-                band.
+                At StackLearn, we help you understand specific score requirements for your target
+                universities and build a preparation plan to meet or exceed them. Our structured
+                coaching covers all four IELTS modules with real-exam practice.
               </p>
             </div>
           </div>
@@ -86,11 +90,10 @@ export default function IELTSPage() {
           <div className="grid gap-8 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] items-start">
             <div>
               <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-                IELTS Band Scores &amp; Requirements
+                IELTS Score <span className="gradient-text">Requirements</span>
               </h2>
               <p className="text-slate-700 text-sm md:text-base leading-relaxed mb-4">
-                IELTS results are reported on a band scale from 0 to 9, where each band corresponds to
-                a level of English proficiency:
+                IELTS results are reported on a band scale from 0 to 9:
               </p>
               <ul className="space-y-1.5 text-sm md:text-base text-slate-700 mb-4">
                 <li>• Band 9: Expert user</li>
@@ -100,71 +103,69 @@ export default function IELTSPage() {
                 <li>• Band 5 and below: Modest or below</li>
               </ul>
               <p className="text-slate-700 text-sm md:text-base leading-relaxed mb-3">
-                Typical university expectations:
+                Typical university requirements:
               </p>
               <ul className="space-y-1.5 text-sm md:text-base text-slate-700">
-                <li>• Undergraduate programs: usually 6.0 – 6.5 bands</li>
-                <li>• Postgraduate programs: usually 6.5 – 7.0 bands or higher</li>
-                <li>• Highly ranked &amp; competitive courses: 7.0+ bands</li>
+                <li>• Undergraduate programs: 6.0 to 6.5 bands</li>
+                <li>• Postgraduate programs: 6.5 to 7.0 bands or higher</li>
+                <li>• High-ranked universities: 7.0+ bands for competitive courses</li>
               </ul>
             </div>
             <div className="rounded-2xl bg-white border border-slate-200 px-6 py-6 md:px-7 md:py-7 hover-lift">
-              <h3 className="text-lg font-bold text-slate-900 mb-3">How StackLearn Helps</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-3">Score Planning with StackLearn</h3>
               <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-                We map IELTS requirements for each of your target universities, then design a
-                personalized preparation plan to close the gap between your current level and your
-                desired band score — with milestones, practice tests, and focused speaking &amp; writing
-                improvement.
+                We help you understand specific score requirements for your target universities and
+                build a preparation plan to meet or exceed them. Our approach includes diagnostic
+                tests, section-wise improvement plans, and regular mock assessments.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Modules */}
+      {/* IELTS Modules */}
       <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-6 md:px-8">
           <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-8 text-center">
             IELTS Modules Explained
           </h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-4">
             {[
               {
                 title: "Listening",
                 body:
-                  "Listen to conversations and lectures, then answer questions to test your understanding of details, tone, and context.",
+                  "You will listen to recordings of conversations and lectures in English and answer questions that test your ability to understand detailed information, tone, and context in academic and social environments.",
               },
               {
                 title: "Reading",
                 body:
-                  "Comprehend academic and general texts, identify main ideas, interpret arguments, and understand vocabulary in context.",
+                  "Evaluates your comprehension of texts from books, magazines, and academic materials. You'll be tested on your ability to identify meaning, interpret ideas, and understand logical arguments.",
               },
               {
                 title: "Writing",
                 body:
-                  "Complete Task 1 (describe a chart/graph) and Task 2 (essay) to show clarity, coherence, and grammar accuracy.",
+                  "Complete two tasks: Task 1 (summarise a chart or graph) and Task 2 (write an essay expressing an opinion). Both assess your ability to present ideas clearly, logically, and accurately.",
               },
               {
                 title: "Speaking",
                 body:
-                  "Face‑to‑face interview with an examiner to assess fluency, pronunciation, vocabulary range, and ability to express ideas.",
+                  "A face-to-face interview with an examiner assessing your ability to communicate fluently, express ideas confidently, demonstrate vocabulary range, and maintain clarity of thought.",
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-slate-200 bg-page-soft px-5 py-6 md:px-6 md:py-7 hover-lift flex flex-col"
+                className="rounded-2xl border border-slate-200 bg-page-soft px-5 py-6 md:px-6 md:py-7 hover-lift"
               >
                 <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">
                   {item.title}
                 </h3>
-                <p className="text-xs md:text-sm text-slate-700 leading-relaxed flex-1">
-                  {item.body}
-                </p>
+                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
-          <p className="mt-6 text-center text-xs md:text-sm text-slate-600">
-            Your overall IELTS band score is the average of these four modules.
+          <p className="text-center text-sm text-slate-600 mt-6">
+            Each module is equally important. Your final IELTS band score is calculated as an
+            average of all four.
           </p>
         </div>
       </section>
@@ -174,45 +175,44 @@ export default function IELTSPage() {
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-4xl mx-auto text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
-              Flexible <span className="gradient-text">IELTS Training Modes</span>
+              IELTS Coaching Modes at StackLearn
             </h2>
             <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-              Choose a mode that fits your schedule — every option includes practice tests,
-              section‑wise exercises, personalized feedback, and strategy sessions.
+              Choose a format that fits your learning style and schedule — all options include
+              practice tests, personalized feedback, and strategy sessions.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {[
               {
-                title: "Online Coaching",
+                title: "Online IELTS Coaching",
                 body:
-                  "Live interactive sessions from anywhere with real‑time doubt resolution and access to recordings.",
+                  "Live interactive sessions you can join from anywhere in the world with real-time doubt resolution and flexible schedules.",
               },
               {
-                title: "Offline Classroom",
+                title: "Offline Classroom Coaching",
                 body:
-                  "In‑person classes led by experienced trainers for focused classroom learning and peer interaction.",
+                  "In-person classes led by experienced instructors who provide hands-on training and guidance with direct feedback.",
               },
               {
-                title: "Hybrid Model",
+                title: "Hybrid Training Model",
                 body:
-                  "A mix of online and offline sessions for students who need flexibility with structured support.",
+                  "A mix of online and offline learning for students who want structured support with flexibility.",
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl bg-white border border-slate-200 px-5 py-6 md:px-6 md:py-7 hover-lift flex flex-col text-left"
+                className="rounded-2xl bg-white border border-slate-200 px-5 py-6 md:px-6 md:py-7 hover-lift text-left"
               >
                 <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">
                   {item.title}
                 </h3>
-                <p className="text-xs md:text-sm text-slate-700 leading-relaxed flex-1">
-                  {item.body}
-                </p>
-                <ul className="mt-3 space-y-1.5 text-xs md:text-sm text-slate-700">
-                  <li>• Practice tests &amp; sectional exercises</li>
+                <p className="text-xs md:text-sm text-slate-700 leading-relaxed mb-3">{item.body}</p>
+                <ul className="space-y-1.5 text-xs md:text-sm text-slate-700">
+                  <li>• Practice tests &amp; section-wise exercises</li>
                   <li>• Personalized feedback on weak areas</li>
-                  <li>• Strategy sessions before the exam</li>
+                  <li>• Speaking evaluation &amp; essay correction</li>
+                  <li>• Recorded sessions for revision</li>
                 </ul>
               </div>
             ))}
@@ -229,7 +229,8 @@ export default function IELTSPage() {
             </h2>
             <p className="text-slate-700 text-sm md:text-base leading-relaxed">
               Countless students have achieved their desired IELTS bands with StackLearn&apos;s
-              expert support and structured preparation.
+              expert support. Our structured coaching and regular mock tests have helped students
+              secure admissions and visas at top universities.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
@@ -237,17 +238,17 @@ export default function IELTSPage() {
               {
                 title: "Band 7.5 in 8 Weeks",
                 body:
-                  "Student X improved from Band 6.0 to 7.5 through focused speaking and writing practice.",
+                  "Student X improved from Band 6.0 to Band 7.5 within 8 weeks of focused coaching.",
               },
               {
-                title: "Band 8.0 Achiever",
+                title: "Band 8.0 for UK Admit",
                 body:
-                  "Student Y scored Band 8.0 and received multiple offers from UK universities.",
+                  "Student Y scored Band 8.0 and received offers from top UK universities.",
               },
               {
                 title: "Band 7.0 with Scholarship",
                 body:
-                  "Student Z achieved Band 7.0 and secured admission along with scholarship support.",
+                  "Student Z achieved Band 7.0 and secured admission with scholarship support.",
               },
             ].map((item) => (
               <div
@@ -257,9 +258,7 @@ export default function IELTSPage() {
                 <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">
                   {item.title}
                 </h3>
-                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">
-                  {item.body}
-                </p>
+                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
@@ -271,45 +270,41 @@ export default function IELTSPage() {
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-3xl mx-auto text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
-              IELTS FAQs
+              IELTS <span className="gradient-text">FAQs</span>
             </h2>
           </div>
-          <div className="max-w-4xl mx-auto space-y-4">
+          <div className="max-w-5xl mx-auto grid gap-4 md:grid-cols-2">
             {[
               {
                 q: "What is the IELTS test format?",
-                a:
-                  "IELTS consists of four sections: Listening, Reading, Writing, and Speaking. The total test duration is approximately 2 hours 45 minutes.",
+                a: "IELTS consists of four sections: Listening, Reading, Writing, and Speaking. The total test duration is approximately 2 hours 45 minutes.",
               },
               {
                 q: "How is the IELTS band score calculated?",
-                a:
-                  "Each section is scored from 0 to 9. Your final band score is the average of the four sections, rounded to the nearest whole or half band.",
+                a: "Each section is scored from 0 to 9. Your final band score is an average of the four sections rounded to the nearest whole or half band.",
               },
               {
                 q: "How long is my IELTS score valid?",
-                a: "IELTS scores are valid for two years from the date of the test.",
+                a: "Your IELTS score is valid for two years from the date of the test.",
               },
               {
                 q: "How many times can I take the IELTS exam?",
-                a:
-                  "You can take the IELTS exam as many times as you like. We recommend structured preparation and mock tests before each attempt.",
+                a: "You can take the IELTS exam as many times as you like to improve your score.",
               },
               {
                 q: "Do you provide mock IELTS tests?",
-                a:
-                  "Yes, StackLearn includes regular mock tests and detailed feedback to help you track progress and build confidence.",
+                a: "Yes, StackLearn includes regular mock tests in the preparation program to help you track progress and build confidence.",
               },
-            ].map((item) => (
-              <div
+            ].map((item, idx) => (
+              <article
                 key={item.q}
-                className="rounded-2xl bg-white border border-slate-200 px-5 py-4 md:px-6 md:py-5 hover-lift"
+                className="rounded-2xl border border-slate-200 bg-page-soft px-5 py-5 md:px-6 md:py-6"
               >
-                <p className="font-semibold text-slate-900 mb-1 text-sm md:text-base">
-                  {item.q}
-                </p>
-                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">{item.a}</p>
-              </div>
+                <h3 className="text-sm md:text-base font-bold text-slate-900 mb-2">
+                  {idx + 1}. {item.q}
+                </h3>
+                <p className="text-xs md:text-sm text-slate-600 leading-relaxed">{item.a}</p>
+              </article>
             ))}
           </div>
         </div>
@@ -320,8 +315,8 @@ export default function IELTSPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/8199562/pexels-photo-8199562.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Students celebrating IELTS success"
+            src="https://images.pexels.com/photos/5427868/pexels-photo-5427868.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            alt="Student achieving IELTS success"
             fill
             className="object-cover opacity-50"
           />
@@ -332,14 +327,14 @@ export default function IELTSPage() {
               Ready to Achieve Your Best IELTS Score?
             </h2>
             <p className="text-sm md:text-base text-white/90 mb-6">
-              Join StackLearn&apos;s IELTS preparation program and benefit from expert coaching,
-              personalized guidance, and a clear roadmap to your target band.
+              Join StackLearn&apos;s IELTS preparation program today and benefit from expert
+              coaching, personalized guidance, and a structured roadmap to your target band.
             </p>
             <BookConsultButton
               variant="white"
               className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
             >
-              Book Your Free IELTS Consultation Now
+              Book Your Free IELTS Consultation
               <FiArrowRight className="w-4 h-4" />
             </BookConsultButton>
           </div>
@@ -348,4 +343,3 @@ export default function IELTSPage() {
     </div>
   );
 }
-

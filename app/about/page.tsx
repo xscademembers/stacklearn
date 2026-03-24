@@ -283,7 +283,7 @@ export default function AboutPage() {
                 Stack Learn now offers career-oriented Technical, Non-Technical, and Corporate Training programs designed to prepare students for global job markets.
               </p>
               <Link
-                href="/trainings"
+                href="/trainings/technical"
                 className="inline-block px-8 py-4 bg-brand text-white rounded-full font-semibold hover:shadow-lg transition-all"
               >
                 Explore Trainings

@@ -39,7 +39,7 @@ const searchableContent: SearchResult[] = [
   { title: "Success Stories", description: "Read about our students' achievements", href: "/success-stories", category: "Resources" },
   { title: "Study Abroad Steps", description: "Complete guide to studying abroad", href: "/study-abroad-steps", category: "Resources" },
   { title: "Blog & Resources", description: "Articles, guides, and FAQs", href: "/blog", category: "Resources" },
-  { title: "Trainings", description: "Technical and non-technical training programs", href: "/trainings", category: "Services" },
+  { title: "Trainings", description: "Technical and non-technical training programs", href: "/trainings/technical", category: "Services" },
   { title: "Contact Us", description: "Get in touch with our counsellors", href: "/contact", category: "Pages" },
   { title: "About Stack Learn", description: "Our mission, vision, and team", href: "/about", category: "Pages" },
   { title: "Our Branches", description: "Find your nearest Stack Learn office", href: "/branches", category: "Pages" },

@@ -57,15 +57,47 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/trainings" className="hover:text-brand transition-colors">
-                  Trainings
-                </Link>
-              </li>
-              <li>
                 <Link href="/destinations" className="hover:text-brand transition-colors">
                   Destinations
                 </Link>
               </li>
+              <li>
+                <Link href="/trainings/technical" className="hover:text-brand transition-colors">
+                  Technical Trainings
+                </Link>
+              </li>
+              <li>
+                <Link href="/trainings/non-technical" className="hover:text-brand transition-colors">
+                  Non-Technical Trainings
+                </Link>
+              </li>
+              <li>
+                <Link href="/trainings/study-abroad" className="hover:text-brand transition-colors">
+                  Study Abroad Trainings
+                </Link>
+              </li>
+              <li>
+                <Link href="/trainings/corporate" className="hover:text-brand transition-colors">
+                  Corporate Trainings
+                </Link>
+              </li>
+              <li>
+                <Link href="/test-prep" className="hover:text-brand transition-colors">
+                  Test Preparation
+                </Link>
+              </li>
+              <li>
+                <Link href="/scholarships" className="hover:text-brand transition-colors">
+                  Scholarships
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3 - Resources */}
+          <div>
+            <h3 className="text-white font-bold mb-6 text-lg">Resources</h3>
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/study-abroad-steps" className="hover:text-brand transition-colors">
                   Study Abroad Steps
@@ -89,33 +121,6 @@ export default function Footer() {
               <li>
                 <Link href="/branches" className="hover:text-brand transition-colors">
                   Branches
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3 - Resources */}
-          <div>
-            <h3 className="text-white font-bold mb-6 text-lg">Resources</h3>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/scholarships" className="hover:text-brand transition-colors">
-                  Scholarships
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-brand transition-colors">
-                  Guides & FAQs
-                </Link>
-              </li>
-              <li>
-                <Link href="/test-prep" className="hover:text-brand transition-colors">
-                  Test Preparation
-                </Link>
-              </li>
-              <li>
-                <Link href="/study-abroad-steps" className="hover:text-brand transition-colors">
-                  Study Abroad Process
                 </Link>
               </li>
               <li>
@@ -204,7 +209,6 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-gray-400">
               <p>Copyright © 2025 Stack Learn. All Rights Reserved.</p>
-              <p className="text-xs mt-1">Version: v2.0 | Updated: November 2025</p>
             </div>
             <div className="flex items-center space-x-4">
               <a

@@ -22,6 +22,7 @@ const sopBenefits = [
   "Highlights your unique strengths",
   "Explains gaps or career transitions properly",
   "Builds confidence in your profile",
+  "Differentiates your application from other candidates",
 ];
 
 const processSteps = [

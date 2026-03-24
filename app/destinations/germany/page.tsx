@@ -31,6 +31,10 @@ const keyReasons = [
     title: "Strong Job Market",
     description: "Excellent career prospects in Europe\u2019s largest economy with global companies and long-term settlement pathways.",
   },
+  {
+    title: "18-Month Post-Study Job Seeker Visa",
+    description: "Provides ample time to secure jobs in Germany's strong economy and pursue long-term work opportunities.",
+  },
 ];
 
 const courses = [
@@ -38,11 +42,11 @@ const courses = [
   "Automotive Engineering",
   "Electrical Engineering",
   "Computer Science",
-  "AI & Data Science",
+  "Artificial Intelligence & Data Science",
   "Renewable Energy Engineering",
   "Civil Engineering",
-  "MBA",
-  "Business Administration",
+  "MBA (Master of Business Administration)",
+  "Business Administration & Management",
   "Finance & Economics",
 ];
 
@@ -91,6 +95,12 @@ const scholarships = [
     description: "Funded by a German political foundation, KAS offers financial and mentoring support to international postgraduate and doctoral students who demonstrate academic excellence, leadership potential, and interest in public policy.",
     tag: "Leadership",
     tagColor: "bg-slate-100 text-slate-700",
+  },
+  {
+    name: "University Merit-Based Scholarships",
+    description: "Many institutions such as IU International University of Applied Sciences, SRH Berlin University of Applied Sciences, and University of Europe for Applied Sciences offer merit-based tuition scholarships, typically with 10% to 50% fee reductions.",
+    tag: "University Specific",
+    tagColor: "bg-slate-100 text-slate-600",
   },
 ];
 
@@ -202,17 +212,24 @@ export default function GermanyPage() {
               research-oriented, and industry-linked programs. It is a safe, multicultural, and
               economically stable country offering excellent post-study work opportunities.
             </p>
+            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-8 max-w-3xl mx-auto">
+              At Stack Learn, we guide you with strategic university selection, application support,
+              and complete German student visa assistance &mdash; ensuring a smooth and confident
+              start to your study journey in Germany.
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <BookConsultButton variant="white" className="inline-flex items-center gap-2">
                 Talk to Germany Expert
                 <FiArrowRight className="w-4 h-4" />
               </BookConsultButton>
               <Link
-                href="/destinations"
+                href="https://9356bd51-32b1-4639-9cc0-0661ac5d0a2d.usrfiles.com/ugd/9356bd_3f6565fc887047a9bcaf9cf4bedf4bfb.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-4 border-2 border-white/40 text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 inline-flex items-center gap-2 justify-center"
               >
-                All Destinations
-                <FiGlobe className="w-4 h-4" />
+                Download Brochure
+                <FiArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -625,6 +642,10 @@ export default function GermanyPage() {
 
             <p className="mt-6 text-center text-xs text-slate-500">
               Note: Scholarship availability, eligibility, and funding amounts may change annually.
+            </p>
+            <p className="mt-3 text-center text-xs md:text-sm text-slate-600">
+              At Stack Learn, we assess your academic profile and guide you toward the most suitable
+              scholarship opportunities to improve your chances of financial support.
             </p>
 
             <div className="text-center mt-8 flex flex-col sm:flex-row gap-4 justify-center">

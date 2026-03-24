@@ -8,6 +8,7 @@ const whyHelp = [
   "Identify collateral vs non-collateral loans",
   "Prepare proper financial documentation",
   "Improve chances of faster approval",
+  "Choose the right lender and loan scheme",
 ];
 
 const loanTypes = [
@@ -29,8 +30,8 @@ const documents = [
   "Offer letter from university",
   "Academic transcripts",
   "Identity & address proof",
-  "Income proof of co-applicant",
-  "Bank statements",
+  "Income proof of co-applicant (in case of salaried / self-employed / pensioner)",
+  "Bank statements (of students / co-applicants whatever is applicable)",
   "Collateral documents (if applicable)",
 ];
 
@@ -58,6 +59,7 @@ const supportPoints = [
   "Document preparation assistance",
   "Application tracking",
   "Sanction letter coordination",
+  "Coordination with banks and financial partners for faster processing",
 ];
 
 const faqs = [

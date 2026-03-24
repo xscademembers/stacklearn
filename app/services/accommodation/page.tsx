@@ -8,6 +8,7 @@ const whyHelp = [
   "Understand lease terms and deposit policies",
   "Plan accommodation within your budget",
   "Secure housing before travel",
+  "Ensure a safe and comfortable living environment",
 ];
 
 const types = [
@@ -16,6 +17,7 @@ const types = [
   { name: "Shared Apartments / Flats", desc: "Cost-effective shared housing with other students" },
   { name: "Studio Apartments", desc: "Private living spaces for independent students" },
   { name: "Homestay Options", desc: "Living with a local host family" },
+  { name: "Short-Term Temporary Accommodation", desc: "Hostels, Airbnb, or guesthouses before permanent move-in" },
 ];
 
 const processSteps = [

@@ -35,19 +35,23 @@ const keyReasons = [
     title: "Safe & Welcoming Environment",
     description: "Friendly multicultural society with excellent quality of life.",
   },
+  {
+    title: "Gateway to the European Union Job Market",
+    description: "Provides graduates access to the wider European Union employment market.",
+  },
 ];
 
 const courses = [
   "Computer Science",
-  "Information Technology",
+  "Information Technology (IT)",
   "Data Science & Analytics",
   "Cybersecurity",
   "Pharmaceutical Sciences",
   "Business Management",
-  "International Management",
+  "Management (General / International Management)",
   "Civil Engineering",
   "Economics",
-  "AI & Emerging Tech",
+  "Artificial Intelligence & Emerging Tech",
 ];
 
 const universities = [
@@ -68,32 +72,38 @@ const universities = [
 const scholarships = [
   {
     name: "Government of Ireland International Education Scholarship (GOI-IES)",
-    description: "A prestigious Irish government scholarship awarded to high-achieving international students for one year of Bachelor\u2019s, Master\u2019s, or PhD study, offering a \u20AC10,000 stipend along with a full tuition fee waiver at participating Irish higher education institutions.",
+    description: "Funded by the Government of Ireland, this prestigious scholarship supports high-achieving international students pursuing Master's or PhD programs and provides a \u20AC10,000 stipend with full tuition fee waiver at participating institutions.",
     tag: "Government Funded",
     tagColor: "bg-brand-soft text-brand",
   },
   {
-    name: "Irish Research Council (IRC) Postgraduate Scholarship",
-    description: "A competitive, fully funded scholarship supporting Master\u2019s (research) and PhD students across all disciplines, providing a stipend, tuition fee contribution, and research expenses for outstanding candidates.",
+    name: "Centenary Scholarship Programme",
+    description: "A collaborative initiative between the Government of Ireland and leading universities, this scholarship supports Indian students in postgraduate programs with partial or full tuition support in selected courses.",
+    tag: "Postgraduate",
+    tagColor: "bg-slate-100 text-slate-700",
+  },
+  {
+    name: "Irish Research Council Scholarships",
+    description: "Supports outstanding international students in research-based Master's and PhD programs with tuition coverage, annual stipend, and research funding support for strong proposals.",
     tag: "Research",
     tagColor: "bg-brand-soft text-brand",
   },
   {
-    name: "Ireland Fellows Programme (IFP)",
-    description: "Funded by the Irish Government, this fully funded scholarship supports early- to mid-career professionals from eligible countries to pursue Master\u2019s degrees in Ireland, focusing on leadership development and sustainable development goals.",
-    tag: "Fully Funded",
-    tagColor: "bg-slate-100 text-slate-700",
-  },
-  {
-    name: "Higher Education Authority (HEA) Scholarships",
-    description: "Administered by Ireland\u2019s Higher Education Authority, these merit-based awards are offered in collaboration with Irish universities, targeting talented international students in technology, business, health sciences, and innovation.",
-    tag: "Merit-Based",
+    name: "Trinity College Dublin Global Excellence Scholarships",
+    description: "Merit-based awards for high-achieving international postgraduate students, typically offering tuition fee reductions ranging from \u20AC2,000 to \u20AC5,000.",
+    tag: "University Specific",
     tagColor: "bg-accent-soft text-accent",
   },
   {
-    name: "Erasmus+ Programme (Ireland Participation)",
-    description: "Supported by the European Union and facilitated by Irish institutions, this program offers funding opportunities for joint Master\u2019s degrees and academic mobility, enabling international students to study in Ireland as part of a multi-country European program.",
-    tag: "EU Program",
+    name: "UCD Global Excellence Scholarships",
+    description: "University College Dublin scholarships for top international talent that may cover 50% to 100% of tuition fees based on academic excellence and profile strength.",
+    tag: "Top Talent",
+    tagColor: "bg-slate-100 text-slate-600",
+  },
+  {
+    name: "University of Limerick International Scholarships",
+    description: "Merit-based scholarships for international students in selected Master's programs, typically providing tuition fee reductions between \u20AC1,500 and \u20AC4,000.",
+    tag: "Merit Based",
     tagColor: "bg-slate-100 text-slate-600",
   },
 ];
@@ -205,7 +215,14 @@ export default function IrelandPage() {
               system, strong industry connections, and one-year Master&apos;s programs. As a major
               European hub for technology, pharmaceuticals, and finance, it offers excellent
               internship opportunities and a two-year post-study work visa for master&apos;s
-              graduates.
+              graduates. With high employability, competitive salaries, and a safe English-speaking
+              environment, Ireland is an attractive choice for Indian students seeking global career
+              growth.
+            </p>
+            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-8 max-w-3xl mx-auto">
+              At Stack Learn, we guide you with strategic university selection, application support,
+              and complete Ireland student visa assistance &mdash; ensuring a confident start to your
+              international journey.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <BookConsultButton variant="white" className="inline-flex items-center gap-2">
@@ -213,11 +230,13 @@ export default function IrelandPage() {
                 <FiArrowRight className="w-4 h-4" />
               </BookConsultButton>
               <Link
-                href="/destinations"
+                href="https://9356bd51-32b1-4639-9cc0-0661ac5d0a2d.usrfiles.com/ugd/9356bd_d6712f17e2cc45fe877581d1e99172ab.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-4 border-2 border-white/40 text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 inline-flex items-center gap-2 justify-center"
               >
-                All Destinations
-                <FiGlobe className="w-4 h-4" />
+                Download Brochure
+                <FiArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -503,6 +522,10 @@ export default function IrelandPage() {
                     opportunities.
                   </p>
                 </div>
+                <p className="mt-3 text-xs text-slate-600 leading-relaxed">
+                  As of 2026, Ireland continues to maintain these post-study work durations for
+                  eligible graduates.
+                </p>
               </div>
             </div>
           </div>
@@ -557,6 +580,7 @@ export default function IrelandPage() {
                     { type: "Standard Processing", time: "4\u20138 weeks", note: "From application submission and biometric enrolment" },
                     { type: "Application Window", time: "3 months before start", note: "Submit well in advance" },
                     { type: "Peak Season (May\u2013Sep)", time: "May extend", note: "Higher student volumes during this period" },
+                    { type: "Priority Service", time: "Typically not available", note: "No formal priority/super-priority route in India" },
                   ].map((item) => (
                     <div key={item.type} className="rounded-xl bg-page-soft border border-slate-100 px-4 py-3">
                       <p className="text-sm font-bold text-slate-900">{item.type}</p>
@@ -632,6 +656,10 @@ export default function IrelandPage() {
 
             <p className="mt-6 text-center text-xs text-slate-500">
               Note: Scholarship availability, eligibility, and funding amounts may change annually.
+            </p>
+            <p className="mt-3 text-center text-xs md:text-sm text-slate-600">
+              At Stack Learn, we assess your academic profile and guide you toward the most suitable
+              scholarship opportunities to improve your chances of financial support.
             </p>
 
             <div className="text-center mt-8 flex flex-col sm:flex-row gap-4 justify-center">

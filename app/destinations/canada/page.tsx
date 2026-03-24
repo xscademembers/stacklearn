@@ -35,15 +35,19 @@ const keyReasons = [
     title: "Safe & Multicultural Environment",
     description: "Inclusive society offering diversity, safety, and excellent quality of life.",
   },
+  {
+    title: "Wide Range of Career-Oriented Programs",
+    description: "Diverse industry-aligned programs and skilled trades pathways ensuring employability.",
+  },
 ];
 
 const courses = [
   "Computer Science",
-  "Information Technology",
-  "Artificial Intelligence",
+  "Information Technology (IT)",
+  "Artificial Intelligence (AI)",
   "Data Science & Analytics",
-  "Engineering (Civil, Mech, Elec)",
-  "MBA",
+  "Engineering (Civil, Mechanical, Electrical)",
+  "Business Administration (MBA)",
   "Finance",
   "Health Sciences / Nursing",
   "Project Management",
@@ -60,6 +64,8 @@ const universities = [
   { name: "Lambton College", initials: "LC", color: "bg-accent" },
   { name: "University Canada West", initials: "UCW", color: "bg-slate-800" },
   { name: "University of Niagara Falls Canada", initials: "UNF", color: "bg-brand" },
+  { name: "University of Regina", initials: "UoR", color: "bg-slate-700" },
+  { name: "International Business University (IBU)", initials: "IBU", color: "bg-slate-600" },
 ];
 
 const scholarships = [
@@ -70,33 +76,33 @@ const scholarships = [
     tagColor: "bg-accent-soft text-accent",
   },
   {
-    name: "Canada Graduate Scholarships",
-    description: "A Government of Canada initiative supporting high-achieving master\u2019s and doctoral students through substantial financial assistance to promote advanced research, innovation, and academic excellence.",
-    tag: "Government Funded",
+    name: "Ontario Graduate Scholarship (OGS)",
+    description: "Funded by the Government of Ontario and participating universities, OGS supports Master's and PhD students with awards typically ranging from CAD 10,000 to CAD 15,000 per year.",
+    tag: "Merit-Based",
     tagColor: "bg-brand-soft text-brand",
   },
   {
-    name: "Ontario Graduate Scholarship (OGS)",
-    description: "A merit-based scholarship jointly funded by the Government of Ontario and participating universities, offering up to CAD 15,000 per year to academically outstanding graduate students.",
-    tag: "Merit-Based",
+    name: "University of Regina International Entrance Scholarship",
+    description: "Offered to strong international applicants, this entrance scholarship typically provides tuition fee reductions or first-year financial awards based on academic profile.",
+    tag: "University Specific",
     tagColor: "bg-accent-soft text-accent",
   },
   {
-    name: "Pierre Elliott Trudeau Foundation Doctoral Scholarships",
-    description: "A highly competitive program providing generous financial support, leadership training, and mentorship to doctoral candidates conducting impactful research in social sciences and humanities.",
-    tag: "Research",
+    name: "Lakehead University International Entrance Scholarships",
+    description: "Merit-based awards for international undergraduate and postgraduate students, with funding commonly ranging from CAD 4,000 to CAD 30,000 based on academic performance.",
+    tag: "Entrance Award",
     tagColor: "bg-slate-100 text-slate-700",
   },
   {
-    name: "Canada-ASEAN Scholarships (SEED)",
-    description: "A government-funded initiative covering tuition, travel, living expenses, and health insurance for eligible international students pursuing academic collaboration in Canada.",
-    tag: "Exchange",
+    name: "Ontario Tech University International Scholarships",
+    description: "International merit scholarships for high-achieving students enrolling in undergraduate or graduate programs, typically offering tuition fee reductions and financial grants.",
+    tag: "International Merit",
     tagColor: "bg-brand-soft text-brand",
   },
   {
-    name: "Mitacs Globalink Research Internship",
-    description: "A competitive research internship program enabling high-performing undergraduate students from India to undertake 12-week fully funded research projects at Canadian universities.",
-    tag: "Internship",
+    name: "University Canada West Entrance Awards",
+    description: "Entrance awards including leadership and academic excellence scholarships for students in business and management programs, typically offering partial tuition reductions.",
+    tag: "Business Programs",
     tagColor: "bg-slate-100 text-slate-600",
   },
 ];
@@ -208,17 +214,24 @@ export default function CanadaPage() {
               students. It is highly favoured for its balance of high-quality education, safety, and
               a clear, stable path to permanent residency.
             </p>
+            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-8 max-w-3xl mx-auto">
+              At Stack Learn, we guide you with strategic university selection, application support,
+              and complete Canadian student visa assistance &mdash; ensuring a confident start to
+              your international journey.
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <BookConsultButton variant="white" className="inline-flex items-center gap-2">
                 Talk to Canada Expert
                 <FiArrowRight className="w-4 h-4" />
               </BookConsultButton>
               <Link
-                href="/destinations"
+                href="https://9356bd51-32b1-4639-9cc0-0661ac5d0a2d.usrfiles.com/ugd/9356bd_799cefe882b041269f51d9bc5ddfecd0.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-4 border-2 border-white/40 text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 inline-flex items-center gap-2 justify-center"
               >
-                All Destinations
-                <FiGlobe className="w-4 h-4" />
+                Download Brochure
+                <FiArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -619,6 +632,10 @@ export default function CanadaPage() {
             </div>
             <p className="mt-6 text-center text-xs text-slate-500">
               Note: Scholarship availability, eligibility, and funding amounts may change annually.
+            </p>
+            <p className="mt-3 text-center text-xs md:text-sm text-slate-600">
+              At Stack Learn, we assess your academic profile and guide you toward the most suitable
+              scholarship opportunities to improve your chances of financial support.
             </p>
             <div className="text-center mt-8 flex flex-col sm:flex-row gap-4 justify-center">
               <BookConsultButton variant="secondary" className="inline-flex items-center gap-2 text-sm">
