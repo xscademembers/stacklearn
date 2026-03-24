@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import dynamic from "next/dynamic";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-const ChatWindow = dynamic(() => import("@/components/ChatWindow"), {
-  ssr: false,
-});
-const DynamicScrollUpdates = dynamic(
-  () => import("@/components/DynamicScrollUpdates"),
-  { ssr: false }
-);
-const LeadsPopup = dynamic(() => import("@/components/LeadsPopup"), {
-  ssr: false,
-});
+import GlobalClientWidgets from "@/components/GlobalClientWidgets";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,11 +26,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <Header />
-        <DynamicScrollUpdates />
+        <GlobalClientWidgets />
         <main className="min-h-screen pt-28">{children}</main>
         <Footer />
-        <ChatWindow />
-        <LeadsPopup />
       </body>
     </html>
   );

@@ -219,7 +219,7 @@ export default function TechnicalTrainingsPage() {
             </h2>
             <p className="text-sm md:text-base text-white/90 mb-6 max-w-2xl mx-auto">
               Join thousands of successful professionals who transformed their careers with
-              StackLearn's technical training programs. Get started with a free career consultation.
+              StackLearn&apos;s technical training programs. Get started with a free career consultation.
             </p>
             <BookConsultButton
               variant="white"
