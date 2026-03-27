@@ -66,6 +66,7 @@ const universities = [
   { name: "University of Niagara Falls Canada", initials: "UNF", color: "bg-brand" },
   { name: "University of Regina", initials: "UoR", color: "bg-slate-700" },
   { name: "International Business University (IBU)", initials: "IBU", color: "bg-slate-600" },
+  { name: "Crandall University - Canada", initials: "CU", color: "bg-slate-800" },
 ];
 
 const scholarships = [

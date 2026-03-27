@@ -116,9 +116,12 @@ export default function TechnicalCourseDetailPage() {
       </section>
 
       {/* Tab Navigation */}
-      <nav className="sticky top-28 z-30 bg-white border-b border-slate-200 shadow-sm">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="flex gap-0 overflow-x-auto" role="tablist">
+      <nav className="sticky top-24 z-30 border-b border-slate-200/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
+        <div className="container mx-auto px-6 py-4 md:px-8">
+          <div
+            className="mx-auto grid w-full max-w-5xl grid-cols-3 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-1"
+            role="tablist"
+          >
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -126,11 +129,11 @@ export default function TechnicalCourseDetailPage() {
                 aria-selected={activeTab === tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  flex items-center gap-2 px-5 py-4 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors duration-200
+                  flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-200 motion-reduce:transition-none
                   ${
                     activeTab === tab.id
-                      ? "border-brand text-brand"
-                      : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
+                      ? "bg-white text-brand shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
                   }
                 `}
               >
@@ -143,20 +146,20 @@ export default function TechnicalCourseDetailPage() {
       </nav>
 
       {/* Tab Content */}
-      <div className="min-h-[60vh]">
+      <div className="min-h-[60vh] bg-slate-50">
         {/* ===== OVERVIEW TAB ===== */}
         {activeTab === "overview" && (
           <div>
             {/* About Course */}
-            <section className="py-16 md:py-20 bg-white">
+            <section className="py-16 md:py-20">
               <div className="container mx-auto px-6 md:px-8">
-                <div className="max-w-4xl mx-auto">
-                  <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">
+                <div className="mx-auto max-w-5xl rounded-3xl border border-slate-200 bg-white px-6 py-8 shadow-sm md:px-10 md:py-10">
+                  <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6 md:mb-8">
                     About This <span className="gradient-text">Course</span>
                   </h2>
-                  <div className="space-y-4">
+                  <div className="space-y-4 md:space-y-5">
                     {course.overview.aboutCourse.map((para, i) => (
-                      <p key={i} className="text-sm md:text-base text-slate-700 leading-relaxed">
+                      <p key={i} className="text-sm md:text-base text-slate-700 leading-7">
                         {para}
                       </p>
                     ))}
@@ -166,38 +169,40 @@ export default function TechnicalCourseDetailPage() {
             </section>
 
             {/* Content Sections */}
-            {[
-              course.overview.whyItMatters,
-              course.overview.whatYouGain,
-              course.overview.realWorldApplications,
-              course.overview.certification,
-              course.overview.enrollCTA,
-            ].map((section, idx) => (
-              <section
-                key={section.heading}
-                className={`py-12 md:py-16 ${idx % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
-              >
-                <div className="container mx-auto px-6 md:px-8">
-                  <div className="max-w-4xl mx-auto">
-                    <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 mb-4">
-                      {section.heading}
-                    </h2>
-                    <div className="space-y-3">
-                      {section.paragraphs.map((para, i) => (
-                        <p key={i} className="text-sm md:text-base text-slate-700 leading-relaxed">
-                          {para}
-                        </p>
-                      ))}
+            <section className="pb-16 md:pb-20">
+              <div className="container mx-auto px-6 md:px-8">
+                <div className="mx-auto flex max-w-5xl flex-col gap-6 md:gap-8">
+                  {[
+                    course.overview.whyItMatters,
+                    course.overview.whatYouGain,
+                    course.overview.realWorldApplications,
+                    course.overview.certification,
+                    course.overview.enrollCTA,
+                  ].map((section) => (
+                    <div
+                      key={section.heading}
+                      className="rounded-3xl border border-slate-200 bg-white px-6 py-7 shadow-sm md:px-10 md:py-9"
+                    >
+                      <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 mb-4">
+                        {section.heading}
+                      </h2>
+                      <div className="space-y-3 md:space-y-4">
+                        {section.paragraphs.map((para, i) => (
+                          <p key={i} className="text-sm md:text-base text-slate-700 leading-7">
+                            {para}
+                          </p>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              </section>
-            ))}
+              </div>
+            </section>
 
             {/* Key Highlights */}
             <section className="py-16 md:py-20 bg-white">
               <div className="container mx-auto px-6 md:px-8">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-5xl mx-auto">
                   <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-8 text-center">
                     Key <span className="gradient-text">Highlights</span>
                   </h2>
@@ -219,7 +224,7 @@ export default function TechnicalCourseDetailPage() {
             {/* Who Can Apply */}
             <section className="py-16 md:py-20 bg-gray-50">
               <div className="container mx-auto px-6 md:px-8">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-5xl mx-auto">
                   <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-8 text-center">
                     Who Can <span className="gradient-text">Apply?</span>
                   </h2>
@@ -243,7 +248,7 @@ export default function TechnicalCourseDetailPage() {
             {/* Career Roles */}
             <section className="py-16 md:py-20 bg-white">
               <div className="container mx-auto px-6 md:px-8">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-5xl mx-auto">
                   <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3 text-center">
                     Where Will Your Career <span className="gradient-text">Take Off?</span>
                   </h2>
@@ -271,7 +276,7 @@ export default function TechnicalCourseDetailPage() {
         {activeTab === "curriculum" && (
           <section className="py-16 md:py-20 bg-gray-50">
             <div className="container mx-auto px-6 md:px-8">
-              <div className="max-w-4xl mx-auto">
+              <div className="max-w-5xl mx-auto">
                 <header className="text-center mb-12">
                   <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
                     Course <span className="gradient-text">Curriculum</span>

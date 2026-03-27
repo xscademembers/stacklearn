@@ -35,6 +35,11 @@ const keyReasons = [
     title: "18-Month Post-Study Job Seeker Visa",
     description: "Provides ample time to secure jobs in Germany's strong economy and pursue long-term work opportunities.",
   },
+  {
+    title: "Strategic Location in Europe",
+    description:
+      "Easy access to multiple European countries, students exposed to international career opportunities and professional networks across the European Union.",
+  },
 ];
 
 const courses = [
