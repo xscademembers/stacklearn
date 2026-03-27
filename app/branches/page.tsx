@@ -21,6 +21,12 @@ const branches = [
     phone: "+91 9606031844",
     email: "gudivada@stacklearn.com",
   },
+  {
+    name: "Stack Learn - Bengaluru",
+    address: "MG Road, Bengaluru, Karnataka, India",
+    phone: "+91 9606031842",
+    email: "bengaluru@stacklearn.com",
+  },
 ];
 
 export default function BranchesPage() {
@@ -59,6 +65,7 @@ export default function BranchesPage() {
               <option>Telangana</option>
               <option>Andhra Pradesh</option>
               <option>Tamil Nadu</option>
+              <option>Karnataka</option>
             </select>
             <button className="px-6 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors">
               Find Branch

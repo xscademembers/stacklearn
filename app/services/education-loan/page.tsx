@@ -17,6 +17,7 @@ const loanTypes = [
   { name: "Government Bank Loans", desc: "Education loans from public sector banks" },
   { name: "Private Institution Loans", desc: "Loans from private financial institutions" },
   { name: "Tuition + Living Coverage", desc: "Comprehensive loans covering all expenses" },
+  { name: "International lender", desc: "For overseas study" },
 ];
 
 const eligibility = [

@@ -36,7 +36,7 @@ const faqs = [
   {
     question: "Which countries does StackLearn support?",
     answer:
-      "We support students planning to study in top destinations including the UK, USA, Canada, Australia, Germany, and other leading global education hubs.",
+      "We support students planning to study in top destinations including the UK, USA, Canada, Australia, Germany, Ireland, and other leading global education hubs.",
   },
   {
     question: "Do you provide accommodation and post arrival support?",
