@@ -323,13 +323,19 @@ export default function USAPage() {
             </p>
           </div>
 
-          <div className="max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-            {courses.map((course) => (
+          <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+            {courses.map((course, index) => (
               <div
                 key={course}
-                className="rounded-2xl bg-white border border-slate-200 px-4 py-4 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15 hover:border-brand"
+                className="group rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-page-soft/80 px-4 py-5 text-left shadow-sm transition-all duration-300 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/10 motion-reduce:transition-none"
               >
-                <p className="text-sm md:text-base font-semibold text-slate-900">{course}</p>
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-soft text-brand text-xs font-bold">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="h-2 w-2 rounded-full bg-brand/60 transition-colors duration-300 group-hover:bg-brand motion-reduce:transition-none" />
+                </div>
+                <p className="text-sm md:text-[15px] font-semibold text-slate-900 leading-snug">{course}</p>
               </div>
             ))}
           </div>
@@ -349,13 +355,13 @@ export default function USAPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-5">
-            {universities.map((uni) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-5 max-w-5xl mx-auto">
+            {universities.slice(0, 12).map((uni) => (
               <div
                 key={uni.name}
                 className="group rounded-2xl bg-page-soft border border-slate-200 px-4 py-5 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15 hover:border-brand"
               >
-                <div className={`h-12 w-12 mb-3 rounded-xl ${uni.color} flex items-center justify-center text-white font-bold text-xs mx-auto group-hover:scale-110 transition-transform duration-300`}>
+                <div className="h-12 w-12 mb-3 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-xs mx-auto group-hover:scale-110 transition-transform duration-300">
                   {uni.initials}
                 </div>
                 <p className="text-xs md:text-sm font-semibold text-slate-900 leading-snug">
@@ -627,7 +633,7 @@ export default function USAPage() {
       {/* Scholarships */}
       <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
                 Scholarships to <span className="gradient-text">Study in the USA</span>
@@ -640,16 +646,21 @@ export default function USAPage() {
               </p>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-2">
-              {scholarships.map((scholarship) => (
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {scholarships.map((scholarship, index) => (
                 <article
                   key={scholarship.name}
-                  className="rounded-2xl border border-slate-200 bg-page-soft px-5 py-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15"
+                  className="group rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-page-soft/80 px-5 py-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/10 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                 >
-                  <span className={`inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-3 ${scholarship.tagColor}`}>
-                    {scholarship.tag}
-                  </span>
-                  <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <span className="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-soft text-brand">
+                      {scholarship.tag}
+                    </span>
+                    <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-full border border-brand/20 bg-brand-soft px-2 text-[11px] font-bold text-brand">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2 leading-snug">
                     {scholarship.name}
                   </h3>
                   <p className="text-xs md:text-sm text-slate-700 leading-relaxed">

@@ -55,7 +55,7 @@ export default function ChatWindow() {
     <>
       {/* WhatsApp Floating Icon */}
       <a
-        href="https://wa.me/919606031842"
+        href="https://wa.me/919606031840"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-16 h-16 bg-brand text-white rounded-full shadow-2xl hover:shadow-brand/50 hover:scale-110 transition-all duration-300 z-40 flex items-center justify-center animate-float"
@@ -138,7 +138,7 @@ export default function ChatWindow() {
               </button>
             </div>
             <a
-              href="https://wa.me/919606031842"
+              href="https://wa.me/919606031840"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors text-sm font-bold shadow-md hover:shadow-lg"
@@ -216,7 +216,7 @@ export default function ChatWindow() {
               </button>
             </div>
             <a
-              href="https://wa.me/919606031842"
+              href="https://wa.me/919606031840"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white rounded-lg text-sm font-bold shadow-md hover:shadow-lg"

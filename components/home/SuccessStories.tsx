@@ -42,12 +42,15 @@ const stories = [
 
 export default function SuccessStories() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState<"next" | "prev">("next");
 
   const nextSlide = () => {
+    setDirection("next");
     setCurrentIndex((prev) => (prev + 1) % stories.length);
   };
 
   const prevSlide = () => {
+    setDirection("prev");
     setCurrentIndex((prev) => (prev - 1 + stories.length) % stories.length);
   };
 
@@ -65,7 +68,9 @@ export default function SuccessStories() {
         <div className="relative max-w-6xl mx-auto px-8">
           <div className="overflow-hidden">
             <div
-              className="flex transition-transform duration-500 ease-in-out"
+              className={`flex will-change-transform transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                direction === "next" ? "animate-carousel-track-next" : "animate-carousel-track-prev"
+              }`}
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
               {stories.map((story, index) => (

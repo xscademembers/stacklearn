@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -80,24 +80,41 @@ const destinations = [
   },
 ];
 
-const VISIBLE_CARDS = 4;
-
 export default function PopularDestinations() {
   const [index, setIndex] = useState(0);
+  const [cardsPerView, setCardsPerView] = useState(4);
   const total = destinations.length;
+  const maxIndex = Math.max(0, total - cardsPerView);
+
+  useEffect(() => {
+    const updateCardsPerView = () => {
+      if (window.innerWidth >= 1024) {
+        setCardsPerView(4);
+        return;
+      }
+      if (window.innerWidth >= 640) {
+        setCardsPerView(2);
+        return;
+      }
+      setCardsPerView(1);
+    };
+
+    updateCardsPerView();
+    window.addEventListener("resize", updateCardsPerView);
+    return () => window.removeEventListener("resize", updateCardsPerView);
+  }, []);
+
+  useEffect(() => {
+    setIndex((prev) => Math.min(prev, maxIndex));
+  }, [maxIndex]);
 
   const showPrev = () => {
-    setIndex((prev) => (prev - 1 + total) % total);
+    setIndex((prev) => Math.max(0, prev - 1));
   };
 
   const showNext = () => {
-    setIndex((prev) => (prev + 1) % total);
+    setIndex((prev) => Math.min(maxIndex, prev + 1));
   };
-
-  const visible = Array.from({ length: VISIBLE_CARDS }).map((_, i) => {
-    const item = destinations[(index + i) % total];
-    return { ...item, key: `${item.href}-${index}-${i}` };
-  });
 
   return (
     <section
@@ -116,54 +133,64 @@ export default function PopularDestinations() {
 
         <div className="space-y-8">
           {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {visible.map((destination) => (
-              <Link
-                key={destination.key}
-                href={destination.href}
-                className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-100 transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={destination.image}
-                    alt={destination.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3">
-                    <Image
-                      src={destination.flag}
-                      alt=""
-                      width={28}
-                      height={20}
-                      className="rounded shadow-md flex-shrink-0"
-                    />
-                    <h3 className="text-white font-semibold text-xl drop-shadow-md truncate">
-                      {destination.name}
-                    </h3>
-                  </div>
+          <div className="overflow-hidden -mx-3">
+            <div
+              className="flex transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+              style={{ transform: `translateX(-${index * (100 / cardsPerView)}%)` }}
+            >
+              {destinations.map((destination) => (
+                <div
+                  key={destination.href}
+                  className="px-3 shrink-0"
+                  style={{ flex: `0 0 ${100 / cardsPerView}%` }}
+                >
+                  <Link
+                    href={destination.href}
+                    className="group flex h-full flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-100 transition-all duration-300 hover:-translate-y-1"
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={destination.image}
+                        alt={destination.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                      <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3">
+                        <Image
+                          src={destination.flag}
+                          alt=""
+                          width={28}
+                          height={20}
+                          className="rounded shadow-md flex-shrink-0"
+                        />
+                        <h3 className="text-white font-semibold text-xl drop-shadow-md truncate">
+                          {destination.name}
+                        </h3>
+                      </div>
+                    </div>
+                    <div className="p-6 flex flex-col flex-1">
+                      <ul className="space-y-2.5 flex-1">
+                        {destination.highlights.map((highlight, i) => (
+                          <li
+                            key={i}
+                            className="text-sm text-slate-600 flex items-start gap-2"
+                          >
+                            <span className="mt-1 h-1.5 w-1.5 rounded-full bg-brand flex-shrink-0" />
+                            <span className="leading-snug">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-5 flex items-center text-brand font-semibold text-sm group-hover:gap-2 transition-all duration-300">
+                        <span>Explore more</span>
+                        <FiArrowRight className="w-4 h-4 flex-shrink-0 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </Link>
                 </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <ul className="space-y-2.5 flex-1">
-                    {destination.highlights.map((highlight, i) => (
-                      <li
-                        key={i}
-                        className="text-sm text-slate-600 flex items-start gap-2"
-                      >
-                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-brand flex-shrink-0" />
-                        <span className="leading-snug">{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-5 flex items-center text-brand font-semibold text-sm group-hover:gap-2 transition-all duration-300">
-                    <span>Explore more</span>
-                    <FiArrowRight className="w-4 h-4 flex-shrink-0 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </Link>
-            ))}
+              ))}
+            </div>
           </div>
 
           {/* Navigation arrows below cards so they never overlap */}
@@ -171,7 +198,8 @@ export default function PopularDestinations() {
             <button
               type="button"
               onClick={showPrev}
-              className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-brand hover:text-white hover:border-brand shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+              disabled={index === 0}
+              className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-brand hover:text-white hover:border-brand shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-700 disabled:hover:border-slate-200"
               aria-label="Previous destinations"
             >
               <FiChevronLeft className="w-5 h-5 mr-1" />
@@ -180,14 +208,14 @@ export default function PopularDestinations() {
             <button
               type="button"
               onClick={showNext}
-              className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-brand hover:text-white hover:border-brand shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+              disabled={index >= maxIndex}
+              className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-brand hover:text-white hover:border-brand shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-700 disabled:hover:border-slate-200"
               aria-label="Next destinations"
             >
               Next
               <FiChevronRight className="w-5 h-5 ml-1" />
             </button>
           </div>
-
         </div>
       </div>
     </section>

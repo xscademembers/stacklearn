@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiChevronDown, FiCheck } from "react-icons/fi";
@@ -84,49 +83,31 @@ const countries = [
 const countryBenefits = [
   {
     country: "UK",
-    color: "bg-brand-soft border-brand/20",
-    accent: "text-brand",
-    tag: "bg-brand-soft text-brand",
     title: "Accelerated Academic Excellence",
     description: "One-year master\u2019s programs and industry-focused curricula enable faster career entry with globally respected qualifications.",
   },
   {
     country: "USA",
-    color: "bg-accent-soft border-accent/20",
-    accent: "text-accent",
-    tag: "bg-accent-soft text-accent",
     title: "Innovation & Research Leadership",
     description: "Access to cutting-edge research infrastructure, flexible study pathways, and strong internship/OPT opportunities enhances employability.",
   },
   {
     country: "Australia",
-    color: "bg-accent-soft border-accent/20",
-    accent: "text-accent",
-    tag: "bg-accent-soft text-accent",
     title: "Industry-Aligned Learning",
     description: "Practical education models with strong post-study work rights support long-term career progression.",
   },
   {
     country: "Canada",
-    color: "bg-slate-50 border-slate-200",
-    accent: "text-slate-700",
-    tag: "bg-slate-100 text-slate-700",
     title: "Career & Immigration Pathways",
     description: "Affordable education combined with co-op programs and PR-friendly policies strengthens global career prospects.",
   },
   {
     country: "Germany",
-    color: "bg-accent-soft border-accent/20",
-    accent: "text-accent",
-    tag: "bg-accent-soft text-accent",
     title: "High-Quality, Cost-Efficient Education",
     description: "Public universities offer world-class technical education with low or no tuition fees, particularly in engineering and technology.",
   },
   {
     country: "Ireland",
-    color: "bg-brand-soft border-brand/20",
-    accent: "text-brand",
-    tag: "bg-brand-soft text-brand",
     title: "Gateway to Europe\u2019s Tech Hub",
     description: "Strong presence of multinational corporations provides excellent opportunities in technology, pharma, and finance.",
   },
@@ -211,7 +192,7 @@ const faqs = [
   },
   {
     question: "How much does it cost to study abroad?",
-    answer: "Costs vary by country and program. Tuition may range between \u20B910\u201330 lakhs per year depending on destination, while living expenses typically range \u20B98\u201315 lakhs annually. Our counsellors provide transparent cost breakdowns and help you plan finances, scholarships, and education loan options.",
+    answer: "Costs vary by country and program. Tuition fees may range between \u20B910\u201330 lakhs per year depending on destination, while living expenses typically range \u20B98\u201315 lakhs annually. Our counsellors provide transparent cost breakdowns and help you plan finances, scholarships, and education loan options.",
   },
   {
     question: "Is proof of funds required for a student visa?",
@@ -232,7 +213,8 @@ const faqs = [
 ];
 
 export default function DestinationsPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const leftFaqs = faqs.slice(0, 5);
+  const rightFaqs = faqs.slice(5, 9);
 
   return (
     <div>
@@ -400,12 +382,12 @@ export default function DestinationsPage() {
             {countryBenefits.map((item) => (
               <article
                 key={item.country}
-                className={`rounded-2xl border px-5 py-6 md:px-6 md:py-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${item.color}`}
+                className="rounded-2xl border border-brand/20 bg-brand-soft/40 px-5 py-6 md:px-6 md:py-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15"
               >
-                <span className={`inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-3 ${item.tag}`}>
+                <span className="inline-block text-xs font-bold uppercase tracking-[0.16em] px-3 py-1 rounded-full mb-3 bg-brand text-white">
                   {item.country}
                 </span>
-                <h3 className={`text-base md:text-lg font-bold mb-2 ${item.accent}`}>
+                <h3 className="text-base md:text-lg font-bold mb-2 text-brand">
                   {item.title}
                 </h3>
                 <p className="text-xs md:text-sm text-slate-700 leading-relaxed">
@@ -500,15 +482,15 @@ export default function DestinationsPage() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 mb-8">
-            <div className="rounded-2xl bg-brand-soft/50 border border-brand/20 px-6 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15">
+            <div className="rounded-2xl bg-brand-soft/40 border border-brand/20 px-6 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15">
               <p className="text-3xl md:text-4xl font-extrabold text-brand mb-1">98%</p>
               <p className="text-sm font-semibold text-slate-900">Student Visa Success Rate</p>
             </div>
-            <div className="rounded-2xl bg-accent-soft/50 border border-accent/20 px-6 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-              <p className="text-3xl md:text-4xl font-extrabold text-accent mb-1">97%</p>
+            <div className="rounded-2xl bg-brand-soft/40 border border-brand/20 px-6 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15">
+              <p className="text-3xl md:text-4xl font-extrabold text-brand mb-1">97%</p>
               <p className="text-sm font-semibold text-slate-900">Admission Success Rate</p>
             </div>
-            <div className="rounded-2xl bg-page-soft border border-slate-200 px-6 py-6 text-center sm:col-span-2 md:col-span-1 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15">
+            <div className="rounded-2xl bg-brand-soft/40 border border-brand/20 px-6 py-6 text-center sm:col-span-2 md:col-span-1 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-brand/15">
               <p className="text-3xl md:text-4xl font-extrabold text-brand mb-1">500+</p>
               <p className="text-sm font-semibold text-slate-900">Successful Student Placements</p>
             </div>
@@ -582,46 +564,56 @@ export default function DestinationsPage() {
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-6 md:px-8">
           <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">
               Frequently Asked <span className="gradient-text">Questions</span>
             </h2>
-            <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
-              Find answers to the most common queries about studying abroad.
+            <p className="text-lg md:text-xl text-slate-700 font-medium max-w-2xl mx-auto">
+              Find answers to the most common queries students ask before studying abroad.
             </p>
           </div>
 
-          <div className="max-w-3xl mx-auto space-y-3">
+          <div className="hidden md:grid md:grid-cols-2 gap-6 md:gap-8">
+            {leftFaqs.map((faq, rowIndex) => (
+              <div
+                key={`left-${faq.question}`}
+                style={{ gridColumn: 1, gridRow: rowIndex + 1 }}
+                className="bg-white rounded-2xl shadow-sm border border-slate-200 px-5 py-4 md:px-6 md:py-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand/10"
+              >
+                <p className="font-semibold text-slate-900 mb-2 text-sm md:text-base">
+                  {rowIndex + 1}. {faq.question}
+                </p>
+                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">
+                  {faq.answer}
+                </p>
+              </div>
+            ))}
+
+            {rightFaqs.map((faq, rowIndex) => (
+              <div
+                key={`right-${faq.question}`}
+                style={{ gridColumn: 2, gridRow: rowIndex + 1 }}
+                className="bg-white rounded-2xl shadow-sm border border-slate-200 px-5 py-4 md:px-6 md:py-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand/10"
+              >
+                <p className="font-semibold text-slate-900 mb-2 text-sm md:text-base">
+                  {rowIndex + 1 + leftFaqs.length}. {faq.question}
+                </p>
+                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">
+                  {faq.answer}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="md:hidden space-y-4">
             {faqs.map((faq, index) => (
               <div
-                key={index}
-                className="rounded-2xl bg-white border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md"
+                key={`mobile-${faq.question}`}
+                className="bg-white rounded-2xl shadow-sm border border-slate-200 px-5 py-4 text-left"
               >
-                <button
-                  type="button"
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full flex items-center justify-between gap-4 px-5 py-4 md:px-6 md:py-5 text-left"
-                  aria-expanded={openFaq === index}
-                >
-                  <span className="font-semibold text-slate-900 text-sm md:text-base">
-                    {index + 1}. {faq.question}
-                  </span>
-                  <FiChevronDown
-                    className={`w-5 h-5 text-brand flex-shrink-0 transition-transform duration-300 ${
-                      openFaq === index ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                <div
-                  className={`grid transition-all duration-300 ${
-                    openFaq === index ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <p className="px-5 pb-4 md:px-6 md:pb-5 text-xs md:text-sm text-slate-700 leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </div>
-                </div>
+                <p className="font-semibold text-slate-900 mb-2 text-sm">
+                  {index + 1}. {faq.question}
+                </p>
+                <p className="text-xs text-slate-700 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
           </div>

@@ -162,7 +162,11 @@ export default function Footer() {
             <div className="space-y-4 text-sm">
               <div>
                 <p className="font-bold text-white mb-2 text-base">Head Office</p>
-                <p className="text-gray-300">Stack Learn, Hyderabad, Telangana, India</p>
+                <p className="text-gray-300">
+                  Stack Learn Overseas Consultancy No-374, 2nd floor 4th
+                  cross, 60 Feet Rd, above amogha child health care, Amruthahalli,
+                  Bengaluru, Karnataka-560092
+                </p>
               </div>
               <div>
                 <p className="font-bold text-white mb-2 text-base">Phone</p>
@@ -191,7 +195,7 @@ export default function Footer() {
                   Book Free Counselling
                 </BookConsultButton>
                 <a
-                  href="https://wa.me/919606031842"
+                  href="https://wa.me/919606031840"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 px-4 py-3 bg-brand text-white rounded-full hover:bg-brand-strong hover:scale-105 transition-all duration-300 transform text-sm font-semibold"
@@ -212,7 +216,7 @@ export default function Footer() {
             </div>
             <div className="flex items-center space-x-4">
               <a
-                href="https://wa.me/919606031842"
+                href="https://wa.me/919606031840"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-brand transition-colors"

@@ -114,6 +114,46 @@ html {
   }
 }
 
+@keyframes carouselInRight {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes carouselInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes trackPulseNext {
+  0% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes trackPulsePrev {
+  0% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 /* Motion-respecting animation helpers */
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out;
@@ -139,11 +179,31 @@ html {
   animation: marquee2 30s linear infinite;
 }
 
+.animate-carousel-in-right {
+  animation: carouselInRight 0.55s ease-out both;
+}
+
+.animate-carousel-in-left {
+  animation: carouselInLeft 0.55s ease-out both;
+}
+
+.animate-carousel-track-next {
+  animation: trackPulseNext 0.4s ease-out;
+}
+
+.animate-carousel-track-prev {
+  animation: trackPulsePrev 0.4s ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fadeInUp,
   .animate-fadeIn,
   .animate-slideInRight,
-  .animate-float {
+  .animate-float,
+  .animate-carousel-in-right,
+  .animate-carousel-in-left,
+  .animate-carousel-track-next,
+  .animate-carousel-track-prev {
     animation: none !important;
   }
 
@@ -198,10 +258,12 @@ html {
 ::-webkit-scrollbar-thumb {
   background: rgb(var(--color-brand));
   border-radius: 5px;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(var(--color-brand-strong));
+  box-shadow: 0 0 0 2px rgba(var(--color-brand), 0.18);
 }
 
 /* Focus styles */
