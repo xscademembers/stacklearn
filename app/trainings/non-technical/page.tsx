@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiClock, FiUsers, FiCheckCircle } from "react-icons/fi";
-import BookConsultButton from "@/components/BookConsultButton";
+import TrainingEnquiryButton from "@/components/TrainingEnquiryButton";
 import { nonTechnicalCourses } from "@/lib/non-technical-courses-data";
 
 export const metadata: Metadata = {
@@ -40,13 +40,14 @@ export default function NonTechnicalTrainingsPage() {
               freshers and working professionals. Advance your career in specialized engineering
               fields with industry-ready skills.
             </p>
-            <BookConsultButton
+            <TrainingEnquiryButton
               variant="white"
+              defaultCourseType="Non-Technical"
               className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
             >
-              Explore Courses
+              Enroll Now
               <FiArrowRight className="w-4 h-4" />
-            </BookConsultButton>
+            </TrainingEnquiryButton>
           </div>
         </div>
       </section>
@@ -217,13 +218,14 @@ export default function NonTechnicalTrainingsPage() {
               Join StackLearn&apos;s specialized training programs and gain the skills that
               employers are looking for. Get started with a free career consultation.
             </p>
-            <BookConsultButton
+            <TrainingEnquiryButton
               variant="white"
+              defaultCourseType="Non-Technical"
               className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
             >
-              Book Free Career Consultation
+              Enroll Now
               <FiArrowRight className="w-4 h-4" />
-            </BookConsultButton>
+            </TrainingEnquiryButton>
           </div>
         </div>
       </section>

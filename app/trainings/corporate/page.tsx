@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { FiArrowRight, FiCheckCircle, FiChevronDown } from "react-icons/fi";
-import BookConsultButton from "@/components/BookConsultButton";
+import CorporateTrainingButton from "@/components/CorporateTrainingButton";
 import CorporateFaqs from "./CorporateFaqs";
 
 export const metadata: Metadata = {
@@ -124,19 +124,19 @@ export default function CorporateTrainingsPage() {
               apply new knowledge directly in their work environment.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <BookConsultButton
+              <CorporateTrainingButton
                 variant="white"
                 className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
               >
                 Request Corporate Training
                 <FiArrowRight className="w-4 h-4" />
-              </BookConsultButton>
-              <BookConsultButton
+              </CorporateTrainingButton>
+              <CorporateTrainingButton
                 variant="secondary"
                 className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base !border-white/40 !text-white hover:!bg-white/10"
               >
                 Schedule Consultation
-              </BookConsultButton>
+              </CorporateTrainingButton>
             </div>
           </div>
         </div>
@@ -394,19 +394,19 @@ export default function CorporateTrainingsPage() {
               technology-driven business environment.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <BookConsultButton
+              <CorporateTrainingButton
                 variant="white"
                 className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
               >
-                Request Corporate Training
+                Request Proposal
                 <FiArrowRight className="w-4 h-4" />
-              </BookConsultButton>
-              <BookConsultButton
+              </CorporateTrainingButton>
+              <CorporateTrainingButton
                 variant="secondary"
                 className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base !border-white/40 !text-white hover:!bg-white/10"
               >
                 Talk to Our Training Experts
-              </BookConsultButton>
+              </CorporateTrainingButton>
             </div>
           </div>
         </div>

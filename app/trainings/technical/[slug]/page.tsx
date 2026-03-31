@@ -15,7 +15,7 @@ import {
   FiAward,
   FiBriefcase,
 } from "react-icons/fi";
-import BookConsultButton from "@/components/BookConsultButton";
+import TrainingEnquiryButton from "@/components/TrainingEnquiryButton";
 import { getTechnicalCourseBySlug } from "@/lib/technical-courses-data";
 
 type TabId = "overview" | "curriculum" | "faqs";
@@ -102,13 +102,15 @@ export default function TechnicalCourseDetailPage() {
               </div>
 
               <div className="flex flex-wrap justify-center gap-4">
-                <BookConsultButton
+                <TrainingEnquiryButton
                   variant="white"
+                  defaultCourseType="Technical"
+                  defaultCourseName={course.shortTitle}
                   className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
                 >
-                  Apply Now
+                  Enroll Now
                   <FiArrowRight className="w-4 h-4" />
-                </BookConsultButton>
+                </TrainingEnquiryButton>
               </div>
             </div>
           </div>
@@ -332,10 +334,14 @@ export default function TechnicalCourseDetailPage() {
                 </div>
 
                 <div className="mt-10 text-center">
-                  <BookConsultButton className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base">
-                    Download Detailed Brochure
+                  <TrainingEnquiryButton
+                    defaultCourseType="Technical"
+                    defaultCourseName={course.shortTitle}
+                    className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
+                  >
+                    Request Callback
                     <FiArrowRight className="w-4 h-4" />
-                  </BookConsultButton>
+                  </TrainingEnquiryButton>
                 </div>
               </div>
             </div>
@@ -379,10 +385,14 @@ export default function TechnicalCourseDetailPage() {
                   <p className="text-sm text-slate-700 mb-4">
                     Our course advisors are happy to help you find the right training program.
                   </p>
-                  <BookConsultButton className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base">
+                  <TrainingEnquiryButton
+                    defaultCourseType="Technical"
+                    defaultCourseName={course.shortTitle}
+                    className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
+                  >
                     Talk to a Course Advisor
                     <FiArrowRight className="w-4 h-4" />
-                  </BookConsultButton>
+                  </TrainingEnquiryButton>
                 </div>
               </div>
             </div>
@@ -411,13 +421,15 @@ export default function TechnicalCourseDetailPage() {
               rewarding career in tech.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <BookConsultButton
+              <TrainingEnquiryButton
                 variant="white"
+                defaultCourseType="Technical"
+                defaultCourseName={course.shortTitle}
                 className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
               >
-                Apply Now
+                Enroll Now
                 <FiArrowRight className="w-4 h-4" />
-              </BookConsultButton>
+              </TrainingEnquiryButton>
               <Link
                 href="/trainings/technical"
                 className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base font-semibold border-2 border-white/40 rounded-full text-white hover:bg-white/10 transition-colors duration-300"
