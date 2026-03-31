@@ -6,7 +6,7 @@ import { FiArrowRight } from "react-icons/fi";
 export const metadata: Metadata = {
   title: "GRE Coaching | StackLearn Test Preparation",
   description:
-    "Focused GRE coaching with structured concepts, problem-solving practice, mock exams, and performance analysis for competitive scores.",
+    "Focused GRE coaching with structured concepts, problem-solving practice, mock exams, and performance analysis for competitive scores for MS, MBA and other graduate programs abroad.",
 };
 
 export default function GREPage() {

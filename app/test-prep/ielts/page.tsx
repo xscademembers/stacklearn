@@ -6,7 +6,7 @@ import { FiArrowRight } from "react-icons/fi";
 export const metadata: Metadata = {
   title: "IELTS Coaching | StackLearn Test Preparation",
   description:
-    "Expert IELTS coaching with structured listening, reading, writing, and speaking preparation, mock tests, and personalized feedback for your target band score.",
+    "Expert IELTS coaching online and classroom programs with structured listening, reading, writing, and speaking preparation, mock tests, and personalized feedback for your target band score and overseas education goals.",
 };
 
 export default function IELTSPage() {
@@ -34,7 +34,7 @@ export default function IELTSPage() {
             </h1>
             <p className="text-base md:text-lg text-white/90 leading-relaxed mb-6">
               Achieve your target IELTS band with expert coaching, structured practice, and
-              real-exam simulations at StackLearn.
+              real-exam simulations at StackLearn — ideal for students planning to study in the UK, USA, Canada, Australia and other top destinations.
             </p>
             <BookConsultButton
               variant="white"

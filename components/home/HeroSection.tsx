@@ -64,11 +64,13 @@ export default function HeroSection() {
           {/* Left Content */}
           <div className="space-y-8 md:space-y-10 animate-fadeInUp">
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white leading-tight drop-shadow-lg">
-              Study Abroad Made <span className="text-accent">Simple</span>
+              Best Study Abroad{" "}
+              <span className="text-accent">Consultancy in India</span>
             </h1>
             <p className="text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed font-medium max-w-xl">
-              Expert guidance, global partnerships, and transparent support at
-              every step of your international education journey.
+              Expert overseas education consultants helping you study in the UK,
+              USA, Canada, Australia and more with transparent study visa
+              guidance and a simple, structured study abroad process.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
               <BookConsultButton className="flex items-center justify-center gap-2">

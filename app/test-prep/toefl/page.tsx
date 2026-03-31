@@ -6,7 +6,7 @@ import { FiArrowRight } from "react-icons/fi";
 export const metadata: Metadata = {
   title: "TOEFL Coaching | StackLearn Test Preparation",
   description:
-    "TOEFL coaching focused on integrated reading, listening, speaking, and writing skills for admissions in the USA, Canada, and other destinations.",
+    "TOEFL coaching focused on integrated reading, listening, speaking, and writing skills for admissions in the USA, Canada, and other destinations as part of your overall study abroad process.",
 };
 
 export default function TOEFLPage() {

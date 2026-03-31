@@ -8,7 +8,7 @@ import { nonTechnicalCourses } from "@/lib/non-technical-courses-data";
 export const metadata: Metadata = {
   title: "Non-Technical Training Courses | StackLearn",
   description:
-    "Specialized non-technical training programs including VLSI Design Verification with hands-on projects, expert mentorship, and placement assistance.",
+    "Specialized non-technical and domain-focused training programs including VLSI Design Verification with hands-on projects, expert mentorship, and placement assistance. Part of StackLearn's broader Technical & Non-Technical Training offerings that support global study abroad and career goals.",
 };
 
 export default function NonTechnicalTrainingsPage() {

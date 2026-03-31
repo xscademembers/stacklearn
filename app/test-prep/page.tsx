@@ -50,14 +50,14 @@ export default function TestPrepPage() {
               Test Preparation
             </h1>
             <p className="text-base md:text-2xl font-semibold text-white/90 mb-5">
-              IELTS, GRE, TOEFL &amp; GMAT Coaching Tailored for Your Study Abroad Goals
+              IELTS, GRE, TOEFL &amp; GMAT Coaching Tailored for Your Study Abroad Goals – including flexible IELTS coaching online options.
             </p>
-            <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4 mx-auto">
-              A strong test score can open doors to top universities worldwide. Whether you are
-              applying for undergraduate, postgraduate, or MBA programs, international universities
-              rely on standardized test scores to assess your academic readiness and English
-              proficiency.
-            </p>
+              <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4 mx-auto">
+                A strong test score can open doors to top universities worldwide. Whether you are
+                applying for undergraduate, postgraduate, or MBA programs, international universities
+                rely on standardized test scores to assess your academic readiness and English
+                proficiency — making structured IELTS, TOEFL, and GRE coaching especially important for study abroad success.
+              </p>
             <p className="text-base md:text-lg text-white/90 leading-relaxed mx-auto">
               At StackLearn, we provide structured and result‑driven test preparation for IELTS,
               GRE, TOEFL, and GMAT. Our expert trainers, personalized learning plans, and

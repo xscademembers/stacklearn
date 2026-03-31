@@ -8,7 +8,7 @@ import { technicalCourses } from "@/lib/technical-courses-data";
 export const metadata: Metadata = {
   title: "Technical Training Courses | StackLearn",
   description:
-    "Industry-ready technical training in Azure Data Engineering, Data Science, Power BI, QA Automation, and RPA UiPath with placement assistance.",
+    "Industry-ready technical training in Azure Data Engineering, Data Science, Power BI, QA Automation, and RPA (UiPath) Training with placement assistance. Build skills alongside your overseas education plans with Python Training, SQL Training, and other Technical & Non-Technical Training programs.",
 };
 
 const courseIcons: Record<string, string> = {
@@ -44,8 +44,8 @@ export default function TechnicalTrainingsPage() {
             </h1>
             <p className="text-base md:text-lg text-white/90 leading-relaxed mb-6 max-w-3xl mx-auto">
               Gain in-demand tech skills with hands-on, mentor-led training programs designed for
-              both freshers and working professionals. From cloud data engineering to automation —
-              build the career you envision.
+              both freshers and working professionals. From cloud data engineering, Python Training
+              and SQL Training to QA automation and RPA (UiPath) Training — build the career you envision.
             </p>
             <TrainingEnquiryButton
               variant="white"

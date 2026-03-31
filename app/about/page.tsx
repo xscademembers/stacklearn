@@ -91,7 +91,8 @@ export default function AboutPage() {
             <p className="text-sm md:text-base text-slate-700 leading-relaxed">
               We combine overseas education consultancy with practical technical training to help
               students not just study abroad — but actually thrive there. From choosing the right
-              university to building job-ready skills, we support students through the complete journey.
+              university to building job-ready skills, we support students through the complete journey,
+              acting as one of the best study abroad consultants in India for tech-focused global careers.
             </p>
           </div>
           <div className="max-w-4xl mx-auto grid gap-4 md:grid-cols-2">

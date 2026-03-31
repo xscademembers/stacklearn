@@ -95,15 +95,15 @@ export default function ServicesPage() {
               End-to-End Study Abroad Services for International Education
             </h1>
             <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4 max-w-4xl mx-auto">
-              Looking for trusted study abroad consultants to guide your overseas education journey?
+              Looking for trusted Top Study Abroad Consultants to guide your overseas education journey?
               At StackLearn, we provide complete study abroad services including profile evaluation,
-              university admission assistance, SOP &amp; LOR writing, student visa support,
-              accommodation guidance, and education loan assistance.
+              university admission assistance, SOP &amp; LOR writing, student visa process guidance,
+              accommodation support, and education loan assistance.
             </p>
             <p className="text-sm md:text-base text-white/80 leading-relaxed max-w-3xl mx-auto">
               As a professional overseas education consultancy, we help students plan, apply, and
               secure admission to top universities in the UK, USA, Canada, Australia, and other
-              leading destinations.
+              leading destinations, with clear breakdowns of the cost of studying abroad and funding options.
             </p>
             <div className="mt-8">
               <BookConsultButton

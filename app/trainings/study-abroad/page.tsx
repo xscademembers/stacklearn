@@ -6,7 +6,7 @@ import BookConsultButton from "@/components/BookConsultButton";
 export const metadata: Metadata = {
   title: "Study Abroad Training | StackLearn",
   description:
-    "End-to-end overseas education support — university shortlisting, application submissions, IELTS preparation, visa support, SOP guidance, and dedicated counselling.",
+    "End-to-end overseas education support from one of the best study abroad consultants in India — university shortlisting, application submissions, IELTS coaching online, visa support, SOP guidance, and dedicated counselling for Study in UK, USA, Canada, Australia and more.",
 };
 
 const services = [
@@ -61,8 +61,9 @@ export default function StudyAbroadTrainingsPage() {
               <span className="text-accent">Studying Abroad</span> a Reality
             </h1>
             <p className="text-base md:text-lg text-white/90 leading-relaxed mb-6 max-w-3xl mx-auto">
-              Our team of experienced experts will guide you every step of the way, ensuring a
-              smooth and successful journey to your ideal university.
+              Our team of experienced overseas education consultants will guide you every step of the way,
+              ensuring a smooth and successful study abroad journey to your ideal university with clear
+              study visa guidance and country-specific support.
             </p>
             <BookConsultButton
               variant="white"
@@ -85,9 +86,9 @@ export default function StudyAbroadTrainingsPage() {
               </h2>
               <p className="text-sm md:text-base text-slate-700 leading-relaxed mb-4">
                 At Stack Learn Private Limited, we are a group of people passionate about helping
-                students embark on their global education journey. We are a premier consultancy
-                offering expert guidance and support to students who aspire to pursue higher
-                education abroad.
+                students embark on their global education journey. We are a premier study abroad
+                consultancy offering expert guidance and support to students who aspire to pursue higher
+                education abroad with the help of experienced overseas education consultants.
               </p>
               <p className="text-sm md:text-base text-slate-700 leading-relaxed">
                 Our goal is to simplify the overseas education process and ensure that students are

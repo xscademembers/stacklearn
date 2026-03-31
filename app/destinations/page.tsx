@@ -280,7 +280,9 @@ export default function DestinationsPage() {
             </p>
             <p className="text-base md:text-lg text-slate-700 leading-relaxed mb-8">
               Studying abroad fosters independence, cross-cultural competence, and access to
-              specialized, flexible learning models aligned with industry demand.
+              specialized, flexible learning models aligned with industry demand. We regularly guide
+              Study in UK for Indian Students, explain Study in Canada requirements, and break down
+              the cost of studying in UK and other destinations so you can plan with clarity.
             </p>
 
             <div className="grid gap-4 sm:grid-cols-2 mb-8">
@@ -465,10 +467,11 @@ export default function DestinationsPage() {
             ))}
           </div>
 
-          <p className="mt-10 text-center text-sm md:text-base text-slate-600 max-w-3xl mx-auto">
-            At Stack Learn, our approach is strategic, compliant with current immigration policies,
-            and fully focused on delivering measurable outcomes for your global academic success.
-          </p>
+            <p className="mt-10 text-center text-sm md:text-base text-slate-600 max-w-3xl mx-auto">
+              At Stack Learn, our approach is strategic, compliant with current immigration policies,
+              and fully focused on delivering measurable outcomes for your global academic success as one
+              of the best study abroad consultants in India.
+            </p>
         </div>
       </section>
 
