@@ -35,6 +35,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Form controls: keep dropdown text readable across platforms */
+select {
+  color: rgb(var(--color-text));
+  background-color: rgb(var(--color-surface));
+}
+
+select option {
+  color: rgb(var(--color-text));
+  background-color: rgb(var(--color-surface));
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

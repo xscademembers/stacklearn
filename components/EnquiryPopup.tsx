@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { FiX } from "react-icons/fi";
 
 interface EnquiryPopupProps {
@@ -9,6 +10,7 @@ interface EnquiryPopupProps {
 }
 
 export default function EnquiryPopup({ isOpen, onClose }: EnquiryPopupProps) {
+  const [mounted, setMounted] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -53,10 +55,14 @@ export default function EnquiryPopup({ isOpen, onClose }: EnquiryPopupProps) {
     onClose();
   };
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+  if (!isOpen || !mounted) return null;
+
+  const modal = (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-5 relative animate-fadeInUp max-h-[90vh] overflow-y-auto">
         <button
           onClick={handleClose}
@@ -127,7 +133,7 @@ export default function EnquiryPopup({ isOpen, onClose }: EnquiryPopupProps) {
                   <select
                     value={formData.destination}
                     onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
-                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm"
+                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm bg-white text-slate-900"
                   >
                     <option value="">Select country</option>
                     <option value="uk">United Kingdom</option>
@@ -180,4 +186,6 @@ export default function EnquiryPopup({ isOpen, onClose }: EnquiryPopupProps) {
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }

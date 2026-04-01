@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { FiX } from "react-icons/fi";
 
 interface TrainingEnquiryPopupProps {
@@ -16,6 +17,7 @@ export default function TrainingEnquiryPopup({
   defaultCourseType,
   defaultCourseName,
 }: TrainingEnquiryPopupProps) {
+  const [mounted, setMounted] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -29,7 +31,11 @@ export default function TrainingEnquiryPopup({
     preferredBatch: "",
   });
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -79,8 +85,8 @@ export default function TrainingEnquiryPopup({
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+  const modal = (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative animate-fadeInUp motion-reduce:animate-none max-h-[90vh] overflow-y-auto">
         <button
           onClick={handleClose}
@@ -153,7 +159,7 @@ export default function TrainingEnquiryPopup({
                     required
                     value={formData.courseType}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm"
+                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm bg-white text-slate-900"
                   >
                     <option value="">Select type</option>
                     <option value="Technical">Technical</option>
@@ -186,7 +192,7 @@ export default function TrainingEnquiryPopup({
                     required
                     value={formData.mode}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm"
+                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm bg-white text-slate-900"
                   >
                     <option value="">Select mode</option>
                     <option value="Online">Online</option>
@@ -203,7 +209,7 @@ export default function TrainingEnquiryPopup({
                     required
                     value={formData.preferredBatch}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm"
+                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm bg-white text-slate-900"
                   >
                     <option value="">Select batch</option>
                     <option value="Morning">Morning</option>
@@ -263,5 +269,7 @@ export default function TrainingEnquiryPopup({
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }
 

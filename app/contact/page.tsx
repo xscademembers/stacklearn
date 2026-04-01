@@ -94,7 +94,7 @@ export default function ContactPage() {
             <div className="bg-gray-50 p-6 rounded-xl text-center">
               <FiMapPin className="w-12 h-12 text-brand mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Our Office</h3>
-              <p className="text-gray-600 mb-4">Hyderabad, Telangana, India</p>
+              <p className="text-gray-600 mb-4">MG Road, Bengaluru, Karnataka, India</p>
               <a
                 href="https://maps.google.com"
                 target="_blank"
@@ -198,7 +198,7 @@ export default function ContactPage() {
                   <strong>Office Hours:</strong> Mon-Sat, 10:00 AM - 5:00 PM
                 </p>
                 <p className="text-gray-600 mb-4">
-                  <strong>Address:</strong> Stack Learn, Hyderabad, Telangana, India
+                  <strong>Address:</strong> Stack Learn, MG Road, Bengaluru, Karnataka, India
                 </p>
                 <div className="flex gap-4 mt-6">
                   <a
