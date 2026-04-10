@@ -240,6 +240,7 @@ export default function ApplyPage() {
                     required
                     value={formData.mobile}
                     onChange={(e) => { setFormData({ ...formData, mobile: e.target.value }); setErrors({ ...errors, mobile: "" }); }}
+                    placeholder="+ 91 78993 38507"
                     className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.mobile ? 'border-accent' : 'border-gray-300'}`}
                   />
                   {errors.mobile && <p className="text-accent text-sm mt-1">{errors.mobile}</p>}

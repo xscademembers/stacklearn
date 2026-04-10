@@ -191,7 +191,7 @@ export default function Header() {
                 <Link
                   href="/services"
                   className={`flex items-center px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                    isActive("/services")
+                    isActive("/services") || isActive("/trainings")
                       ? "text-brand bg-brand-soft"
                       : "text-slate-700 hover:text-brand hover:bg-brand-soft/50"
                   }`}
@@ -206,16 +206,43 @@ export default function Header() {
                       : "opacity-0 invisible -translate-y-2"
                   }`}
                 >
-                  {services.map((item) => (
-                    <Link
-                      key={item.href + item.name}
-                      href={item.href}
-                      className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-soft hover:text-brand transition-colors duration-200 font-medium"
-                      onClick={() => setOpenDropdown(null)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                  <div className="relative group/studyAbroadServices">
+                    <span className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-soft hover:text-brand transition-colors duration-200 font-semibold cursor-default">
+                      <span>Study Abroad Services</span>
+                      <FiChevronRight className="w-4 h-4 shrink-0" />
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-72 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 opacity-0 invisible group-hover/studyAbroadServices:opacity-100 group-hover/studyAbroadServices:visible transition-all duration-200">
+                      {services.map((item) => (
+                        <Link
+                          key={item.href + item.name}
+                          href={item.href}
+                          className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-soft hover:text-brand transition-colors duration-200 font-medium"
+                          onClick={() => setOpenDropdown(null)}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="relative group/servicesTraining">
+                    <span className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-soft hover:text-brand transition-colors duration-200 font-semibold cursor-default">
+                      <span>Training</span>
+                      <FiChevronRight className="w-4 h-4 shrink-0" />
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 opacity-0 invisible group-hover/servicesTraining:opacity-100 group-hover/servicesTraining:visible transition-all duration-200">
+                      {trainings.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-soft hover:text-brand transition-colors duration-200 font-medium"
+                          onClick={() => setOpenDropdown(null)}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -228,7 +255,7 @@ export default function Header() {
                 <button
                   type="button"
                   className={`flex items-center px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                    isActive("/trainings") || isActive("/study-abroad-steps") || isActive("/test-prep") || isActive("/scholarships") || isActive("/success-stories") || isActive("/blog") || isActive("/branches") || isActive("/contact")
+                    isActive("/study-abroad-steps") || isActive("/test-prep") || isActive("/scholarships") || isActive("/success-stories") || isActive("/blog") || isActive("/branches") || isActive("/contact")
                       ? "text-brand bg-brand-soft"
                       : "text-slate-700 hover:text-brand hover:bg-brand-soft/50"
                   }`}
@@ -243,28 +270,6 @@ export default function Header() {
                       : "opacity-0 invisible -translate-y-2"
                   }`}
                 >
-                  {/* Trainings with submenu */}
-                  <div className="relative group/trainings">
-                    <span
-                      className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-soft hover:text-brand transition-colors duration-200 font-semibold cursor-default"
-                    >
-                      <span>Trainings</span>
-                      <FiChevronRight className="w-4 h-4" />
-                    </span>
-                    <div className="absolute left-full top-0 ml-1 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 opacity-0 invisible group-hover/trainings:opacity-100 group-hover/trainings:visible transition-all duration-200">
-                      {trainings.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-brand-soft hover:text-brand transition-colors duration-200 font-medium"
-                          onClick={() => setOpenDropdown(null)}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-
                   {/* Study Abroad Steps with submenu */}
                   <div className="relative group/steps">
                     <Link
@@ -433,7 +438,7 @@ export default function Header() {
               <Link
                 href="/services"
                 className={`block px-4 py-3 rounded-lg font-semibold transition-colors ${
-                  isActive("/services")
+                  isActive("/services") || isActive("/trainings")
                     ? "text-brand bg-brand-soft"
                     : "text-slate-700 hover:bg-brand-soft"
                 }`}
@@ -441,12 +446,31 @@ export default function Header() {
               >
                 Services
               </Link>
-              <div className="px-4 pt-3 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400">Trainings</div>
+              <div className="px-6 pt-2 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400">
+                Study Abroad Services
+              </div>
+              {services.map((item) => (
+                <Link
+                  key={item.href + item.name}
+                  href={item.href}
+                  className={`block pl-8 pr-4 py-2.5 rounded-lg font-medium text-sm transition-colors ${
+                    isActive(item.href)
+                      ? "text-brand bg-brand-soft"
+                      : "text-slate-700 hover:bg-brand-soft"
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+              <div className="px-6 pt-3 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400">
+                Training
+              </div>
               {trainings.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`block px-6 py-2.5 rounded-lg font-medium text-sm transition-colors ${
+                  className={`block pl-8 pr-4 py-2.5 rounded-lg font-medium text-sm transition-colors ${
                     isActive(item.href)
                       ? "text-brand bg-brand-soft"
                       : "text-slate-700 hover:bg-brand-soft"

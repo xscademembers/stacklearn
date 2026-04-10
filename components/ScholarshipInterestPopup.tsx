@@ -110,7 +110,7 @@ export default function ScholarshipInterestPopup({
                 value={formData.mobile}
                 onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
                 className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-colors focus:border-brand"
-                placeholder="+91 9876543210"
+                placeholder="+ 91 78993 38507"
               />
             </label>
             <label className="text-sm text-gray-700">

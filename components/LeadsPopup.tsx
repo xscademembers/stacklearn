@@ -133,7 +133,7 @@ export default function LeadsPopup() {
                     setFormData({ ...formData, mobile: e.target.value })
                   }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
-                  placeholder="+91 9876543210"
+                  placeholder="+ 91 78993 38507"
                 />
               </div>
               <div>

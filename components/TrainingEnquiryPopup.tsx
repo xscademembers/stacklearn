@@ -130,6 +130,7 @@ export default function TrainingEnquiryPopup({
                     required
                     value={formData.phoneNumber}
                     onChange={handleChange}
+                    placeholder="+ 91 78993 38507"
                     className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm"
                   />
                 </div>

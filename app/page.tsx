@@ -4,6 +4,7 @@ import HowWeHelpSection from "@/components/home/HowWeHelpSection";
 import ServicesOverview from "@/components/home/ServicesOverview";
 import WhyChooseStackLearn from "@/components/home/WhyChooseStackLearn";
 import PopularDestinations from "@/components/home/PopularDestinations";
+import PopularTrainingPrograms from "@/components/home/PopularTrainingPrograms";
 import ProcessSection from "@/components/home/ProcessSection";
 import SuccessStories from "@/components/home/SuccessStories";
 import ScholarshipPromotion from "@/components/home/ScholarshipPromotion";
@@ -19,6 +20,7 @@ export default function Home() {
       <ServicesOverview />
       <WhyChooseStackLearn />
       <PopularDestinations />
+      <PopularTrainingPrograms />
       <ProcessSection />
       <SuccessStories />
       <ScholarshipPromotion />

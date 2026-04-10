@@ -169,6 +169,7 @@ export default function ScheduleMeetingPage() {
                     required
                     value={formData.mobile}
                     onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                    placeholder="+ 91 78993 38507"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                   />
                 </div>

@@ -123,7 +123,7 @@ export default function EnquiryPopup({ isOpen, onClose }: EnquiryPopupProps) {
                     value={formData.mobile}
                     onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
                     className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-brand focus:border-brand transition-all text-sm"
-                    placeholder="+91 9876543210"
+                    placeholder="+ 91 78993 38507"
                   />
                 </div>
                 <div>

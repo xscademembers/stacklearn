@@ -63,25 +63,35 @@ export default function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
           {/* Left Content */}
           <div className="space-y-8 md:space-y-10 animate-fadeInUp">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white leading-tight drop-shadow-lg">
-              Best Study Abroad{" "}
-              <span className="text-accent">Consultancy in India</span>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight drop-shadow-lg">
+              Best Study Abroad Consultancy and{" "}
+              <span className="text-accent">Job-Oriented Training Institute</span>{" "}
+              in India
             </h1>
-            <p className="text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed font-medium max-w-xl">
-              Expert overseas education consultants helping you study in the UK,
-              USA, Canada, Australia and more with transparent study visa
-              guidance and a simple, structured study abroad process.
-            </p>
+            <div className="space-y-4 md:space-y-6 max-w-xl">
+              <p className="text-lg md:text-xl lg:text-2xl text-white/95 leading-relaxed font-semibold">
+                Confused about studying abroad or building a career?
+              </p>
+              <p className="text-base md:text-lg text-white/90 leading-relaxed">
+                StackLearn helps you choose the right path with expert guidance,
+                top university admissions, and industry-focused training programs
+                that lead to real results.
+              </p>
+              <p className="text-base md:text-lg text-white/85 leading-relaxed">
+                Limited slots available for free counselling. Take the first step
+                today.
+              </p>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
               <BookConsultButton className="flex items-center justify-center gap-2">
                 Book Free Counselling
                 <FiArrowRight className="w-5 h-5" />
               </BookConsultButton>
               <Link
-                href="/destinations"
+                href="/trainings/technical"
                 className="px-8 py-4 border-2 border-brand text-brand rounded-full font-semibold hover:bg-brand hover:text-white hover:border-brand transition-all duration-300 hover:scale-105 transform text-center"
               >
-                Explore Destinations
+                Explore Training Programs
               </Link>
             </div>
           </div>
@@ -155,7 +165,7 @@ export default function HeroSection() {
                       setFormData({ ...formData, mobile: e.target.value })
                     }
                     className="w-full px-4 py-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-brand focus:border-brand transition-all bg-page-soft hover:bg-surface"
-                    placeholder="+91 9876543210"
+                    placeholder="+ 91 78993 38507"
                   />
                 </div>
                 <div>
