@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { FiSave, FiCheck } from "react-icons/fi";
+import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 
 interface ContactSettings {
   phone: string;
@@ -17,19 +18,51 @@ interface ContactSettings {
   mapUrl: string;
 }
 
+const FALLBACK_SETTINGS: ContactSettings = {
+  phone: "+91-9606031842",
+  phone2: "",
+  email: "info@stacklearn.com",
+  whatsapp: "919606031840",
+  address:
+    "Stack Learn Overseas Consultancy No-374, 2nd floor 4th cross, 60 Feet Rd, above amogha child health care, Amruthahalli, Bengaluru, Karnataka-560092",
+  officeHours: "Mon–Sat | 10:00 AM – 5:00 PM",
+  instagram: "https://instagram.com/stacklearn",
+  facebook: "https://facebook.com/stacklearn",
+  linkedin: "https://linkedin.com/company/stacklearn",
+  youtube: "https://youtube.com/@stacklearn",
+  mapUrl: "https://maps.google.com",
+};
+
 export default function ContactInfoPage() {
   const [settings, setSettings] = useState<ContactSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
 
   const fetchSettings = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/settings");
-    const data = await res.json();
-    setSettings(data.settings);
-    setLoading(false);
+    setLoadError("");
+    try {
+      const res = await adminFetch("/api/admin/settings");
+      const data = await res.json();
+      if (!res.ok) {
+        setLoadError(typeof data.message === "string" ? data.message : "Could not load settings.");
+        setSettings(FALLBACK_SETTINGS);
+        return;
+      }
+      setSettings(data.settings as ContactSettings);
+    } catch (e) {
+      setLoadError(
+        isAbortOrTimeoutError(e)
+          ? "Request timed out — check MongoDB (MONGODB_URI, Atlas IP list)."
+          : "Could not load settings."
+      );
+      setSettings(FALLBACK_SETTINGS);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => { fetchSettings(); }, [fetchSettings]);
@@ -40,7 +73,7 @@ export default function ContactInfoPage() {
     setError("");
     setSaved(false);
     try {
-      const res = await fetch("/api/admin/settings", {
+      const res = await adminFetch("/api/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(settings),
@@ -48,11 +81,20 @@ export default function ContactInfoPage() {
       if (!res.ok) { setError("Failed to save"); return; }
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
-    } catch { setError("Network error"); } finally { setSaving(false); }
+    } catch (e) {
+      setError(
+        isAbortOrTimeoutError(e) ? "Save timed out — check MongoDB connection." : "Network error"
+      );
+    } finally {
+      setSaving(false);
+    }
   };
 
-  if (loading || !settings) {
+  if (loading) {
     return <p className="text-center py-12 text-foreground-muted">Loading…</p>;
+  }
+  if (!settings) {
+    return <p className="text-center py-12 text-foreground-muted">No settings loaded.</p>;
   }
 
   const field = (label: string, key: keyof ContactSettings, type = "text", rows?: number) => (
@@ -78,6 +120,11 @@ export default function ContactInfoPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
+      {loadError ? (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950" role="alert">
+          {loadError} You can still edit below; saving requires a working database connection.
+        </div>
+      ) : null}
       <div className="bg-surface rounded-xl border border-border p-6 space-y-5">
         <h2 className="text-lg font-bold text-foreground">Contact Information</h2>
         <p className="text-sm text-foreground-muted">

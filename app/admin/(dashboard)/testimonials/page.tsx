@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { FiPlus, FiEdit2, FiTrash2, FiSave, FiX, FiEye, FiEyeOff } from "react-icons/fi";
+import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 
 interface Testimonial {
   _id: string;
@@ -26,13 +27,30 @@ export default function TestimonialsPage() {
   const [editing, setEditing] = useState<Partial<Testimonial> | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [listError, setListError] = useState("");
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/testimonials");
-    const data = await res.json();
-    setItems(data.testimonials || []);
-    setLoading(false);
+    setListError("");
+    try {
+      const res = await adminFetch("/api/admin/testimonials");
+      const data = await res.json();
+      if (!res.ok) {
+        setListError(typeof data.message === "string" ? data.message : "Could not load testimonials.");
+        setItems([]);
+        return;
+      }
+      setItems(data.testimonials || []);
+    } catch (e) {
+      setListError(
+        isAbortOrTimeoutError(e)
+          ? "Request timed out — check MongoDB connection."
+          : "Could not load testimonials."
+      );
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => { fetchItems(); }, [fetchItems]);
@@ -45,11 +63,15 @@ export default function TestimonialsPage() {
   }, []);
 
   const toggleVisibility = async (item: Testimonial) => {
-    await fetch("/api/admin/testimonials", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ _id: item._id, visible: !item.visible }),
-    });
+    try {
+      await adminFetch("/api/admin/testimonials", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ _id: item._id, visible: !item.visible }),
+      });
+    } catch {
+      setListError("Could not update visibility.");
+    }
     fetchItems();
   };
 
@@ -59,7 +81,7 @@ export default function TestimonialsPage() {
     setError("");
     try {
       const method = editing._id ? "PUT" : "POST";
-      const res = await fetch("/api/admin/testimonials", {
+      const res = await adminFetch("/api/admin/testimonials", {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
@@ -67,16 +89,24 @@ export default function TestimonialsPage() {
       if (!res.ok) { setError("Failed to save"); return; }
       setEditing(null);
       fetchItems();
-    } catch { setError("Network error"); } finally { setSaving(false); }
+    } catch (e) {
+      setError(isAbortOrTimeoutError(e) ? "Save timed out — check MongoDB." : "Network error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this testimonial?")) return;
-    await fetch("/api/admin/testimonials", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
+    try {
+      await adminFetch("/api/admin/testimonials", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+    } catch {
+      setListError("Delete failed or timed out.");
+    }
     fetchItems();
   };
 
@@ -139,6 +169,11 @@ export default function TestimonialsPage() {
 
   return (
     <div className="space-y-6">
+      {listError ? (
+        <div className="rounded-lg border border-accent/30 bg-accent-soft px-4 py-3 text-sm text-foreground" role="alert">
+          {listError}
+        </div>
+      ) : null}
       <div className="flex items-center justify-between">
         <p className="text-sm text-foreground-muted">{items.length} testimonials</p>
         <button onClick={() => setEditing({ ...emptyTestimonial })} className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm font-medium hover:bg-brand-strong transition-colors">

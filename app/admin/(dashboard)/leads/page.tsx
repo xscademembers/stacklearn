@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useState, useCallback } from "react";
 import { FiSearch, FiDownload, FiChevronLeft, FiChevronRight, FiFilter } from "react-icons/fi";
+import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 
 interface LeadDoc {
   _id: string;
@@ -48,7 +49,7 @@ export default function LeadsPage() {
         page: String(page),
         limit: String(limit),
       });
-      const res = await fetch(`/api/admin/leads?${params}`);
+      const res = await adminFetch(`/api/admin/leads?${params}`);
       const data = await res.json();
       if (!res.ok) {
         setListError(
@@ -62,8 +63,14 @@ export default function LeadsPage() {
       }
       setDocs(data.docs || []);
       setTotal(data.total || 0);
-    } catch {
-      setListError("Could not load submissions. Check your connection.");
+    } catch (e) {
+      if (isAbortOrTimeoutError(e)) {
+        setListError(
+          "Request timed out — MongoDB may be unreachable. Check MONGODB_URI and Atlas IP access, then restart the server."
+        );
+      } else {
+        setListError("Could not load submissions. Check your connection.");
+      }
       setDocs([]);
       setTotal(0);
     } finally {

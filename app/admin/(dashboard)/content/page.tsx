@@ -8,6 +8,7 @@ import {
   type CmsSectionField,
 } from "@/lib/cms-page-templates";
 import { mergeCmsSections } from "@/lib/cms-merge-sections";
+import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 
 interface PageContent {
   pageKey: string;
@@ -42,7 +43,7 @@ export default function ContentPage() {
     setLoadError("");
     setWarning("");
     try {
-      const res = await fetch("/api/admin/content", { credentials: "same-origin" });
+      const res = await adminFetch("/api/admin/content");
       const data = await parseJsonResponse(res);
       if (data._parseError) {
         setLoadError("Could not read the server response. Try refreshing the page.");
@@ -62,8 +63,14 @@ export default function ContentPage() {
         setWarning(data.warning);
       }
       setPages((Array.isArray(data.pages) ? data.pages : []) as PageContent[]);
-    } catch {
-      setLoadError("Network error. Check your connection and that the dev server is running.");
+    } catch (e) {
+      if (isAbortOrTimeoutError(e)) {
+        setLoadError(
+          "Request timed out. The server is probably waiting on MongoDB — check MONGODB_URI, Atlas IP access, then restart the dev server."
+        );
+      } else {
+        setLoadError("Network error. Check your connection and that the dev server is running.");
+      }
       setPages([]);
     } finally {
       setLoading(false);
@@ -130,10 +137,9 @@ export default function ContentPage() {
     setError("");
     setSaved(false);
     try {
-      const res = await fetch("/api/admin/content", {
+      const res = await adminFetch("/api/admin/content", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
         body: JSON.stringify({ pageKey: selectedPage, sections }),
       });
       const data = await parseJsonResponse(res);
@@ -152,8 +158,14 @@ export default function ContentPage() {
       setSaved(true);
       await fetchPages();
       setTimeout(() => setSaved(false), 3000);
-    } catch {
-      setError("Network error. Check your connection and try again.");
+    } catch (e) {
+      if (isAbortOrTimeoutError(e)) {
+        setError(
+          "Save timed out — MongoDB may be unreachable. Check connection and try again."
+        );
+      } else {
+        setError("Network error. Check your connection and try again.");
+      }
     } finally {
       setSaving(false);
     }

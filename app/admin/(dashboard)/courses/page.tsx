@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { FiPlus, FiEdit2, FiTrash2, FiSave, FiX } from "react-icons/fi";
+import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 
 interface Course {
   _id: string;
@@ -34,13 +35,30 @@ export default function CoursesPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState("all");
+  const [listError, setListError] = useState("");
 
   const fetchCourses = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/courses");
-    const data = await res.json();
-    setCourses(data.courses || []);
-    setLoading(false);
+    setListError("");
+    try {
+      const res = await adminFetch("/api/admin/courses");
+      const data = await res.json();
+      if (!res.ok) {
+        setListError(typeof data.message === "string" ? data.message : "Could not load courses.");
+        setCourses([]);
+        return;
+      }
+      setCourses(data.courses || []);
+    } catch (e) {
+      setListError(
+        isAbortOrTimeoutError(e)
+          ? "Request timed out — check MongoDB connection."
+          : "Could not load courses."
+      );
+      setCourses([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => { fetchCourses(); }, [fetchCourses]);
@@ -60,7 +78,7 @@ export default function CoursesPage() {
     setError("");
     try {
       const method = editing._id ? "PUT" : "POST";
-      const res = await fetch("/api/admin/courses", {
+      const res = await adminFetch("/api/admin/courses", {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
@@ -68,16 +86,24 @@ export default function CoursesPage() {
       if (!res.ok) { const d = await res.json(); setError(d.message || "Failed to save"); return; }
       setEditing(null);
       fetchCourses();
-    } catch { setError("Network error"); } finally { setSaving(false); }
+    } catch (e) {
+      setError(isAbortOrTimeoutError(e) ? "Save timed out — check MongoDB." : "Network error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this course?")) return;
-    await fetch("/api/admin/courses", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
+    try {
+      await adminFetch("/api/admin/courses", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+    } catch {
+      setListError("Delete failed or timed out.");
+    }
     fetchCourses();
   };
 
@@ -164,6 +190,11 @@ export default function CoursesPage() {
 
   return (
     <div className="space-y-6">
+      {listError ? (
+        <div className="rounded-lg border border-accent/30 bg-accent-soft px-4 py-3 text-sm text-foreground" role="alert">
+          {listError}
+        </div>
+      ) : null}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex gap-2">
           {["all", "technical", "non-technical"].map((f) => (

@@ -50,7 +50,7 @@ async function getStats() {
       testimonials: 0,
       courses: 0,
       mongoWarning:
-        "Could not reach MongoDB. Check MONGODB_URI and your network, then restart the server.",
+        "Could not reach MongoDB within a few seconds. Check MONGODB_URI, Atlas Network Access (IP allow list), VPN/firewall, then restart the dev server.",
     };
   }
 }

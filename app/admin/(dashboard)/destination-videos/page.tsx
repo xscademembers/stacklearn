@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { FiSave, FiCheck } from "react-icons/fi";
+import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 import { DESTINATION_SHORT_KEYS } from "@/lib/destination-shorts-defaults";
 
 const LABELS: Record<string, string> = {
@@ -19,17 +20,36 @@ export default function DestinationVideosPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/destination-shorts");
-    const data = await res.json();
-    const next: Record<string, string> = {};
-    for (const key of DESTINATION_SHORT_KEYS) {
-      next[key] = typeof data.urls?.[key] === "string" ? data.urls[key] : "";
+    setLoadError("");
+    try {
+      const res = await adminFetch("/api/admin/destination-shorts");
+      const data = await res.json();
+      if (!res.ok) {
+        setLoadError(
+          typeof data.message === "string" ? data.message : "Could not load destination videos."
+        );
+        setUrls(Object.fromEntries(DESTINATION_SHORT_KEYS.map((k) => [k, ""])));
+        return;
+      }
+      const next: Record<string, string> = {};
+      for (const key of DESTINATION_SHORT_KEYS) {
+        next[key] = typeof data.urls?.[key] === "string" ? data.urls[key] : "";
+      }
+      setUrls(next);
+    } catch (e) {
+      setLoadError(
+        isAbortOrTimeoutError(e)
+          ? "Request timed out — check MongoDB connection."
+          : "Could not load destination videos."
+      );
+      setUrls(Object.fromEntries(DESTINATION_SHORT_KEYS.map((k) => [k, ""])));
+    } finally {
+      setLoading(false);
     }
-    setUrls(next);
-    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -41,7 +61,7 @@ export default function DestinationVideosPage() {
     setError("");
     setSaved(false);
     try {
-      const res = await fetch("/api/admin/destination-shorts", {
+      const res = await adminFetch("/api/admin/destination-shorts", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ urls }),
@@ -54,8 +74,8 @@ export default function DestinationVideosPage() {
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
       load();
-    } catch {
-      setError("Network error");
+    } catch (e) {
+      setError(isAbortOrTimeoutError(e) ? "Save timed out — check MongoDB." : "Network error");
     } finally {
       setSaving(false);
     }
@@ -67,6 +87,11 @@ export default function DestinationVideosPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
+      {loadError ? (
+        <div className="rounded-lg border border-accent/30 bg-accent-soft px-4 py-3 text-sm text-foreground" role="alert">
+          {loadError}
+        </div>
+      ) : null}
       <p className="text-sm text-foreground-muted">
         Paste a full YouTube Shorts or watch URL for each destination. Leave a field empty to use
         the built-in default link for that country.

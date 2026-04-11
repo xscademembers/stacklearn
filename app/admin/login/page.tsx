@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function AdminLoginPage() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/auth/login", {
+      const res = await adminFetch("/api/admin/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
@@ -27,8 +28,12 @@ export default function AdminLoginPage() {
       }
       router.push("/admin");
       router.refresh();
-    } catch {
-      setError("Network error. Please try again.");
+    } catch (e) {
+      setError(
+        isAbortOrTimeoutError(e)
+          ? "Login request timed out. Is the dev server running?"
+          : "Network error. Please try again."
+      );
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { FiPlus, FiEdit2, FiTrash2, FiSave, FiX } from "react-icons/fi";
+import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 
 interface Blog {
   _id: string;
@@ -31,13 +32,30 @@ export default function BlogsPage() {
   const [editing, setEditing] = useState<Partial<Blog> | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [listError, setListError] = useState("");
 
   const fetchBlogs = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/blogs");
-    const data = await res.json();
-    setBlogs(data.blogs || []);
-    setLoading(false);
+    setListError("");
+    try {
+      const res = await adminFetch("/api/admin/blogs");
+      const data = await res.json();
+      if (!res.ok) {
+        setListError(typeof data.message === "string" ? data.message : "Could not load blogs.");
+        setBlogs([]);
+        return;
+      }
+      setBlogs(data.blogs || []);
+    } catch (e) {
+      if (isAbortOrTimeoutError(e)) {
+        setListError("Request timed out — check MongoDB (MONGODB_URI, Atlas IP list) and restart the server.");
+      } else {
+        setListError("Could not load blogs.");
+      }
+      setBlogs([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -63,7 +81,7 @@ export default function BlogsPage() {
     setError("");
     try {
       const method = editing._id ? "PUT" : "POST";
-      const res = await fetch("/api/admin/blogs", {
+      const res = await adminFetch("/api/admin/blogs", {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
@@ -75,8 +93,12 @@ export default function BlogsPage() {
       }
       setEditing(null);
       fetchBlogs();
-    } catch {
-      setError("Network error");
+    } catch (e) {
+      setError(
+        isAbortOrTimeoutError(e)
+          ? "Save timed out — check MongoDB connection."
+          : "Network error"
+      );
     } finally {
       setSaving(false);
     }
@@ -84,11 +106,15 @@ export default function BlogsPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this blog post?")) return;
-    await fetch("/api/admin/blogs", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
+    try {
+      await adminFetch("/api/admin/blogs", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+    } catch {
+      setListError("Delete failed or timed out.");
+    }
     fetchBlogs();
   };
 
@@ -196,6 +222,11 @@ export default function BlogsPage() {
 
   return (
     <div className="space-y-6">
+      {listError ? (
+        <div className="rounded-lg border border-accent/30 bg-accent-soft px-4 py-3 text-sm text-foreground" role="alert">
+          {listError}
+        </div>
+      ) : null}
       <div className="flex items-center justify-between">
         <p className="text-sm text-foreground-muted">{blogs.length} blog posts</p>
         <button
