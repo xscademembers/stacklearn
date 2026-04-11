@@ -1,6 +1,14 @@
 import Image from "next/image";
 import { FiArrowRight, FiCheckCircle, FiTarget } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import { getMergedPageContent } from "@/lib/get-merged-page-content";
+import { getCmsField } from "@/lib/cms-merge-sections";
+
+const DEFAULT_ABOUT_HERO =
+  "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1600";
+
+const DEFAULT_ABOUT_INTRO =
+  "At StackLearn, we started with a simple observation: many students go abroad with big dreams — but without the right preparation to succeed once they get there. Getting into a university is only the first step. Building a career in a competitive global environment is the real challenge. That's where we come in.";
 
 const gapProblems = [
   "Lack of practical skills",
@@ -40,7 +48,18 @@ const makesUsDifferent = [
   { title: "Career readiness", body: "Portfolios, interview confidence, and a path to global opportunities." },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const sections = await getMergedPageContent("about");
+  const kicker = getCmsField(sections, "hero", "kicker") || "About Us";
+  const heading = getCmsField(sections, "hero", "heading");
+  const desc = getCmsField(sections, "hero", "description");
+  const heroImgRaw = getCmsField(sections, "hero", "heroImage");
+  const heroImg = heroImgRaw || DEFAULT_ABOUT_HERO;
+  const heroUnoptimized =
+    !heroImg.includes("images.pexels.com") && !heroImg.includes("images.unsplash.com");
+  const mission = getCmsField(sections, "mission", "mission");
+  const vision = getCmsField(sections, "mission", "vision");
+
   return (
     <main>
       {/* Hero */}
@@ -48,27 +67,31 @@ export default function AboutPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src={heroImg}
             alt="Global career guidance"
             fill
             priority
+            unoptimized={heroUnoptimized}
             className="object-cover opacity-50"
           />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-16 md:py-24 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-brand-soft mb-3">
-              About Us
+              {kicker}
             </p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
-              More Than Just Study Abroad —{" "}
-              <span className="text-accent">We Build Global Careers</span>
-            </h1>
-            <p className="text-base md:text-lg text-white/90 leading-relaxed mb-6 max-w-3xl mx-auto">
-              At StackLearn, we started with a simple observation: many students go abroad with big
-              dreams — but without the right preparation to succeed once they get there. Getting into
-              a university is only the first step. Building a career in a competitive global environment
-              is the real challenge. That’s where we come in.
+            {heading ? (
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight whitespace-pre-line">
+                {heading}
+              </h1>
+            ) : (
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
+                More Than Just Study Abroad —{" "}
+                <span className="text-accent">We Build Global Careers</span>
+              </h1>
+            )}
+            <p className="text-base md:text-lg text-white/90 leading-relaxed mb-6 max-w-3xl mx-auto whitespace-pre-line">
+              {desc || DEFAULT_ABOUT_INTRO}
             </p>
             <BookConsultButton
               variant="white"
@@ -80,6 +103,29 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {mission || vision ? (
+        <section className="py-16 md:py-20 bg-page-soft border-b border-border">
+          <div className="container mx-auto px-6 md:px-8 max-w-5xl mx-auto grid gap-10 md:grid-cols-2">
+            {mission ? (
+              <div>
+                <h2 className="text-xl font-bold text-slate-900 mb-3">Mission</h2>
+                <p className="text-sm md:text-base text-slate-700 leading-relaxed whitespace-pre-line">
+                  {mission}
+                </p>
+              </div>
+            ) : null}
+            {vision ? (
+              <div>
+                <h2 className="text-xl font-bold text-slate-900 mb-3">Vision</h2>
+                <p className="text-sm md:text-base text-slate-700 leading-relaxed whitespace-pre-line">
+                  {vision}
+                </p>
+              </div>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
 
       {/* What We Do */}
       <section className="py-16 md:py-20 bg-white">

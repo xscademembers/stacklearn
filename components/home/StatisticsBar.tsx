@@ -1,16 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import type { CmsPageSection } from "@/lib/cms-page-templates";
+import { getCmsField } from "@/lib/cms-merge-sections";
 
-const stats = [
-  { label: "Students Assisted", value: "5000+", suffix: "+" },
-  { label: "Partner Universities", value: "100+", suffix: "+" },
-  { label: "Countries Supported", value: "15+", suffix: "+" },
-  { label: "Visa Success Rate", value: "97", suffix: "%" },
+const DEFAULT_STATS = [
+  { label: "Students Assisted", value: "5000+" },
+  { label: "Partner Universities", value: "100+" },
+  { label: "Countries Supported", value: "15+" },
+  { label: "Visa Success Rate", value: "97" },
 ];
 
-export default function StatisticsBar() {
+function buildStats(sections: CmsPageSection[] | null | undefined) {
+  if (!sections?.length) return DEFAULT_STATS;
+  return [1, 2, 3, 4].map((i) => ({
+    label:
+      getCmsField(sections, "stats", `stat${i}Label`) || DEFAULT_STATS[i - 1].label,
+    value:
+      getCmsField(sections, "stats", `stat${i}Value`) || DEFAULT_STATS[i - 1].value,
+  }));
+}
+
+type StatisticsBarProps = {
+  cmsSections?: CmsPageSection[] | null;
+};
+
+export default function StatisticsBar({ cmsSections }: StatisticsBarProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const stats = useMemo(() => buildStats(cmsSections), [cmsSections]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

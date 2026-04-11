@@ -7,8 +7,17 @@ import { usePathname } from "next/navigation";
 import { FiArrowRight } from "react-icons/fi";
 import BookConsultButton from "../BookConsultButton";
 import { withSubmissionContext } from "@/lib/submissionPayload";
+import type { CmsPageSection } from "@/lib/cms-page-templates";
+import { getCmsField } from "@/lib/cms-merge-sections";
 
-export default function HeroSection() {
+const DEFAULT_HERO_IMAGE =
+  "https://images.pexels.com/photos/3184396/pexels-photo-3184396.jpeg?auto=compress&cs=tinysrgb&w=1600";
+
+type HeroSectionProps = {
+  cmsSections?: CmsPageSection[] | null;
+};
+
+export default function HeroSection({ cmsSections }: HeroSectionProps) {
   const pathname = usePathname();
   const [formData, setFormData] = useState({
     name: "",
@@ -19,6 +28,16 @@ export default function HeroSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+
+  const sections = cmsSections ?? [];
+  const cmsHeading = getCmsField(sections, "hero", "heading");
+  const cmsSubheading = getCmsField(sections, "hero", "subheading");
+  const cmsDescription = getCmsField(sections, "hero", "description");
+  const cmsCtaText = getCmsField(sections, "hero", "ctaText");
+  const cmsHeroImage = getCmsField(sections, "hero", "heroImage");
+  const imageSrc = cmsHeroImage || DEFAULT_HERO_IMAGE;
+  const heroImageUnoptimized =
+    !imageSrc.includes("images.pexels.com") && !imageSrc.includes("images.unsplash.com");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,10 +75,11 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black" />
         <Image
-          src="https://images.pexels.com/photos/3184396/pexels-photo-3184396.jpeg?auto=compress&cs=tinysrgb&w=1600"
+          src={imageSrc}
           alt="Diverse students studying together in bright environment"
           fill
           priority
+          unoptimized={heroImageUnoptimized}
           className="object-cover opacity-50"
         />
       </div>
@@ -68,28 +88,53 @@ export default function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
           {/* Left Content */}
           <div className="space-y-8 md:space-y-10 animate-fadeInUp">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight drop-shadow-lg">
-              Best Study Abroad Consultancy and{" "}
-              <span className="text-accent">Job-Oriented Training Institute</span>{" "}
-              in India
-            </h1>
+            {cmsHeading ? (
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight drop-shadow-lg whitespace-pre-line">
+                {cmsHeading}
+              </h1>
+            ) : (
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight drop-shadow-lg">
+                Best Study Abroad Consultancy and{" "}
+                <span className="text-accent">Job-Oriented Training Institute</span> in India
+              </h1>
+            )}
             <div className="space-y-4 md:space-y-6 max-w-xl">
-              <p className="text-lg md:text-xl lg:text-2xl text-white/95 leading-relaxed font-semibold">
-                Confused about studying abroad or building a career?
-              </p>
-              <p className="text-base md:text-lg text-white/90 leading-relaxed">
-                StackLearn helps you choose the right path with expert guidance,
-                top university admissions, and industry-focused training programs
-                that lead to real results.
-              </p>
-              <p className="text-base md:text-lg text-white/85 leading-relaxed">
-                Limited slots available for free counselling. Take the first step
-                today.
-              </p>
+              {cmsSubheading || cmsDescription ? (
+                <>
+                  {cmsSubheading ? (
+                    <p className="text-lg md:text-xl lg:text-2xl text-white/95 leading-relaxed font-semibold whitespace-pre-line">
+                      {cmsSubheading}
+                    </p>
+                  ) : null}
+                  {cmsDescription
+                    ? cmsDescription.split(/\n\n+/).map((para, i) => (
+                        <p
+                          key={i}
+                          className="text-base md:text-lg text-white/90 leading-relaxed whitespace-pre-line"
+                        >
+                          {para}
+                        </p>
+                      ))
+                    : null}
+                </>
+              ) : (
+                <>
+                  <p className="text-lg md:text-xl lg:text-2xl text-white/95 leading-relaxed font-semibold">
+                    Confused about studying abroad or building a career?
+                  </p>
+                  <p className="text-base md:text-lg text-white/90 leading-relaxed">
+                    StackLearn helps you choose the right path with expert guidance, top university
+                    admissions, and industry-focused training programs that lead to real results.
+                  </p>
+                  <p className="text-base md:text-lg text-white/85 leading-relaxed">
+                    Limited slots available for free counselling. Take the first step today.
+                  </p>
+                </>
+              )}
             </div>
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
               <BookConsultButton className="flex items-center justify-center gap-2">
-                Book Free Counselling
+                {cmsCtaText || "Book Free Counselling"}
                 <FiArrowRight className="w-5 h-5" />
               </BookConsultButton>
               <Link

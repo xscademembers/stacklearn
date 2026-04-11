@@ -2,130 +2,36 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { FiSave, FiCheck, FiChevronDown, FiChevronRight, FiPlus, FiTrash2 } from "react-icons/fi";
-
-interface SectionField {
-  key: string;
-  label: string;
-  value: string;
-  type: "text" | "textarea" | "image";
-}
-
-interface PageSection {
-  sectionKey: string;
-  sectionLabel: string;
-  fields: SectionField[];
-}
+import {
+  CMS_PAGE_TEMPLATES,
+  type CmsPageSection,
+  type CmsSectionField,
+} from "@/lib/cms-page-templates";
+import { mergeCmsSections } from "@/lib/cms-merge-sections";
 
 interface PageContent {
   pageKey: string;
-  sections: PageSection[];
+  sections: CmsPageSection[];
   updatedAt?: string;
 }
 
-const PAGE_TEMPLATES: { key: string; label: string; defaultSections: PageSection[] }[] = [
-  {
-    key: "home",
-    label: "Home Page",
-    defaultSections: [
-      { sectionKey: "hero", sectionLabel: "Hero Section", fields: [
-        { key: "heading", label: "Main Heading", value: "", type: "text" },
-        { key: "subheading", label: "Sub Heading", value: "", type: "text" },
-        { key: "description", label: "Description", value: "", type: "textarea" },
-        { key: "ctaText", label: "CTA Button Text", value: "", type: "text" },
-        { key: "heroImage", label: "Hero Background Image URL", value: "", type: "image" },
-      ]},
-      { sectionKey: "stats", sectionLabel: "Statistics Bar", fields: [
-        { key: "stat1Label", label: "Stat 1 Label", value: "", type: "text" },
-        { key: "stat1Value", label: "Stat 1 Value", value: "", type: "text" },
-        { key: "stat2Label", label: "Stat 2 Label", value: "", type: "text" },
-        { key: "stat2Value", label: "Stat 2 Value", value: "", type: "text" },
-        { key: "stat3Label", label: "Stat 3 Label", value: "", type: "text" },
-        { key: "stat3Value", label: "Stat 3 Value", value: "", type: "text" },
-      ]},
-    ],
-  },
-  {
-    key: "about",
-    label: "About Us",
-    defaultSections: [
-      { sectionKey: "hero", sectionLabel: "Hero Section", fields: [
-        { key: "heading", label: "Page Heading", value: "", type: "text" },
-        { key: "description", label: "Description", value: "", type: "textarea" },
-        { key: "heroImage", label: "Hero Image URL", value: "", type: "image" },
-      ]},
-      { sectionKey: "mission", sectionLabel: "Mission & Vision", fields: [
-        { key: "mission", label: "Mission Statement", value: "", type: "textarea" },
-        { key: "vision", label: "Vision Statement", value: "", type: "textarea" },
-      ]},
-    ],
-  },
-  {
-    key: "destinations",
-    label: "Destinations Page",
-    defaultSections: [
-      { sectionKey: "hero", sectionLabel: "Hero Section", fields: [
-        { key: "heading", label: "Page Heading", value: "", type: "text" },
-        { key: "subheading", label: "Sub Heading", value: "", type: "text" },
-      ]},
-    ],
-  },
-  {
-    key: "services",
-    label: "Services Page",
-    defaultSections: [
-      { sectionKey: "hero", sectionLabel: "Hero Section", fields: [
-        { key: "heading", label: "Page Heading", value: "", type: "text" },
-        { key: "description", label: "Description", value: "", type: "textarea" },
-      ]},
-    ],
-  },
-  {
-    key: "trainings",
-    label: "Trainings Page",
-    defaultSections: [
-      { sectionKey: "hero", sectionLabel: "Hero Section", fields: [
-        { key: "heading", label: "Page Heading", value: "", type: "text" },
-        { key: "description", label: "Description", value: "", type: "textarea" },
-      ]},
-    ],
-  },
-  {
-    key: "scholarships",
-    label: "Scholarships Page",
-    defaultSections: [
-      { sectionKey: "hero", sectionLabel: "Hero Section", fields: [
-        { key: "heading", label: "Page Heading", value: "", type: "text" },
-        { key: "description", label: "Description", value: "", type: "textarea" },
-      ]},
-    ],
-  },
-  {
-    key: "contact",
-    label: "Contact Page",
-    defaultSections: [
-      { sectionKey: "hero", sectionLabel: "Hero Section", fields: [
-        { key: "heading", label: "Page Heading", value: "", type: "text" },
-        { key: "subheading", label: "Sub Heading", value: "", type: "text" },
-      ]},
-    ],
-  },
-  {
-    key: "test-prep",
-    label: "Test Preparation",
-    defaultSections: [
-      { sectionKey: "hero", sectionLabel: "Hero Section", fields: [
-        { key: "heading", label: "Page Heading", value: "", type: "text" },
-        { key: "description", label: "Description", value: "", type: "textarea" },
-      ]},
-    ],
-  },
-];
+async function parseJsonResponse(res: Response): Promise<Record<string, unknown>> {
+  const text = await res.text();
+  if (!text.trim()) return {};
+  try {
+    return JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    return { _parseError: true };
+  }
+}
 
 export default function ContentPage() {
   const [pages, setPages] = useState<PageContent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [warning, setWarning] = useState("");
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
-  const [sections, setSections] = useState<PageSection[]>([]);
+  const [sections, setSections] = useState<CmsPageSection[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -133,25 +39,49 @@ export default function ContentPage() {
 
   const fetchPages = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/content");
-    const data = await res.json();
-    setPages(data.pages || []);
-    setLoading(false);
+    setLoadError("");
+    setWarning("");
+    try {
+      const res = await fetch("/api/admin/content", { credentials: "same-origin" });
+      const data = await parseJsonResponse(res);
+      if (data._parseError) {
+        setLoadError("Could not read the server response. Try refreshing the page.");
+        setPages([]);
+        return;
+      }
+      if (!res.ok) {
+        setLoadError(
+          typeof data.message === "string"
+            ? data.message
+            : `Could not load content (${res.status}).`
+        );
+        setPages((Array.isArray(data.pages) ? data.pages : []) as PageContent[]);
+        return;
+      }
+      if (typeof data.warning === "string" && data.warning) {
+        setWarning(data.warning);
+      }
+      setPages((Array.isArray(data.pages) ? data.pages : []) as PageContent[]);
+    } catch {
+      setLoadError("Network error. Check your connection and that the dev server is running.");
+      setPages([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => { fetchPages(); }, [fetchPages]);
+  useEffect(() => {
+    fetchPages();
+  }, [fetchPages]);
 
   const selectPage = (pageKey: string) => {
     setSelectedPage(pageKey);
     setSaved(false);
     setError("");
+    const tpl = CMS_PAGE_TEMPLATES.find((t) => t.key === pageKey);
+    const defaults = tpl?.defaultSections ?? [];
     const existing = pages.find((p) => p.pageKey === pageKey);
-    if (existing) {
-      setSections(existing.sections);
-    } else {
-      const tpl = PAGE_TEMPLATES.find((t) => t.key === pageKey);
-      setSections(tpl ? tpl.defaultSections : []);
-    }
+    setSections(mergeCmsSections(defaults, existing?.sections));
     setExpanded(null);
   };
 
@@ -203,55 +133,91 @@ export default function ContentPage() {
       const res = await fetch("/api/admin/content", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify({ pageKey: selectedPage, sections }),
       });
-      if (!res.ok) { setError("Failed to save"); return; }
+      const data = await parseJsonResponse(res);
+      if (data._parseError) {
+        setError("Invalid response from server. Save may have failed.");
+        return;
+      }
+      if (!res.ok) {
+        setError(
+          typeof data.message === "string"
+            ? data.message
+            : `Save failed (${res.status}).`
+        );
+        return;
+      }
       setSaved(true);
-      fetchPages();
+      await fetchPages();
       setTimeout(() => setSaved(false), 3000);
-    } catch { setError("Network error"); } finally { setSaving(false); }
+    } catch {
+      setError("Network error. Check your connection and try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  if (loading) return <p className="text-center py-12 text-foreground-muted">Loading…</p>;
+  if (loading) {
+    return (
+      <div className="py-12 text-center space-y-2">
+        <p className="text-foreground-muted">Loading page content…</p>
+        <p className="text-xs text-foreground-muted">If this stays here, check MongoDB and the browser console.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
+      {loadError ? (
+        <div className="rounded-lg border border-accent/30 bg-accent-soft px-4 py-3 text-sm text-foreground" role="alert">
+          {loadError}
+        </div>
+      ) : null}
+      {warning ? (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="status">
+          {warning}
+        </div>
+      ) : null}
+
       <p className="text-sm text-foreground-muted">
         Select a page to edit its content. Changes here let non-technical users update
-        headings, descriptions, images, and text across the site.
+        headings, descriptions, images, and text across the site. After you save, refresh the
+        public page to see updates.
       </p>
 
-      {/* Page selector */}
       <div className="flex flex-wrap gap-2">
-        {PAGE_TEMPLATES.map((tpl) => {
+        {CMS_PAGE_TEMPLATES.map((tpl) => {
           const hasContent = pages.some((p) => p.pageKey === tpl.key);
           return (
             <button
               key={tpl.key}
+              type="button"
               onClick={() => selectPage(tpl.key)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors border ${
                 selectedPage === tpl.key
                   ? "bg-brand text-white border-brand"
                   : hasContent
-                  ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
-                  : "bg-surface text-foreground border-border hover:bg-page-soft"
+                    ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                    : "bg-surface text-foreground border-border hover:bg-page-soft"
               }`}
             >
               {tpl.label}
-              {hasContent && selectedPage !== tpl.key && <span className="ml-1 text-xs">✓</span>}
+              {hasContent && selectedPage !== tpl.key ? <span className="ml-1 text-xs">✓</span> : null}
             </button>
           );
         })}
       </div>
 
-      {/* Editor */}
-      {selectedPage && (
+      {selectedPage ? (
         <div className="bg-surface rounded-xl border border-border p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold text-foreground">
-              {PAGE_TEMPLATES.find((t) => t.key === selectedPage)?.label || selectedPage}
+              {CMS_PAGE_TEMPLATES.find((t) => t.key === selectedPage)?.label || selectedPage}
             </h2>
             <button
+              type="button"
               onClick={addSection}
               className="flex items-center gap-1 px-3 py-1 text-xs bg-page-soft rounded-lg hover:bg-border transition-colors font-medium"
             >
@@ -262,16 +228,27 @@ export default function ContentPage() {
           {sections.map((section, sIdx) => (
             <div key={section.sectionKey} className="border border-border rounded-lg">
               <button
-                onClick={() => setExpanded(expanded === section.sectionKey ? null : section.sectionKey)}
+                type="button"
+                onClick={() =>
+                  setExpanded(expanded === section.sectionKey ? null : section.sectionKey)
+                }
                 className="flex items-center justify-between w-full px-4 py-3 text-left hover:bg-page-soft transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  {expanded === section.sectionKey ? <FiChevronDown className="w-4 h-4" /> : <FiChevronRight className="w-4 h-4" />}
+                  {expanded === section.sectionKey ? (
+                    <FiChevronDown className="w-4 h-4" />
+                  ) : (
+                    <FiChevronRight className="w-4 h-4" />
+                  )}
                   <span className="font-semibold text-sm text-foreground">{section.sectionLabel}</span>
                   <span className="text-xs text-foreground-muted">({section.fields.length} fields)</span>
                 </div>
                 <button
-                  onClick={(e) => { e.stopPropagation(); removeSection(sIdx); }}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeSection(sIdx);
+                  }}
                   className="p-1 text-red-400 hover:text-red-600 transition-colors"
                   title="Remove section"
                 >
@@ -279,10 +256,12 @@ export default function ContentPage() {
                 </button>
               </button>
 
-              {expanded === section.sectionKey && (
+              {expanded === section.sectionKey ? (
                 <div className="px-4 pb-4 space-y-3 border-t border-border pt-3">
                   <div>
-                    <label className="block text-xs font-semibold mb-1 text-foreground-muted">Section Label</label>
+                    <label className="block text-xs font-semibold mb-1 text-foreground-muted">
+                      Section Label
+                    </label>
                     <input
                       type="text"
                       value={section.sectionLabel}
@@ -312,7 +291,10 @@ export default function ContentPage() {
                           value={field.type}
                           onChange={(e) => {
                             const updated = [...sections];
-                            updated[sIdx].fields[fIdx] = { ...field, type: e.target.value as SectionField["type"] };
+                            updated[sIdx].fields[fIdx] = {
+                              ...field,
+                              type: e.target.value as CmsSectionField["type"],
+                            };
                             setSections(updated);
                           }}
                           className="text-xs border border-border rounded px-1 py-0.5"
@@ -342,18 +324,20 @@ export default function ContentPage() {
                   ))}
 
                   <button
+                    type="button"
                     onClick={() => addField(sIdx)}
                     className="flex items-center gap-1 text-xs text-brand font-medium hover:underline"
                   >
                     <FiPlus className="w-3 h-3" /> Add Field
                   </button>
                 </div>
-              )}
+              ) : null}
             </div>
           ))}
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error ? <p className="text-sm text-red-600">{error}</p> : null}
           <button
+            type="button"
             onClick={handleSave}
             disabled={saving}
             className="flex items-center gap-2 px-6 py-2 bg-brand text-white rounded-lg font-medium hover:bg-brand-strong transition-colors disabled:opacity-60"
@@ -362,7 +346,7 @@ export default function ContentPage() {
             {saving ? "Saving…" : saved ? "Saved!" : "Save Content"}
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

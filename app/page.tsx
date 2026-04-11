@@ -10,12 +10,17 @@ import SuccessStories from "@/components/home/SuccessStories";
 import ScholarshipPromotion from "@/components/home/ScholarshipPromotion";
 import BlogHighlights from "@/components/home/BlogHighlights";
 import FAQSection from "@/components/home/FAQSection";
+import { getMergedPageContent } from "@/lib/get-merged-page-content";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const homeContent = await getMergedPageContent("home");
+
   return (
     <div className="w-full">
-      <HeroSection />
-      <StatisticsBar />
+      <HeroSection cmsSections={homeContent} />
+      <StatisticsBar cmsSections={homeContent} />
       <HowWeHelpSection />
       <ServicesOverview />
       <WhyChooseStackLearn />
