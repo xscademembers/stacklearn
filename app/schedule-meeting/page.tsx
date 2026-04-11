@@ -3,9 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { FiCalendar, FiClock, FiCheck } from "react-icons/fi";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 export default function ScheduleMeetingPage() {
+  const pathname = usePathname();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [formData, setFormData] = useState({
@@ -17,6 +20,8 @@ export default function ScheduleMeetingPage() {
     message: "",
   });
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   const timeSlots = [
     "10:00 AM",
@@ -27,10 +32,47 @@ export default function ScheduleMeetingPage() {
     "4:00 PM",
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Meeting scheduled:", { selectedDate, selectedTime, formData });
-    setIsConfirmed(true);
+    setSaveError("");
+    setIsSaving(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          withSubmissionContext(
+            {
+              name: formData.name,
+              email: formData.email,
+              mobile: formData.mobile,
+              service: "Counselling meeting request",
+              message: formData.message || null,
+              meetingDate: selectedDate,
+              meetingTime: selectedTime,
+              meetingPurpose: formData.purpose,
+              meetingMode: formData.mode,
+            },
+            pathname,
+            "schedule_meeting_page"
+          )
+        ),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setSaveError(
+          typeof data.message === "string"
+            ? data.message
+            : "Could not save your booking. Please try again."
+        );
+        return;
+      }
+      setIsConfirmed(true);
+    } catch {
+      setSaveError("Network error. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (isConfirmed) {
@@ -213,11 +255,17 @@ export default function ScheduleMeetingPage() {
                     placeholder="e.g., I want to discuss scholarships for UK universities."
                   />
                 </div>
+                {saveError ? (
+                  <p className="text-sm text-accent" role="alert">
+                    {saveError}
+                  </p>
+                ) : null}
                 <button
                   type="submit"
-                  className="w-full px-6 py-4 bg-brand text-white rounded-lg font-semibold hover:shadow-lg transition-all"
+                  disabled={isSaving}
+                  className="w-full px-6 py-4 bg-brand text-white rounded-lg font-semibold hover:shadow-lg transition-all disabled:opacity-60"
                 >
-                  Confirm Booking
+                  {isSaving ? "Saving…" : "Confirm Booking"}
                 </button>
               </form>
             </div>

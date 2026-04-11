@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
 import { FiX } from "react-icons/fi";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 interface CorporateTrainingPopupProps {
   isOpen: boolean;
@@ -13,6 +15,7 @@ export default function CorporateTrainingPopup({
   isOpen,
   onClose,
 }: CorporateTrainingPopupProps) {
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,10 +54,13 @@ export default function CorporateTrainingPopup({
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: "corporate-training",
-          ...formData,
-        }),
+        body: JSON.stringify(
+          withSubmissionContext(
+            { source: "corporate-training", ...formData },
+            pathname,
+            "corporate_training_popup"
+          )
+        ),
       });
 
       if (response.ok) {

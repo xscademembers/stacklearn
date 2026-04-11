@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDatabase, COLLECTIONS } from "@/lib/mongodb";
+import { clampStr } from "@/lib/api/submissionStrings";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const submittedFromPath =
+      clampStr(body.submittedFromPath, 512) || null;
+    const formSource = clampStr(body.formSource, 128) || "apply_page";
     const { name, email, mobile, preferredCountry, course, level, qualification, institution } = body;
 
     // Validate required fields
@@ -40,6 +44,8 @@ export async function POST(request: NextRequest) {
       applicationId,
       ...body,
       email: email.toLowerCase(),
+      submittedFromPath,
+      formSource,
       status: "pending",
       createdAt: new Date(),
       updatedAt: new Date(),

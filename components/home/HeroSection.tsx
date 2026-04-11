@@ -3,10 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { FiArrowRight } from "react-icons/fi";
 import BookConsultButton from "../BookConsultButton";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 export default function HeroSection() {
+  const pathname = usePathname();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,7 +29,9 @@ export default function HeroSection() {
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(
+          withSubmissionContext({ ...formData }, pathname, "home_hero_form")
+        ),
       });
       
       const data = await response.json();

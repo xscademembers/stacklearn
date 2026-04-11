@@ -1,14 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { FiX } from "react-icons/fi";
 import Link from "next/link";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 export default function LeadsPopup() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     mobile: "",
     destination: "",
   });
@@ -68,7 +72,9 @@ export default function LeadsPopup() {
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(
+          withSubmissionContext({ ...formData }, pathname, "leads_popup")
+        ),
       });
       if (response.ok) {
         setIsSubmitted(true);
@@ -76,7 +82,7 @@ export default function LeadsPopup() {
       }
     } catch (error) {
       console.error("Error submitting lead:", error);
-      setIsSubmitted(true); // Show success even if API fails
+      setIsSubmitted(true);
       markDismissed();
     }
   };
@@ -134,6 +140,21 @@ export default function LeadsPopup() {
                   }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
                   placeholder="+ 91 78993 38507"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
+                  placeholder="you@example.com"
                 />
               </div>
               <div>

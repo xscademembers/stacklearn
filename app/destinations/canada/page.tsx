@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiArrowRight, FiCheck, FiChevronDown, FiClock, FiBriefcase, FiDollarSign, FiBookOpen, FiGlobe } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import DestinationYoutubeShort from "@/components/DestinationYoutubeShort";
 
 const keyReasons = [
   {
@@ -238,6 +239,8 @@ export default function CanadaPage() {
           </div>
         </div>
       </section>
+
+      <DestinationYoutubeShort destinationKey="canada" countryLabel="Canada" />
 
       {/* Quick Facts Bar */}
       <section className="py-10 md:py-12 bg-white border-b border-slate-100">

@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { FiArrowRight, FiArrowLeft, FiCheck } from "react-icons/fi";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 const steps = [
   "Personal Details",
@@ -13,6 +15,7 @@ const steps = [
 ];
 
 export default function ApplyPage() {
+  const pathname = usePathname();
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
@@ -85,10 +88,17 @@ export default function ApplyPage() {
     setSubmitError("");
     
     try {
+      const { documents: _documents, ...rest } = formData;
       const response = await fetch("/api/applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(
+          withSubmissionContext(
+            { ...rest, documentCount: formData.documents.length },
+            pathname,
+            "apply_page"
+          )
+        ),
       });
       
       const data = await response.json();

@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
 import { FiX } from "react-icons/fi";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 interface EnquiryPopupProps {
   isOpen: boolean;
@@ -10,6 +12,7 @@ interface EnquiryPopupProps {
 }
 
 export default function EnquiryPopup({ isOpen, onClose }: EnquiryPopupProps) {
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +34,9 @@ export default function EnquiryPopup({ isOpen, onClose }: EnquiryPopupProps) {
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(
+          withSubmissionContext({ ...formData }, pathname, "header_enquiry_popup")
+        ),
       });
       
       const data = await response.json();

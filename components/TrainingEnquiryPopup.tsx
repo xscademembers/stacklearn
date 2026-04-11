@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
 import { FiX } from "react-icons/fi";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 interface TrainingEnquiryPopupProps {
   isOpen: boolean;
@@ -17,6 +19,7 @@ export default function TrainingEnquiryPopup({
   defaultCourseType,
   defaultCourseName,
 }: TrainingEnquiryPopupProps) {
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,10 +56,13 @@ export default function TrainingEnquiryPopup({
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: "training-enquiry",
-          ...formData,
-        }),
+        body: JSON.stringify(
+          withSubmissionContext(
+            { source: "training-enquiry", ...formData },
+            pathname,
+            "training_enquiry_popup"
+          )
+        ),
       });
 
       if (response.ok) {

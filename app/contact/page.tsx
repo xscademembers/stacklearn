@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { FiPhone, FiMail, FiMapPin, FiSend } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 export default function ContactPage() {
+  const pathname = usePathname();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,22 +16,45 @@ export default function ContactPage() {
     service: "",
     message: "",
   });
+  const [submitError, setSubmitError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError("");
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(
+          withSubmissionContext(
+            { ...formData },
+            pathname,
+            "contact_page"
+          )
+        ),
       });
+      const data = await response.json().catch(() => ({}));
       if (response.ok) {
-        alert("Thank you for contacting Stack Learn! Our counsellors will get in touch shortly.");
-        setFormData({ name: "", email: "", mobile: "", service: "", message: "" });
+        alert(
+          "Thank you for contacting Stack Learn! Our counsellors will get in touch shortly."
+        );
+        setFormData({
+          name: "",
+          email: "",
+          mobile: "",
+          service: "",
+          message: "",
+        });
+      } else {
+        setSubmitError(
+          typeof data.message === "string"
+            ? data.message
+            : "Something went wrong. Please try again."
+        );
       }
     } catch (error) {
       console.error("Error submitting contact form:", error);
-      alert("Thank you for contacting Stack Learn! Our counsellors will get in touch shortly.");
+      setSubmitError("Network error. Please try again.");
     }
   };
 
@@ -181,6 +207,11 @@ export default function ContactPage() {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
                   />
                 </div>
+                {submitError ? (
+                  <p className="text-sm text-accent" role="alert">
+                    {submitError}
+                  </p>
+                ) : null}
                 <button
                   type="submit"
                   className="w-full px-6 py-4 bg-brand text-white rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"

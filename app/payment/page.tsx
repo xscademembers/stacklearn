@@ -3,10 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { FiCreditCard, FiCheck } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 export default function PaymentPage() {
+  const pathname = usePathname();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,13 +19,71 @@ export default function PaymentPage() {
     remarks: "",
   });
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [detailsLocked, setDetailsLocked] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const proceedToMethods = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle payment submission
-    console.log("Payment submitted:", formData, paymentMethod);
-    setIsSubmitted(true);
+    setSaveError("");
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.mobile.trim() ||
+      !formData.purpose ||
+      !formData.amount
+    ) {
+      setSaveError("Please fill all required fields.");
+      return;
+    }
+    setDetailsLocked(true);
+  };
+
+  const finalizePayment = async () => {
+    setSaveError("");
+    if (!paymentMethod) {
+      setSaveError("Please select a payment method.");
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          withSubmissionContext(
+            {
+              name: formData.name,
+              email: formData.email,
+              mobile: formData.mobile,
+              service: "Payment request",
+              message: formData.remarks || null,
+              paymentPurpose: formData.purpose,
+              paymentAmount: String(formData.amount),
+              paymentMethod,
+              paymentRemarks: formData.remarks || null,
+            },
+            pathname,
+            "payment_page"
+          )
+        ),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setSaveError(
+          typeof data.message === "string"
+            ? data.message
+            : "Could not record your payment request. Please try again."
+        );
+        return;
+      }
+      setIsSubmitted(true);
+    } catch {
+      setSaveError("Network error. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (isSubmitted) {
@@ -88,7 +149,7 @@ export default function PaymentPage() {
           {/* Payment Form */}
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Payment Information</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={proceedToMethods} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                 <input
@@ -140,6 +201,7 @@ export default function PaymentPage() {
                 <input
                   type="number"
                   required
+                  min={1}
                   value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
@@ -155,6 +217,11 @@ export default function PaymentPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
                 />
               </div>
+              {saveError && !detailsLocked ? (
+                <p className="text-sm text-accent" role="alert">
+                  {saveError}
+                </p>
+              ) : null}
               <button
                 type="submit"
                 className="w-full px-6 py-4 bg-brand text-white rounded-lg font-semibold hover:shadow-lg transition-all"
@@ -165,11 +232,12 @@ export default function PaymentPage() {
           </div>
 
           {/* Payment Options */}
-          {formData.amount && (
+          {detailsLocked ? (
             <div className="bg-white rounded-xl shadow-lg p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Select Payment Method</h2>
               <div className="grid md:grid-cols-3 gap-6">
                 <button
+                  type="button"
                   onClick={() => setPaymentMethod("card")}
                   className={`p-6 border-2 rounded-xl text-center transition-all ${
                     paymentMethod === "card"
@@ -182,6 +250,7 @@ export default function PaymentPage() {
                   <p className="text-sm text-gray-600">Pay securely with Visa, MasterCard, or Rupay.</p>
                 </button>
                 <button
+                  type="button"
                   onClick={() => setPaymentMethod("upi")}
                   className={`p-6 border-2 rounded-xl text-center transition-all ${
                     paymentMethod === "upi"
@@ -194,6 +263,7 @@ export default function PaymentPage() {
                   <p className="text-sm text-gray-600">Pay instantly using Google Pay, PhonePe, or Paytm.</p>
                 </button>
                 <button
+                  type="button"
                   onClick={() => setPaymentMethod("netbanking")}
                   className={`p-6 border-2 rounded-xl text-center transition-all ${
                     paymentMethod === "netbanking"
@@ -206,16 +276,23 @@ export default function PaymentPage() {
                   <p className="text-sm text-gray-600">Transfer directly from your bank account.</p>
                 </button>
               </div>
-              {paymentMethod && (
+              {saveError ? (
+                <p className="text-sm text-accent mt-4" role="alert">
+                  {saveError}
+                </p>
+              ) : null}
+              {paymentMethod ? (
                 <button
-                  onClick={handleSubmit}
-                  className="w-full mt-6 px-6 py-4 bg-brand text-white rounded-lg font-semibold hover:bg-brand-strong transition-colors"
+                  type="button"
+                  onClick={finalizePayment}
+                  disabled={isSaving}
+                  className="w-full mt-6 px-6 py-4 bg-brand text-white rounded-lg font-semibold hover:bg-brand-strong transition-colors disabled:opacity-60"
                 >
-                  Proceed
+                  {isSaving ? "Saving…" : "Proceed"}
                 </button>
-              )}
+              ) : null}
             </div>
-          )}
+          ) : null}
         </div>
       </div>
       </div>

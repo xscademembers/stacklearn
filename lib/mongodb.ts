@@ -48,4 +48,9 @@ export const COLLECTIONS = {
   LEADS: "leads",
   APPLICATIONS: "applications",
   CONTACTS: "contacts",
+  BLOGS: "blogs",
+  TESTIMONIALS: "testimonials",
+  COURSES: "courses",
+  SITE_SETTINGS: "site_settings",
+  PAGE_CONTENT: "page_content",
 } as const;

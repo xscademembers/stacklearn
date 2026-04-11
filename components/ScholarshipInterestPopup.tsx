@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { FiX } from "react-icons/fi";
+import { withSubmissionContext } from "@/lib/submissionPayload";
 
 interface ScholarshipInterestPopupProps {
   isOpen: boolean;
@@ -16,6 +18,7 @@ export default function ScholarshipInterestPopup({
   countryLabel,
   onContinue,
 }: ScholarshipInterestPopupProps) {
+  const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
@@ -37,7 +40,13 @@ export default function ScholarshipInterestPopup({
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(
+          withSubmissionContext(
+            { ...formData },
+            pathname,
+            "scholarship_interest_popup"
+          )
+        ),
       });
 
       if (!response.ok) {
