@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDatabase, COLLECTIONS } from "@/lib/mongodb";
+import {
+  getDatabase,
+  COLLECTIONS,
+  isMongoConfigured,
+  MONGODB_NOT_CONFIGURED_MESSAGE,
+} from "@/lib/mongodb";
 import { clampStr } from "@/lib/api/submissionStrings";
 
 export async function POST(request: NextRequest) {
@@ -29,6 +34,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, message: "Name, email, and mobile are required" },
         { status: 400 }
+      );
+    }
+
+    if (!isMongoConfigured()) {
+      return NextResponse.json(
+        { success: false, message: MONGODB_NOT_CONFIGURED_MESSAGE },
+        { status: 503 }
       );
     }
 
@@ -98,12 +110,17 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error("Error submitting contact form:", error);
+    const errMsg = error instanceof Error ? error.message : "";
+    const configIssue =
+      errMsg.includes("MongoDB") || errMsg.includes("MONGODB_URI");
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to submit contact form. Please try again.",
+        message: configIssue
+          ? MONGODB_NOT_CONFIGURED_MESSAGE
+          : "Failed to submit contact form. Check the database connection and try again.",
       },
-      { status: 500 }
+      { status: configIssue ? 503 : 500 }
     );
   }
 }

@@ -47,8 +47,11 @@ export default function AdminLoginPage() {
           />
           <h1 className="text-2xl font-bold text-foreground">Admin Login</h1>
           <p className="text-foreground-muted text-sm mt-1">
-            Enter the password from your <code className="text-xs bg-page-soft px-1 rounded">ADMIN_PASSWORD</code>{" "}
-            environment variable
+            Use the value of{" "}
+            <code className="text-xs bg-page-soft px-1 rounded">ADMIN_PASSWORD</code> in{" "}
+            <code className="text-xs bg-page-soft px-1 rounded">.env.local</code> (must match exactly).
+            Forms need{" "}
+            <code className="text-xs bg-page-soft px-1 rounded">MONGODB_URI</code> in the same file.
           </p>
         </div>
 

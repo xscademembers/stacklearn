@@ -14,7 +14,7 @@ function passwordsMatch(input: string, expected: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
-    const envPassword = process.env.ADMIN_PASSWORD;
+    const envPassword = (process.env.ADMIN_PASSWORD ?? "").trim();
     if (!envPassword) {
       return NextResponse.json(
         { success: false, message: "Admin login is not configured. Set ADMIN_PASSWORD in .env.local." },
@@ -23,14 +23,16 @@ export async function POST(request: NextRequest) {
     }
 
     const { password } = await request.json();
-    if (typeof password !== "string" || !password) {
+    const inputPassword =
+      typeof password === "string" ? password.trim() : "";
+    if (!inputPassword) {
       return NextResponse.json(
         { success: false, message: "Password is required" },
         { status: 400 }
       );
     }
 
-    if (!passwordsMatch(password, envPassword)) {
+    if (!passwordsMatch(inputPassword, envPassword)) {
       return NextResponse.json(
         { success: false, message: "Invalid password" },
         { status: 401 }

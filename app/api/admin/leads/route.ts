@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDatabase, COLLECTIONS } from "@/lib/mongodb";
+import {
+  getDatabase,
+  COLLECTIONS,
+  isMongoConfigured,
+  MONGODB_NOT_CONFIGURED_MESSAGE,
+} from "@/lib/mongodb";
 import { getAdminSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -8,6 +13,19 @@ export async function GET(request: NextRequest) {
   const session = await getAdminSession();
   if (!session) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
+  if (!isMongoConfigured()) {
+    return NextResponse.json(
+      {
+        message: MONGODB_NOT_CONFIGURED_MESSAGE,
+        docs: [],
+        total: 0,
+        page: 1,
+        limit: 50,
+      },
+      { status: 503 }
+    );
+  }
+
   const url = request.nextUrl;
   const source = url.searchParams.get("source") || "all";
   const search = url.searchParams.get("q") || "";
@@ -15,6 +33,7 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(url.searchParams.get("limit") || "50", 10);
   const format = url.searchParams.get("format");
 
+  try {
   const db = await getDatabase();
 
   let collectionName: string;
@@ -156,4 +175,17 @@ export async function GET(request: NextRequest) {
     page,
     limit,
   });
+  } catch (error) {
+    console.error("Admin leads GET:", error);
+    return NextResponse.json(
+      {
+        message: MONGODB_NOT_CONFIGURED_MESSAGE,
+        docs: [],
+        total: 0,
+        page,
+        limit,
+      },
+      { status: 503 }
+    );
+  }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { Fragment, useEffect, useState, useCallback } from "react";
 import { FiSearch, FiDownload, FiChevronLeft, FiChevronRight, FiFilter } from "react-icons/fi";
 
 interface LeadDoc {
@@ -35,10 +35,12 @@ export default function LeadsPage() {
   const [source, setSource] = useState("all");
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [listError, setListError] = useState("");
   const limit = 25;
 
   const fetchLeads = useCallback(async () => {
     setLoading(true);
+    setListError("");
     try {
       const params = new URLSearchParams({
         source,
@@ -48,10 +50,22 @@ export default function LeadsPage() {
       });
       const res = await fetch(`/api/admin/leads?${params}`);
       const data = await res.json();
+      if (!res.ok) {
+        setListError(
+          typeof data.message === "string"
+            ? data.message
+            : "Could not load submissions."
+        );
+        setDocs([]);
+        setTotal(0);
+        return;
+      }
       setDocs(data.docs || []);
       setTotal(data.total || 0);
     } catch {
-      console.error("Failed to fetch leads");
+      setListError("Could not load submissions. Check your connection.");
+      setDocs([]);
+      setTotal(0);
     } finally {
       setLoading(false);
     }
@@ -88,6 +102,14 @@ export default function LeadsPage() {
 
   return (
     <div className="space-y-6">
+      {listError ? (
+        <div
+          className="rounded-xl border border-accent/40 bg-accent-soft px-4 py-3 text-sm text-foreground"
+          role="alert"
+        >
+          {listError}
+        </div>
+      ) : null}
       {/* Controls */}
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
         <div className="flex flex-wrap gap-3 items-center">
@@ -163,9 +185,8 @@ export default function LeadsPage() {
               </tr>
             ) : (
               docs.map((doc) => (
-                <>
+                <Fragment key={String(doc._id)}>
                   <tr
-                    key={doc._id}
                     className="border-b border-border hover:bg-page-soft cursor-pointer transition-colors"
                     onClick={() =>
                       setExpanded(expanded === doc._id ? null : doc._id)
@@ -193,6 +214,18 @@ export default function LeadsPage() {
                     <tr key={`${doc._id}-detail`} className="bg-page-soft">
                       <td colSpan={7} className="px-6 py-4">
                         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 text-sm">
+                          <div className="sm:col-span-2 lg:col-span-3">
+                            <span className="font-semibold text-foreground">Submitted from page:</span>{" "}
+                            <span className="text-foreground-muted">
+                              {doc.submittedFromPath || "—"}
+                            </span>
+                          </div>
+                          {doc.formSource && (
+                            <div>
+                              <span className="font-semibold text-foreground">Form / widget:</span>{" "}
+                              <span className="text-foreground-muted">{doc.formSource}</span>
+                            </div>
+                          )}
                           {doc.destination && (
                             <div>
                               <span className="font-semibold text-foreground">Destination:</span>{" "}
@@ -257,7 +290,7 @@ export default function LeadsPage() {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))
             )}
           </tbody>

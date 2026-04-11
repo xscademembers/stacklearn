@@ -1,5 +1,12 @@
 import { MongoClient, Db } from "mongodb";
 
+export const MONGODB_NOT_CONFIGURED_MESSAGE =
+  "Database is not configured. Add MONGODB_URI to your .env.local file and restart the dev server.";
+
+export function isMongoConfigured(): boolean {
+  return Boolean(process.env.MONGODB_URI?.trim());
+}
+
 const uri = process.env.MONGODB_URI;
 const options = {};
 

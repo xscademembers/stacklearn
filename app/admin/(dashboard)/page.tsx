@@ -1,20 +1,58 @@
-import { getDatabase, COLLECTIONS } from "@/lib/mongodb";
+import {
+  getDatabase,
+  COLLECTIONS,
+  isMongoConfigured,
+  MONGODB_NOT_CONFIGURED_MESSAGE,
+} from "@/lib/mongodb";
 import { FiUsers, FiMail, FiFileText, FiStar, FiBookOpen } from "react-icons/fi";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 async function getStats() {
-  const db = await getDatabase();
-  const [leads, contacts, applications, blogs, testimonials, courses] = await Promise.all([
-    db.collection(COLLECTIONS.LEADS).countDocuments(),
-    db.collection(COLLECTIONS.CONTACTS).countDocuments(),
-    db.collection(COLLECTIONS.APPLICATIONS).countDocuments(),
-    db.collection(COLLECTIONS.BLOGS).countDocuments(),
-    db.collection(COLLECTIONS.TESTIMONIALS).countDocuments(),
-    db.collection(COLLECTIONS.COURSES).countDocuments(),
-  ]);
-  return { leads, contacts, applications, blogs, testimonials, courses };
+  if (!isMongoConfigured()) {
+    return {
+      leads: 0,
+      contacts: 0,
+      applications: 0,
+      blogs: 0,
+      testimonials: 0,
+      courses: 0,
+      mongoWarning: MONGODB_NOT_CONFIGURED_MESSAGE,
+    };
+  }
+  try {
+    const db = await getDatabase();
+    const [leads, contacts, applications, blogs, testimonials, courses] =
+      await Promise.all([
+        db.collection(COLLECTIONS.LEADS).countDocuments(),
+        db.collection(COLLECTIONS.CONTACTS).countDocuments(),
+        db.collection(COLLECTIONS.APPLICATIONS).countDocuments(),
+        db.collection(COLLECTIONS.BLOGS).countDocuments(),
+        db.collection(COLLECTIONS.TESTIMONIALS).countDocuments(),
+        db.collection(COLLECTIONS.COURSES).countDocuments(),
+      ]);
+    return {
+      leads,
+      contacts,
+      applications,
+      blogs,
+      testimonials,
+      courses,
+      mongoWarning: null as string | null,
+    };
+  } catch {
+    return {
+      leads: 0,
+      contacts: 0,
+      applications: 0,
+      blogs: 0,
+      testimonials: 0,
+      courses: 0,
+      mongoWarning:
+        "Could not reach MongoDB. Check MONGODB_URI and your network, then restart the server.",
+    };
+  }
 }
 
 export default async function AdminDashboard() {
@@ -31,6 +69,15 @@ export default async function AdminDashboard() {
 
   return (
     <div className="space-y-8">
+      {stats.mongoWarning ? (
+        <div
+          className="rounded-xl border border-accent/40 bg-accent-soft px-4 py-3 text-sm text-foreground"
+          role="alert"
+        >
+          {stats.mongoWarning}
+        </div>
+      ) : null}
+
       <div>
         <h2 className="text-2xl font-bold text-foreground mb-1">Welcome back!</h2>
         <p className="text-foreground-muted">Here&apos;s an overview of your site.</p>
