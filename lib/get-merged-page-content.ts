@@ -4,16 +4,14 @@ import {
   type CmsPageSection,
 } from "@/lib/cms-page-templates";
 import { mergeCmsSections } from "@/lib/cms-merge-sections";
-import { getPageSectionsFromFile } from "@/lib/cms-file-store";
+import { getPageSectionsFromCmsStore } from "@/lib/cms-page-store";
 
 function cloneDefaults(defaults: CmsPageSection[]): CmsPageSection[] {
   return JSON.parse(JSON.stringify(defaults)) as CmsPageSection[];
 }
 
 /**
- * Merged CMS content for a page: template defaults + saved overrides.
- * Saved data is read from `data/cms/page-content.json` first; if a page has no file entry,
- * MongoDB is used only when configured (legacy). No database is required for the dashboard to work.
+ * Merged CMS: code templates + saved JSON (disk or Vercel Blob). MongoDB is optional legacy.
  */
 export async function getMergedPageContent(
   pageKey: string
@@ -24,9 +22,9 @@ export async function getMergedPageContent(
   const defaults = template.defaultSections;
 
   try {
-    const fromFile = await getPageSectionsFromFile(pageKey);
-    if (fromFile?.length) {
-      return mergeCmsSections(defaults, fromFile);
+    const fromStore = await getPageSectionsFromCmsStore(pageKey);
+    if (fromStore?.length) {
+      return mergeCmsSections(defaults, fromStore);
     }
   } catch {
     /* fall through */

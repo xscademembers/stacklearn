@@ -37,6 +37,7 @@ export default function ContentPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [cmsStorageHint, setCmsStorageHint] = useState("");
 
   const fetchPages = useCallback(async () => {
     setLoading(true);
@@ -56,11 +57,17 @@ export default function ContentPage() {
             ? data.message
             : `Could not load content (${res.status}).`
         );
+        if (typeof data.cmsStorageHint === "string" && data.cmsStorageHint) {
+          setCmsStorageHint(data.cmsStorageHint);
+        }
         setPages((Array.isArray(data.pages) ? data.pages : []) as PageContent[]);
         return;
       }
       if (typeof data.warning === "string" && data.warning) {
         setWarning(data.warning);
+      }
+      if (typeof data.cmsStorageHint === "string" && data.cmsStorageHint) {
+        setCmsStorageHint(data.cmsStorageHint);
       }
       setPages((Array.isArray(data.pages) ? data.pages : []) as PageContent[]);
     } catch (e) {
@@ -197,11 +204,25 @@ export default function ContentPage() {
         </div>
       ) : null}
 
+      {cmsStorageHint ? (
+        <div
+          className="rounded-lg border border-border bg-page-soft px-4 py-3 text-sm text-foreground"
+          role="status"
+        >
+          <strong className="font-semibold">How your edits are saved:</strong> {cmsStorageHint}{" "}
+          This dashboard updates site copy and image URLs the same way you would edit a JSON file
+          in the project — no MongoDB. On{" "}
+          <strong className="font-semibold">Vercel</strong>, add{" "}
+          <strong className="font-semibold">Vercel Blob</strong> and{" "}
+          <code className="text-xs bg-surface px-1 rounded">BLOB_READ_WRITE_TOKEN</code> so the
+          server can store that JSON file in the cloud.
+        </div>
+      ) : null}
+
       <p className="text-sm text-foreground-muted">
-        Select a page to edit its content. Saves are stored in{" "}
-        <code className="text-xs bg-page-soft px-1 rounded">data/cms/page-content.json</code>{" "}
-        on the server (no database required). After you save, refresh the public page to see
-        updates. JSON-type fields must stay valid JSON.
+        Pick a page below — every template page (home, about, contact, services, etc.) can be edited
+        section by section. Use image fields for picture URLs. After saving, refresh the live page to
+        see changes. Textareas marked as JSON must remain valid JSON.
       </p>
 
       <div className="flex flex-wrap gap-2">

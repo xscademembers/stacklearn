@@ -2,15 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDatabase, COLLECTIONS, isMongoConfigured } from "@/lib/mongodb";
 import { getAdminSession } from "@/lib/auth";
 import {
-  listPagesFromFile,
-  savePageSectionsToFile,
-  cloneSectionsForPersistence,
-  getCmsStoragePathForLogs,
-} from "@/lib/cms-file-store";
+  listPagesFromCmsStore,
+  savePageToCmsStore,
+  getCmsSaveTargetHint,
+  describeCmsStorageForAdminUi,
+} from "@/lib/cms-page-store";
+import { cloneSectionsForPersistence } from "@/lib/cms-file-store";
 import type { CmsPageSection } from "@/lib/cms-page-templates";
 
 export const dynamic = "force-dynamic";
-/** File system writes require Node (not Edge). */
 export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
@@ -22,9 +22,11 @@ export async function GET(request: NextRequest) {
 
     const pageKey = request.nextUrl.searchParams.get("page");
 
+    const hint = describeCmsStorageForAdminUi();
+
     if (pageKey) {
-      const filePages = await listPagesFromFile();
-      const hit = filePages.find((p) => p.pageKey === pageKey);
+      const storePages = await listPagesFromCmsStore();
+      const hit = storePages.find((p) => p.pageKey === pageKey);
       if (hit) {
         return NextResponse.json({
           content: {
@@ -32,6 +34,7 @@ export async function GET(request: NextRequest) {
             sections: hit.sections,
             updatedAt: hit.updatedAt,
           },
+          cmsStorageHint: hint,
         });
       }
       if (isMongoConfigured()) {
@@ -40,22 +43,23 @@ export async function GET(request: NextRequest) {
           const doc = await db
             .collection(COLLECTIONS.PAGE_CONTENT)
             .findOne({ pageKey });
-          return NextResponse.json({ content: doc });
+          return NextResponse.json({ content: doc, cmsStorageHint: hint });
         } catch {
           /* fall through */
         }
       }
-      return NextResponse.json({ content: null });
+      return NextResponse.json({ content: null, cmsStorageHint: hint });
     }
 
-    const filePages = await listPagesFromFile();
-    if (filePages.length > 0) {
+    const storePages = await listPagesFromCmsStore();
+    if (storePages.length > 0) {
       return NextResponse.json({
-        pages: filePages.map((p) => ({
+        pages: storePages.map((p) => ({
           pageKey: p.pageKey,
           sections: p.sections,
           updatedAt: p.updatedAt,
         })),
+        cmsStorageHint: hint,
       });
     }
 
@@ -67,19 +71,20 @@ export async function GET(request: NextRequest) {
           .find()
           .sort({ pageKey: 1 })
           .toArray();
-        return NextResponse.json({ pages: allPages });
+        return NextResponse.json({ pages: allPages, cmsStorageHint: hint });
       } catch {
         /* fall through */
       }
     }
 
-    return NextResponse.json({ pages: [] });
+    return NextResponse.json({ pages: [], cmsStorageHint: hint });
   } catch (error) {
     console.error("Admin content GET:", error);
     return NextResponse.json(
       {
         pages: [],
-        message: "Could not load page content from disk.",
+        message: "Could not load page content.",
+        cmsStorageHint: describeCmsStorageForAdminUi(),
       },
       { status: 200 }
     );
@@ -127,18 +132,18 @@ export async function PUT(request: NextRequest) {
     }
 
     try {
-      await savePageSectionsToFile(pageKey, normalized);
+      await savePageToCmsStore(pageKey, normalized);
     } catch (err) {
-      console.error("Admin content file save:", err);
-      const dest = getCmsStoragePathForLogs();
-      const code = err && typeof err === "object" && "code" in err ? String((err as NodeJS.ErrnoException).code) : "";
+      console.error("Admin content save:", err);
+      const hint = getCmsSaveTargetHint();
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Save failed.";
       return NextResponse.json(
         {
           success: false,
-          message:
-            code === "EACCES" || code === "EPERM"
-              ? `Permission denied writing CMS file. Try running the dev server as a user that can write to:\n${dest}`
-              : `Could not save to ${dest}. Check disk space and folder permissions.`,
+          message: `${msg}\n(Target: ${hint})`,
         },
         { status: 500 }
       );
@@ -153,7 +158,7 @@ export async function PUT(request: NextRequest) {
           { upsert: true }
         );
       } catch {
-        /* file is source of truth */
+        /* JSON store is source of truth */
       }
     }
 
