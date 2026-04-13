@@ -155,6 +155,12 @@ export default function ContentPage() {
         );
         return;
       }
+      if (data.success === false) {
+        setError(
+          typeof data.message === "string" ? data.message : "Save was rejected by the server."
+        );
+        return;
+      }
       setSaved(true);
       await fetchPages();
       setTimeout(() => setSaved(false), 3000);

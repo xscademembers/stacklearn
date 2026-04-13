@@ -2,7 +2,13 @@ import fs from "fs/promises";
 import path from "path";
 import type { CmsPageSection } from "@/lib/cms-page-templates";
 
-const CMS_DIR = path.join(process.cwd(), "data", "cms");
+function resolveCmsDir(): string {
+  const override = process.env.CMS_DATA_DIR?.trim();
+  if (override) return path.resolve(override);
+  return path.join(process.cwd(), "data", "cms");
+}
+
+const CMS_DIR = resolveCmsDir();
 const CMS_FILE = path.join(CMS_DIR, "page-content.json");
 
 export type CmsFilePageDoc = {
@@ -14,6 +20,35 @@ export type CmsFilePageDoc = {
 type CmsFileRoot = {
   pages: Record<string, { sections: CmsPageSection[]; updatedAt?: string }>;
 };
+
+/** Deep clone via JSON; throws with a clear message if sections are not serializable. */
+export function cloneSectionsForPersistence(sections: unknown): CmsPageSection[] {
+  let raw: string;
+  try {
+    raw = JSON.stringify(sections, (_, v) => (v === undefined ? null : v));
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    throw new Error(
+      `Content could not be serialized (${msg}). Try reloading the editor, or shorten JSON fields.`
+    );
+  }
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) {
+      throw new Error("Sections must be an array.");
+    }
+    return parsed as CmsPageSection[];
+  } catch (e) {
+    if (e instanceof SyntaxError) {
+      throw new Error("Internal parse error after clone.");
+    }
+    throw e;
+  }
+}
+
+export function getCmsStoragePathForLogs(): string {
+  return CMS_FILE;
+}
 
 async function readRoot(): Promise<CmsFileRoot> {
   try {
@@ -61,5 +96,17 @@ export async function savePageSectionsToFile(
     sections,
     updatedAt: new Date().toISOString(),
   };
-  await fs.writeFile(CMS_FILE, `${JSON.stringify(root, null, 2)}\n`, "utf-8");
+  const payload = `${JSON.stringify(root, null, 2)}\n`;
+  const tmp = path.join(CMS_DIR, `.page-content.${process.pid}.tmp`);
+  try {
+    await fs.writeFile(tmp, payload, "utf-8");
+    await fs.rename(tmp, CMS_FILE);
+  } catch (err) {
+    try {
+      await fs.unlink(tmp);
+    } catch {
+      /* ignore */
+    }
+    throw err;
+  }
 }
