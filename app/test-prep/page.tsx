@@ -2,6 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiBookOpen } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import { getMergedPageContent } from "@/lib/get-merged-page-content";
+import { getCmsField } from "@/lib/cms-merge-sections";
+
+export const dynamic = "force-dynamic";
 
 const tests = [
   {
@@ -26,7 +30,20 @@ const tests = [
   },
 ];
 
-export default function TestPrepPage() {
+export default async function TestPrepPage() {
+  const sections = await getMergedPageContent("test-prep");
+  const kicker =
+    getCmsField(sections, "hero", "kicker") || "Test Preparation for Study Abroad";
+  const heading = getCmsField(sections, "hero", "heading") || "Test Preparation";
+  const tagline = getCmsField(sections, "hero", "tagline");
+  const intro = getCmsField(sections, "hero", "intro");
+  const intro2 = getCmsField(sections, "hero", "intro2");
+  const heroImage =
+    getCmsField(sections, "hero", "heroImage") ||
+    "https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg?auto=compress&cs=tinysrgb&w=1600";
+  const heroUnopt =
+    !heroImage.includes("images.pexels.com") && !heroImage.includes("images.unsplash.com");
+
   return (
     <div className="pb-0">
       {/* Hero Section */}
@@ -34,34 +51,30 @@ export default function TestPrepPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src={heroImage}
             alt="Students preparing for exams"
             fill
             priority
+            unoptimized={heroUnopt}
             className="object-cover opacity-50"
           />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-16 md:py-20 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
             <p className="text-sm md:text-base uppercase tracking-[0.2em] text-brand-soft mb-3">
-              Test Preparation for Study Abroad
+              {kicker}
             </p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 leading-tight">
-              Test Preparation
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 leading-tight whitespace-pre-line">
+              {heading}
             </h1>
-            <p className="text-base md:text-2xl font-semibold text-white/90 mb-5">
-              IELTS, GRE, TOEFL &amp; GMAT Coaching Tailored for Your Study Abroad Goals – including flexible IELTS coaching online options.
+            <p className="text-base md:text-2xl font-semibold text-white/90 mb-5 whitespace-pre-line">
+              {tagline}
             </p>
-              <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4 mx-auto">
-                A strong test score can open doors to top universities worldwide. Whether you are
-                applying for undergraduate, postgraduate, or MBA programs, international universities
-                rely on standardized test scores to assess your academic readiness and English
-                proficiency — making structured IELTS, TOEFL, and GRE coaching especially important for study abroad success.
+              <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4 mx-auto whitespace-pre-line">
+                {intro}
               </p>
-            <p className="text-base md:text-lg text-white/90 leading-relaxed mx-auto">
-              At StackLearn, we provide structured and result‑driven test preparation for IELTS,
-              GRE, TOEFL, and GMAT. Our expert trainers, personalized learning plans, and
-              real‑exam simulations help you achieve your target scores with confidence.
+            <p className="text-base md:text-lg text-white/90 leading-relaxed mx-auto whitespace-pre-line">
+              {intro2}
             </p>
             <div className="mt-8 flex flex-wrap gap-4 justify-center">
               <BookConsultButton className="inline-flex items-center gap-2 px-8 py-3" variant="primary">

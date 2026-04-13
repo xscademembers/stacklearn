@@ -2,67 +2,102 @@ import Image from "next/image";
 import { FiArrowRight, FiCheckCircle, FiTarget } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
 import { getMergedPageContent } from "@/lib/get-merged-page-content";
-import { getCmsField } from "@/lib/cms-merge-sections";
+import { getCmsField, parseCmsJson } from "@/lib/cms-merge-sections";
+import {
+  DEFAULT_ABOUT_INTRO,
+  ABOUT_GAP_PROBLEMS,
+  ABOUT_APPROACH,
+  ABOUT_WHO_WE_WORK_WITH,
+  ABOUT_MAKES_US_DIFFERENT,
+  type AboutApproachItem,
+  type AboutDiffItem,
+} from "@/lib/cms-about-content";
+
+export const dynamic = "force-dynamic";
 
 const DEFAULT_ABOUT_HERO =
   "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1600";
 
-const DEFAULT_ABOUT_INTRO =
-  "At StackLearn, we started with a simple observation: many students go abroad with big dreams — but without the right preparation to succeed once they get there. Getting into a university is only the first step. Building a career in a competitive global environment is the real challenge. That's where we come in.";
-
-const gapProblems = [
-  "Lack of practical skills",
-  "No real project experience",
-  "Difficulty competing in job markets",
-];
-
-const approach = [
-  {
-    title: "Clarity First",
-    body: "We help you choose the right country, course, and path based on your goals — not trends.",
-  },
-  {
-    title: "End-to-End Guidance",
-    body: "From applications and SOPs to visa support, we guide you through every step.",
-  },
-  {
-    title: "Skill Before You Go",
-    body: "We train you in real-world, in-demand technologies so you’re ready before you land abroad.",
-    bullets: ["Data Science", "AI & Machine Learning", "Software Development"],
-  },
-  {
-    title: "Career-Focused Preparation",
-    body: "We help you build projects, portfolios, and confidence so you’re ready for opportunities abroad.",
-  },
-];
-
-const whoWeWorkWith = [
-  "Students planning to study abroad",
-  "Graduates who want to strengthen their profile",
-  "Individuals aiming for global tech careers",
-];
-
-const makesUsDifferent = [
-  { title: "Education guidance", body: "Right country, course, and university — with honest counselling." },
-  { title: "Technical training", body: "In-demand skills and real project experience before you go." },
-  { title: "Career readiness", body: "Portfolios, interview confidence, and a path to global opportunities." },
-];
+function headingBlackGradient(full: string) {
+  const parts = full.trim().split(/\s+/).filter(Boolean);
+  if (parts.length < 2) {
+    return <span className="gradient-text">{full}</span>;
+  }
+  const last = parts.pop()!;
+  return (
+    <>
+      {parts.join(" ")} <span className="gradient-text">{last}</span>
+    </>
+  );
+}
 
 export default async function AboutPage() {
   const sections = await getMergedPageContent("about");
   const kicker = getCmsField(sections, "hero", "kicker") || "About Us";
   const heading = getCmsField(sections, "hero", "heading");
-  const desc = getCmsField(sections, "hero", "description");
+  const desc =
+    getCmsField(sections, "hero", "description").trim() ||
+    getCmsField(sections, "hero", "fallbackIntro").trim() ||
+    DEFAULT_ABOUT_INTRO;
   const heroImgRaw = getCmsField(sections, "hero", "heroImage");
   const heroImg = heroImgRaw || DEFAULT_ABOUT_HERO;
   const heroUnoptimized =
     !heroImg.includes("images.pexels.com") && !heroImg.includes("images.unsplash.com");
   const mission = getCmsField(sections, "mission", "mission");
   const vision = getCmsField(sections, "mission", "vision");
+  const ctaText = getCmsField(sections, "hero", "ctaText") || "Start Your Journey";
+
+  const whatHeading = getCmsField(sections, "whatWeDo", "heading");
+  const whatIntro = getCmsField(sections, "whatWeDo", "intro");
+  const whatCard1 = getCmsField(sections, "whatWeDo", "card1");
+  const whatCard2 = getCmsField(sections, "whatWeDo", "card2");
+
+  const whyHeading = getCmsField(sections, "whyExists", "heading");
+  const whyIntro = getCmsField(sections, "whyExists", "intro");
+  const promiseKicker = getCmsField(sections, "whyExists", "promiseKicker");
+  const promiseTitle = getCmsField(sections, "whyExists", "promiseTitle");
+  const promiseBody = getCmsField(sections, "whyExists", "promiseBody");
+  const gapProblems = parseCmsJson<string[]>(
+    getCmsField(sections, "whyExists", "gapProblemsJson"),
+    ABOUT_GAP_PROBLEMS
+  );
+
+  const approachHeading = getCmsField(sections, "approach", "heading");
+  const approachIntro = getCmsField(sections, "approach", "intro");
+  const approach = parseCmsJson<AboutApproachItem[]>(
+    getCmsField(sections, "approach", "itemsJson"),
+    ABOUT_APPROACH
+  );
+
+  const whoHeading = getCmsField(sections, "whoWeWorkWith", "heading");
+  const whoItems = parseCmsJson<string[]>(
+    getCmsField(sections, "whoWeWorkWith", "itemsJson"),
+    ABOUT_WHO_WE_WORK_WITH
+  );
+
+  const diffHeading = getCmsField(sections, "different", "heading");
+  const diffPara1 = getCmsField(sections, "different", "para1");
+  const diffPara2 = getCmsField(sections, "different", "para2");
+  const diffItems = parseCmsJson<AboutDiffItem[]>(
+    getCmsField(sections, "different", "itemsJson"),
+    ABOUT_MAKES_US_DIFFERENT
+  );
+
+  const goalHeading = getCmsField(sections, "goal", "heading");
+  const goalBody = getCmsField(sections, "goal", "body");
+
+  const ctaHeading = getCmsField(sections, "cta", "heading");
+  const ctaBody = getCmsField(sections, "cta", "body");
+  const bottomCtaText = getCmsField(sections, "cta", "buttonText");
+  const ctaBg = getCmsField(sections, "cta", "backgroundImage");
+  const ctaBgFinal =
+    ctaBg ||
+    "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1600";
+  const ctaUnopt =
+    !ctaBgFinal.includes("images.pexels.com") && !ctaBgFinal.includes("images.unsplash.com");
 
   return (
     <main>
-      {/* Hero */}
       <section className="relative text-white overflow-hidden border-b border-brand/40">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
@@ -91,13 +126,13 @@ export default async function AboutPage() {
               </h1>
             )}
             <p className="text-base md:text-lg text-white/90 leading-relaxed mb-6 max-w-3xl mx-auto whitespace-pre-line">
-              {desc || DEFAULT_ABOUT_INTRO}
+              {desc}
             </p>
             <BookConsultButton
               variant="white"
               className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
             >
-              Start Your Journey
+              {ctaText}
               <FiArrowRight className="w-4 h-4" />
             </BookConsultButton>
           </div>
@@ -127,48 +162,34 @@ export default async function AboutPage() {
         </section>
       ) : null}
 
-      {/* What We Do */}
       <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-3xl mx-auto text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-              What We <span className="gradient-text">Do</span>
+              {headingBlackGradient(whatHeading)}
             </h2>
-            <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-              We combine overseas education consultancy with practical technical training to help
-              students not just study abroad — but actually thrive there. From choosing the right
-              university to building job-ready skills, we support students through the complete journey,
-              acting as one of the best study abroad consultants in India for tech-focused global careers.
-            </p>
+            <p className="text-sm md:text-base text-slate-700 leading-relaxed">{whatIntro}</p>
           </div>
           <div className="max-w-4xl mx-auto grid gap-4 md:grid-cols-2">
             <div className="rounded-2xl bg-page-soft border border-slate-200 px-6 py-6 md:px-7 md:py-7 hover-lift">
-              <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-                We guide your overseas education decisions with clarity and transparency — so you pick
-                what’s right for your long-term goals.
-              </p>
+              <p className="text-sm md:text-base text-slate-700 leading-relaxed">{whatCard1}</p>
             </div>
             <div className="rounded-2xl bg-page-soft border border-slate-200 px-6 py-6 md:px-7 md:py-7 hover-lift">
-              <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-                We prepare you for global opportunities with hands-on skills, real projects, and
-                career-ready confidence.
-              </p>
+              <p className="text-sm md:text-base text-slate-700 leading-relaxed">{whatCard2}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why StackLearn Exists */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-6 md:px-8">
           <div className="grid gap-10 lg:grid-cols-2 items-start">
             <div>
               <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-                Why StackLearn <span className="gradient-text">Exists</span>
+                {headingBlackGradient(whyHeading)}
               </h2>
               <p className="text-sm md:text-base text-slate-700 leading-relaxed mb-4">
-                Traditional consultancies focus on applications, documentation, and visas. But students
-                often struggle after reaching their destination. We created StackLearn to solve this gap.
+                {whyIntro}
               </p>
               <div className="space-y-3">
                 {gapProblems.map((item) => (
@@ -190,32 +211,26 @@ export default async function AboutPage() {
                 </div>
                 <div>
                   <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-brand">
-                    Our Promise
+                    {promiseKicker}
                   </p>
                   <p className="text-sm md:text-base font-semibold text-slate-900">
-                    We prepare you for what happens after you land.
+                    {promiseTitle}
                   </p>
                 </div>
               </div>
-              <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-                Your admission is a milestone — not the finish line. Our support is designed to help
-                you thrive academically, build real skills, and become competitive in global job markets.
-              </p>
+              <p className="text-sm md:text-base text-slate-700 leading-relaxed">{promiseBody}</p>
             </aside>
           </div>
         </div>
       </section>
 
-      {/* Our Approach */}
       <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-              Our <span className="gradient-text">Approach</span>
+              {headingBlackGradient(approachHeading)}
             </h2>
-            <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-              We don’t treat students as applications — we treat them as future professionals.
-            </p>
+            <p className="text-sm md:text-base text-slate-700 leading-relaxed">{approachIntro}</p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -251,16 +266,15 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Who We Work With */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-3xl mx-auto text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-              Who We <span className="gradient-text">Work With</span>
+              {headingBlackGradient(whoHeading)}
             </h2>
           </div>
           <div className="max-w-4xl mx-auto grid gap-4 md:grid-cols-3">
-            {whoWeWorkWith.map((item) => (
+            {whoItems.map((item) => (
               <article
                 key={item}
                 className="rounded-2xl bg-white border border-slate-200 px-5 py-6 text-center hover-lift"
@@ -272,26 +286,21 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* What Makes Us Different */}
       <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-6 md:px-8">
           <div className="grid gap-10 lg:grid-cols-2 items-start">
             <div>
               <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-                What Makes Us <span className="gradient-text">Different</span>
+                {headingBlackGradient(diffHeading)}
               </h2>
               <p className="text-sm md:text-base text-slate-700 leading-relaxed mb-4">
-                We don’t stop at admissions. We focus on what truly matters: what happens after you land
-                in a new country.
+                {diffPara1}
               </p>
-              <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-                That’s why we combine education guidance, technical training, and career readiness into
-                one single journey.
-              </p>
+              <p className="text-sm md:text-base text-slate-700 leading-relaxed">{diffPara2}</p>
             </div>
 
             <div className="space-y-3">
-              {makesUsDifferent.map((item) => (
+              {diffItems.map((item) => (
                 <article
                   key={item.title}
                   className="rounded-2xl border border-slate-200 bg-page-soft px-6 py-6 md:px-7 md:py-7 hover-lift"
@@ -305,46 +314,39 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Our Goal */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-6 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-              Our <span className="gradient-text">Goal</span>
+              {headingBlackGradient(goalHeading)}
             </h2>
-            <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-              To help students not just go abroad — but succeed, grow, and build meaningful careers
-              globally.
-            </p>
+            <p className="text-sm md:text-base text-slate-700 leading-relaxed">{goalBody}</p>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src={ctaBgFinal}
             alt="Students preparing for global careers"
             fill
+            unoptimized={ctaUnopt}
             className="object-cover opacity-50"
           />
         </div>
         <div className="container mx-auto px-6 md:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4">
-              Let&apos;s Get Started
-            </h2>
-            <p className="text-sm md:text-base text-white/90 mb-6 max-w-2xl mx-auto">
-              If you&apos;re serious about studying abroad and building a strong future, we&apos;re here to
-              guide you. Start your journey with StackLearn.
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4">{ctaHeading}</h2>
+            <p className="text-sm md:text-base text-white/90 mb-6 max-w-2xl mx-auto whitespace-pre-line">
+              {ctaBody}
             </p>
             <BookConsultButton
               variant="white"
               className="inline-flex items-center gap-2 px-8 py-3 text-sm md:text-base"
             >
-              Book Free Counselling
+              {bottomCtaText}
               <FiArrowRight className="w-4 h-4" />
             </BookConsultButton>
           </div>

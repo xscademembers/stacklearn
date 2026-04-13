@@ -4,67 +4,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import type { TrainingProgramCard } from "@/lib/cms-home-content";
 
-const programs = [
-  {
-    title: "Data Science",
-    description:
-      "Learn data analysis, machine learning, and real-world problem solving.",
-    href: "/trainings/technical/data-science",
-    image:
-      "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    title: "Azure Data Engineering",
-    description:
-      "Master data pipelines, cloud storage, and Azure tools for big data roles.",
-    href: "/trainings/technical/azure-data-engineer",
-    image:
-      "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    title: "Microsoft Power BI",
-    description:
-      "Create interactive dashboards and gain business insights using Power BI.",
-    href: "/trainings/technical/microsoft-power-bi",
-    image:
-      "https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    title: "QA Automation",
-    description:
-      "Learn automation testing tools and frameworks for software quality roles.",
-    href: "/trainings/technical/qa-automation",
-    image:
-      "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    title: "RPA UiPath",
-    description:
-      "Automate business processes using UiPath with hands-on projects.",
-    href: "/trainings/technical/rpa-uipath",
-    image:
-      "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    title: "VLSI Design",
-    description:
-      "Build skills in chip design, embedded systems, and semiconductor technologies.",
-    href: "/trainings/non-technical/vlsi-design-verification",
-    image:
-      "https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    title: "Corporate Trainings",
-    description:
-      "Customized training programs for organizations to upskill their teams.",
-    href: "/trainings/corporate",
-    image:
-      "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-];
+export type PopularTrainingCms = {
+  titleLead: string;
+  titleGradient: string;
+  subheading: string;
+  programs: TrainingProgramCard[];
+};
 
-export default function PopularTrainingPrograms() {
+export default function PopularTrainingPrograms({ content }: { content: PopularTrainingCms }) {
+  const programs = content.programs;
   const [index, setIndex] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(4);
   const total = programs.length;
@@ -100,6 +50,8 @@ export default function PopularTrainingPrograms() {
     setIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
+  if (total === 0) return null;
+
   return (
     <section
       className="py-16 md:py-24 bg-slate-50"
@@ -111,10 +63,11 @@ export default function PopularTrainingPrograms() {
             id="popular-training-programs-heading"
             className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4"
           >
-            Popular <span className="gradient-text">Training Programs</span>
+            {content.titleLead}{" "}
+            <span className="gradient-text">{content.titleGradient}</span>
           </h2>
           <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl mx-auto">
-            Build in-demand skills with our job-oriented training programs.
+            {content.subheading}
           </p>
         </div>
 

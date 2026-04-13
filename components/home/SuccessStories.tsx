@@ -4,45 +4,21 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import type { SuccessStory } from "@/lib/cms-home-content";
 
-const stories = [
-  {
-    name: "Sai Kumar",
-    destination: "UK",
-    university: "University of Leeds",
-    course: "MSc Computer Science",
-    quote: "Stack Learn made my visa process completely stress-free — they took care of every document and step!",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200",
-  },
-  {
-    name: "Priya Sharma",
-    destination: "Canada",
-    university: "University of Toronto",
-    course: "MBA",
-    quote: "The counselling team helped me find the perfect university match. Highly recommended!",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200",
-  },
-  {
-    name: "Rahul Patel",
-    destination: "Australia",
-    university: "University of Melbourne",
-    course: "MEng Mechanical",
-    quote: "From application to visa approval, Stack Learn guided me through everything seamlessly.",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200",
-  },
-  {
-    name: "Anjali Reddy",
-    destination: "USA",
-    university: "MIT",
-    course: "MS Data Science",
-    quote: "Their scholarship guidance helped me secure funding. Thank you Stack Learn!",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200",
-  },
-];
+export type SuccessStoriesCms = {
+  titleLead: string;
+  titleGradient: string;
+  subheading: string;
+  stories: SuccessStory[];
+};
 
-export default function SuccessStories() {
+export default function SuccessStories({ content }: { content: SuccessStoriesCms }) {
+  const stories = content.stories;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev">("next");
+
+  if (stories.length === 0) return null;
 
   const nextSlide = () => {
     setDirection("next");
@@ -59,10 +35,11 @@ export default function SuccessStories() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-extrabold text-slate-900 mb-4">
-            Success <span className="gradient-text">Stories</span>
+            {content.titleLead}{" "}
+            <span className="gradient-text">{content.titleGradient}</span>
           </h2>
           <p className="text-xl text-slate-700 font-medium">
-            Real students, real success stories
+            {content.subheading}
           </p>
         </div>
         <div className="relative max-w-6xl mx-auto px-8">
@@ -115,6 +92,7 @@ export default function SuccessStories() {
             </div>
           </div>
           <button
+            type="button"
             onClick={prevSlide}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 bg-white rounded-full p-3 shadow-lg hover:bg-brand-soft transition-colors z-10"
             aria-label="Previous story"
@@ -122,6 +100,7 @@ export default function SuccessStories() {
             <FiChevronLeft className="w-6 h-6 text-gray-700" />
           </button>
           <button
+            type="button"
             onClick={nextSlide}
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 bg-white rounded-full p-3 shadow-lg hover:bg-brand-soft transition-colors z-10"
             aria-label="Next story"
@@ -132,6 +111,7 @@ export default function SuccessStories() {
             {stories.map((_, index) => (
               <button
                 key={index}
+                type="button"
                 onClick={() => setCurrentIndex(index)}
                 className={`w-2 h-2 rounded-full transition-all ${
                   index === currentIndex

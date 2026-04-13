@@ -4,83 +4,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import type { DestinationCard } from "@/lib/cms-home-content";
 
-const destinations = [
-  {
-    name: "United Kingdom",
-    image:
-      "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    flag: "https://flagcdn.com/w40/gb.png",
-    highlights: [
-      "Post-study work visa up to 2 years",
-      "Top-ranked universities globally",
-      "One-year Master's programs",
-    ],
-    href: "/destinations/uk",
-  },
-  {
-    name: "United States",
-    image:
-      "https://images.pexels.com/photos/290386/pexels-photo-290386.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    flag: "https://flagcdn.com/w40/us.png",
-    highlights: [
-      "World-class research opportunities",
-      "Diverse course options",
-      "Strong career prospects",
-    ],
-    href: "/destinations/usa",
-  },
-  {
-    name: "Canada",
-    image:
-      "https://images.pexels.com/photos/2335126/pexels-photo-2335126.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    flag: "https://flagcdn.com/w40/ca.png",
-    highlights: [
-      "Post-graduation work permit",
-      "Affordable education",
-      "Immigration pathways",
-    ],
-    href: "/destinations/canada",
-  },
-  {
-    name: "Australia",
-    image:
-      "https://images.pexels.com/photos/995764/pexels-photo-995764.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    flag: "https://flagcdn.com/w40/au.png",
-    highlights: [
-      "Post-study work visa up to 4 years",
-      "High quality of life",
-      "Strong job market",
-    ],
-    href: "/destinations/australia",
-  },
-  {
-    name: "Germany",
-    image:
-      "https://images.pexels.com/photos/109629/pexels-photo-109629.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    flag: "https://flagcdn.com/w40/de.png",
-    highlights: [
-      "Tuition-free public universities",
-      "Strong engineering & research",
-      "Central European location",
-    ],
-    href: "/destinations/germany",
-  },
-  {
-    name: "Ireland",
-    image:
-      "https://images.pexels.com/photos/2382681/pexels-photo-2382681.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    flag: "https://flagcdn.com/w40/ie.png",
-    highlights: [
-      "Europe's leading tech & pharma hub",
-      "Two-year post-study work visa",
-      "English-speaking EU country",
-    ],
-    href: "/destinations/ireland",
-  },
-];
+export type PopularDestinationsCms = {
+  titleLead: string;
+  titleGradient: string;
+  subheading: string;
+  destinations: DestinationCard[];
+};
 
-export default function PopularDestinations() {
+export default function PopularDestinations({ content }: { content: PopularDestinationsCms }) {
+  const destinations = content.destinations;
   const [index, setIndex] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(4);
   const total = destinations.length;
@@ -116,6 +50,8 @@ export default function PopularDestinations() {
     setIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
+  if (total === 0) return null;
+
   return (
     <section
       className="py-16 md:py-24 bg-slate-50"
@@ -124,15 +60,15 @@ export default function PopularDestinations() {
       <div className="container mx-auto px-6 md:px-8">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">
-            Popular <span className="gradient-text">Destinations</span>
+            {content.titleLead}{" "}
+            <span className="gradient-text">{content.titleGradient}</span>
           </h2>
           <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl mx-auto">
-            Explore top study destinations around the world
+            {content.subheading}
           </p>
         </div>
 
         <div className="space-y-8">
-          {/* Cards */}
           <div className="overflow-hidden -mx-3">
             <div
               className="flex transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
@@ -193,7 +129,6 @@ export default function PopularDestinations() {
             </div>
           </div>
 
-          {/* Navigation arrows below cards so they never overlap */}
           <div className="flex items-center justify-center gap-4">
             <button
               type="button"
@@ -221,4 +156,3 @@ export default function PopularDestinations() {
     </section>
   );
 }
-

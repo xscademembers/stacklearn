@@ -2,123 +2,47 @@
 
 import { useId, useState } from "react";
 
-const studyAbroadPoints = [
-  {
-    title: "Personalized Profile Evaluation",
-    body:
-      "We carefully assess your academics, career goals, and budget to create a customized study abroad plan.",
-  },
-  {
-    title: "Strategic University Shortlisting",
-    body:
-      "We help you select universities and courses that align with your long-term career objectives.",
-  },
-  {
-    title: "Complete Application Support",
-    body:
-      "From SOP and LOR guidance to accurate documentation, we ensure your application stands out.",
-  },
-  {
-    title: "Loan & Scholarship Guidance",
-    body:
-      "We assist you in exploring education loans and scholarships to make studying abroad affordable.",
-  },
-  {
-    title: "Student Visa Assistance",
-    body:
-      "Our structured documentation process and visa preparation support improve your chances of approval.",
-  },
-  {
-    title: "Pre Departure Support",
-    body:
-      "We guide you with travel planning, documentation checks, and everything you need before you fly.",
-  },
-  {
-    title: "Accommodation Assistance",
-    body:
-      "We help you identify safe and suitable housing options close to your university campus.",
-  },
-  {
-    title: "Post-Arrival Guidance",
-    body:
-      "Our support continues with basic settlement advice so you can start your academic journey confidently.",
-  },
-];
-
-const trainingPoints = [
-  {
-    title: "Personalized Career Guidance",
-    body:
-      "We understand your background and career goals to recommend the right course for your growth.",
-  },
-  {
-    title: "Industry-Relevant Course Curriculum",
-    body:
-      "Our training programs are designed based on current market demand and job trends.",
-  },
-  {
-    title: "Hands-on Practical Training",
-    body:
-      "We focus on real-time projects and practical learning to give you actual working experience.",
-  },
-  {
-    title: "Expert Trainers & Mentorship",
-    body:
-      "Learn from experienced professionals who guide you with practical insights and continuous support.",
-  },
-  {
-    title: "Flexible Learning Options",
-    body:
-      "We offer flexible schedules suitable for students, freshers, and working professionals.",
-  },
-  {
-    title: "Certification Support",
-    body:
-      "Earn recognized certifications that strengthen your profile and improve job opportunities.",
-  },
-  {
-    title: "Placement Assistance",
-    body:
-      "We provide job support, interview preparation, and career guidance to help you get placed.",
-  },
-  {
-    title: "Resume & Interview Preparation",
-    body:
-      "We help you build strong resumes and prepare for real-world interview scenarios.",
-  },
-];
-
 type TabId = "study-abroad" | "training";
 
-const tabs: { id: TabId; label: string }[] = [
-  { id: "study-abroad", label: "Study Abroad Support" },
-  { id: "training", label: "Training Support" },
+export type HowWeHelpCms = {
+  titleLead: string;
+  titleGradient: string;
+  intro1: string;
+  intro2: string;
+  tabStudyLabel: string;
+  tabTrainingLabel: string;
+  footer: string;
+  studyAbroadPoints: { title: string; body: string }[];
+  trainingPoints: { title: string; body: string }[];
+};
+
+const defaultTabs = (c: HowWeHelpCms): { id: TabId; label: string }[] => [
+  { id: "study-abroad", label: c.tabStudyLabel || "Study Abroad Support" },
+  { id: "training", label: c.tabTrainingLabel || "Training Support" },
 ];
 
-export default function HowWeHelpSection() {
+export default function HowWeHelpSection({ content }: { content: HowWeHelpCms }) {
   const [activeTab, setActiveTab] = useState<TabId>("study-abroad");
   const baseId = useId();
   const panelId = `${baseId}-panel`;
+  const tabs = defaultTabs(content);
 
-  const activePoints = activeTab === "study-abroad" ? studyAbroadPoints : trainingPoints;
+  const activePoints =
+    activeTab === "study-abroad" ? content.studyAbroadPoints : content.trainingPoints;
 
   return (
     <section className="py-16 md:py-24 bg-[rgb(var(--color-surface))]">
       <div className="container mx-auto px-6 md:px-8">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-            How <span className="gradient-text">We Help You</span>
+            {content.titleLead}{" "}
+            <span className="gradient-text">{content.titleGradient}</span>
           </h2>
           <p className="text-base md:text-lg text-slate-700 leading-relaxed mb-3">
-            Planning your future—whether it&apos;s studying abroad or building a successful
-            career—can feel overwhelming. From choosing the right university or course to gaining
-            practical skills and securing opportunities, the process requires the right guidance at
-            every step.
+            {content.intro1}
           </p>
           <p className="text-base md:text-lg text-slate-700 leading-relaxed">
-            At StackLearn, we provide structured, end-to-end support for both international
-            education and job-oriented training, making your journey simple, clear, and
-            result-driven.
+            {content.intro2}
           </p>
         </div>
 
@@ -176,8 +100,7 @@ export default function HowWeHelpSection() {
         </div>
 
         <p className="mt-10 text-center text-sm md:text-base text-slate-600">
-          From your first counselling session to your first day on campus, StackLearn stands as
-          your trusted study abroad consultancy partner at every step.
+          {content.footer}
         </p>
       </div>
     </section>

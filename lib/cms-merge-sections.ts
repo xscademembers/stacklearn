@@ -51,3 +51,14 @@ export function getCmsField(
   const f = sec?.fields.find((x) => x.key === fieldKey);
   return (f?.value ?? "").trim();
 }
+
+/** Parse JSON from a CMS textarea; invalid or empty values fall back to defaults. */
+export function parseCmsJson<T>(raw: string, fallback: T): T {
+  const t = raw?.trim();
+  if (!t) return fallback;
+  try {
+    return JSON.parse(t) as T;
+  } catch {
+    return fallback;
+  }
+}

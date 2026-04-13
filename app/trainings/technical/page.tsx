@@ -4,6 +4,10 @@ import Image from "next/image";
 import { FiArrowRight, FiClock, FiUsers, FiCheckCircle } from "react-icons/fi";
 import TrainingEnquiryButton from "@/components/TrainingEnquiryButton";
 import { technicalCourses } from "@/lib/technical-courses-data";
+import { getMergedPageContent } from "@/lib/get-merged-page-content";
+import { getCmsField } from "@/lib/cms-merge-sections";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Technical Training Courses | StackLearn",
@@ -19,7 +23,22 @@ const courseIcons: Record<string, string> = {
   "rpa-uipath": "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=600",
 };
 
-export default function TechnicalTrainingsPage() {
+export default async function TechnicalTrainingsPage() {
+  const sections = await getMergedPageContent("trainings");
+  const kicker = getCmsField(sections, "hero", "kicker") || "Technical Training Programs";
+  const headingMain =
+    getCmsField(sections, "hero", "headingMain") || "Industry-Ready Technical";
+  const headingAccent =
+    getCmsField(sections, "hero", "headingAccent") || "Training Courses";
+  const description =
+    getCmsField(sections, "hero", "description") ||
+    "Gain in-demand tech skills with hands-on, mentor-led training programs designed for both freshers and working professionals. From cloud data engineering, Python Training and SQL Training to QA automation and RPA (UiPath) Training — build the career you envision.";
+  const heroImage =
+    getCmsField(sections, "hero", "heroImage") ||
+    "https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=1600";
+  const heroUnopt =
+    !heroImage.includes("images.pexels.com") && !heroImage.includes("images.unsplash.com");
+
   return (
     <div>
       {/* Hero */}
@@ -27,25 +46,24 @@ export default function TechnicalTrainingsPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black" />
           <Image
-            src="https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src={heroImage}
             alt="Students learning technical skills"
             fill
             priority
+            unoptimized={heroUnopt}
             className="object-cover opacity-50"
           />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-16 md:py-24 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-brand-soft mb-3">
-              Technical Training Programs
+              {kicker}
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-3 leading-tight">
-              Industry-Ready Technical <span className="text-accent">Training Courses</span>
+              {headingMain} <span className="text-accent">{headingAccent}</span>
             </h1>
-            <p className="text-base md:text-lg text-white/90 leading-relaxed mb-6 max-w-3xl mx-auto">
-              Gain in-demand tech skills with hands-on, mentor-led training programs designed for
-              both freshers and working professionals. From cloud data engineering, Python Training
-              and SQL Training to QA automation and RPA (UiPath) Training — build the career you envision.
+            <p className="text-base md:text-lg text-white/90 leading-relaxed mb-6 max-w-3xl mx-auto whitespace-pre-line">
+              {description}
             </p>
             <TrainingEnquiryButton
               variant="white"
