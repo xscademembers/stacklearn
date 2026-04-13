@@ -215,7 +215,12 @@ export default function ContentPage() {
           <strong className="font-semibold">Vercel</strong>, add{" "}
           <strong className="font-semibold">Vercel Blob</strong> and{" "}
           <code className="text-xs bg-surface px-1 rounded">BLOB_READ_WRITE_TOKEN</code> so the
-          server can store that JSON file in the cloud.
+          server can store that JSON file in the cloud. After linking Blob, open{" "}
+          <strong className="font-semibold">Settings → Environment Variables</strong> and ensure
+          that token is enabled for <strong className="font-semibold">Production</strong> (or{" "}
+          <strong className="font-semibold">Preview</strong> if you test on preview URLs), then
+          redeploy. For a <strong className="font-semibold">private</strong> Blob store, add{" "}
+          <code className="text-xs bg-surface px-1 rounded">CMS_BLOB_ACCESS=private</code>.
         </div>
       ) : null}
 

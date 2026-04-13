@@ -3,7 +3,8 @@
  *
  * • **Your laptop / Node server**: saves to `data/cms/page-content.json`.
  * • **Vercel**: the server filesystem is read-only. Add **Vercel Blob** and set
- *   `BLOB_READ_WRITE_TOKEN` — content is stored as one JSON file in Blob (not a database).
+ *   `BLOB_READ_WRITE_TOKEN` (per environment: Production / Preview) after linking the store.
+ *   Private Blob stores: set `CMS_BLOB_ACCESS=private`.
  */
 
 import path from "path";
@@ -14,12 +15,13 @@ import {
   type CmsFilePageDoc,
   type CmsPersistedRoot,
 } from "@/lib/cms-file-store";
+import { getCmsBlobReadWriteToken } from "@/lib/cms-blob-env";
 import { readRootFromBlob, writeRootToBlob } from "@/lib/cms-blob-store";
 
 export type { CmsFilePageDoc };
 
 export function cmsUsesBlobStorage(): boolean {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
+  return Boolean(getCmsBlobReadWriteToken());
 }
 
 function isVercelDeployment(): boolean {
@@ -61,7 +63,7 @@ async function persistRoot(root: CmsPersistedRoot): Promise<void> {
   }
   if (isVercelDeployment()) {
     throw new Error(
-      "Vercel cannot write to disk. In the Vercel dashboard: Storage → Create Blob Store → link it to this project (adds BLOB_READ_WRITE_TOKEN). Redeploy, then save again. This stores your CMS as one JSON file in Blob — not MongoDB."
+      "Vercel cannot write to disk. Link a Blob store to this project (adds BLOB_READ_WRITE_TOKEN), then in Settings → Environment Variables confirm that variable exists for the environment you are running (Production vs Preview), and redeploy. Private stores: also set CMS_BLOB_ACCESS=private. CMS is stored as one JSON file in Blob, not MongoDB."
     );
   }
   await writeDiskRoot(root);
