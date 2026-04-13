@@ -36,9 +36,13 @@ export function describeCmsStorageForAdminUi(): string {
   return `Saving to ${path.join("data", "cms", "page-content.json")} on this machine.`;
 }
 
+/** For error messages — never show /var/task paths on Vercel (misleading; disk is not used). */
 export function getCmsSaveTargetHint(): string {
   if (cmsUsesBlobStorage()) {
-    return "Vercel Blob → cms/page-content.json";
+    return "Vercel Blob file cms/page-content.json";
+  }
+  if (isVercelDeployment()) {
+    return "Vercel Blob (set BLOB_READ_WRITE_TOKEN — not a path on disk)";
   }
   return path.join(process.cwd(), "data", "cms", "page-content.json");
 }

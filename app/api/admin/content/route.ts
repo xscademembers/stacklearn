@@ -6,6 +6,7 @@ import {
   savePageToCmsStore,
   getCmsSaveTargetHint,
   describeCmsStorageForAdminUi,
+  cmsUsesBlobStorage,
 } from "@/lib/cms-page-store";
 import { cloneSectionsForPersistence } from "@/lib/cms-file-store";
 import type { CmsPageSection } from "@/lib/cms-page-templates";
@@ -135,15 +136,17 @@ export async function PUT(request: NextRequest) {
       await savePageToCmsStore(pageKey, normalized);
     } catch (err) {
       console.error("Admin content save:", err);
-      const hint = getCmsSaveTargetHint();
-      const msg =
-        err instanceof Error
-          ? err.message
-          : "Save failed.";
+      const msg = err instanceof Error ? err.message : "Save failed.";
+      const onVercelWithoutBlob =
+        process.env.VERCEL === "1" && !cmsUsesBlobStorage();
+      // On Vercel without Blob, msg already explains the fix — do not append /var/task paths.
+      const message = onVercelWithoutBlob
+        ? msg
+        : `${msg}\n(Storage: ${getCmsSaveTargetHint()})`;
       return NextResponse.json(
         {
           success: false,
-          message: `${msg}\n(Target: ${hint})`,
+          message,
         },
         { status: 500 }
       );
