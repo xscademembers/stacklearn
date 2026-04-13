@@ -66,7 +66,7 @@ export default function ContentPage() {
     } catch (e) {
       if (isAbortOrTimeoutError(e)) {
         setLoadError(
-          "Request timed out. The server is probably waiting on MongoDB — check MONGODB_URI, Atlas IP access, then restart the dev server."
+          "Request timed out. Restart the dev server and try again."
         );
       } else {
         setLoadError("Network error. Check your connection and that the dev server is running.");
@@ -160,9 +160,7 @@ export default function ContentPage() {
       setTimeout(() => setSaved(false), 3000);
     } catch (e) {
       if (isAbortOrTimeoutError(e)) {
-        setError(
-          "Save timed out — MongoDB may be unreachable. Check connection and try again."
-        );
+        setError("Save timed out. Check your connection and try again.");
       } else {
         setError("Network error. Check your connection and try again.");
       }
@@ -175,7 +173,7 @@ export default function ContentPage() {
     return (
       <div className="py-12 text-center space-y-2">
         <p className="text-foreground-muted">Loading page content…</p>
-        <p className="text-xs text-foreground-muted">If this stays here, check MongoDB and the browser console.</p>
+        <p className="text-xs text-foreground-muted">If this stays here, check the browser console and dev server logs.</p>
       </div>
     );
   }
@@ -194,9 +192,10 @@ export default function ContentPage() {
       ) : null}
 
       <p className="text-sm text-foreground-muted">
-        Select a page to edit its content. Changes here let non-technical users update
-        headings, descriptions, images, and text across the site. After you save, refresh the
-        public page to see updates.
+        Select a page to edit its content. Saves are stored in{" "}
+        <code className="text-xs bg-page-soft px-1 rounded">data/cms/page-content.json</code>{" "}
+        on the server (no database required). After you save, refresh the public page to see
+        updates. JSON-type fields must stay valid JSON.
       </p>
 
       <div className="flex flex-wrap gap-2">
