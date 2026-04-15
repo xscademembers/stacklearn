@@ -7,27 +7,13 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   FiMenu,
   FiX,
-  FiHome,
-  FiUsers,
-  FiFileText,
-  FiStar,
-  FiBookOpen,
   FiPhone,
-  FiEdit3,
   FiLogOut,
   FiChevronRight,
-  FiVideo,
 } from "react-icons/fi";
 
 const navItems = [
-  { href: "/admin", label: "Dashboard", icon: FiHome },
-  { href: "/admin/leads", label: "Leads / Submissions", icon: FiUsers },
-  { href: "/admin/blogs", label: "Blog Management", icon: FiFileText },
-  { href: "/admin/testimonials", label: "Testimonials", icon: FiStar },
-  { href: "/admin/courses", label: "Courses / Training", icon: FiBookOpen },
-  { href: "/admin/destination-videos", label: "Destination videos", icon: FiVideo },
-  { href: "/admin/contact-info", label: "Contact Details", icon: FiPhone },
-  { href: "/admin/content", label: "Page Content", icon: FiEdit3 },
+  { href: "/admin/contact-info", label: "Contact Information", icon: FiPhone },
 ];
 
 export default function AdminDashboardShell({
@@ -45,8 +31,7 @@ export default function AdminDashboardShell({
     router.refresh();
   };
 
-  const isActive = (href: string) =>
-    href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
+  const isActive = (href: string) => pathname.startsWith(href);
 
   const sidebar = (
     <nav className="flex flex-col h-full">
@@ -130,7 +115,7 @@ export default function AdminDashboardShell({
             {sidebarOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
           </button>
           <h1 className="text-lg font-bold text-foreground">
-            {navItems.find((i) => isActive(i.href))?.label || "Dashboard"}
+            {navItems.find((i) => isActive(i.href))?.label || "Admin"}
           </h1>
         </header>
 
