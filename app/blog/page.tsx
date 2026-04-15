@@ -6,6 +6,8 @@ import {
   isMongoConfigured,
 } from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+
 type BlogListItem = {
   _id: string;
   title: string;
