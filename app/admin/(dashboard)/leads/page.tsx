@@ -1,7 +1,7 @@
 "use client";
 
-import { Fragment, useEffect, useState, useCallback } from "react";
-import { FiSearch, FiDownload, FiChevronLeft, FiChevronRight, FiFilter } from "react-icons/fi";
+import { Fragment, useEffect, useMemo, useState, useCallback } from "react";
+import { FiSearch, FiDownload, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 
 interface LeadDoc {
@@ -21,19 +21,11 @@ interface LeadDoc {
   [key: string]: unknown;
 }
 
-const sourceOptions = [
-  { value: "all", label: "All Sources" },
-  { value: "leads", label: "Leads" },
-  { value: "contacts", label: "Contacts" },
-  { value: "applications", label: "Applications" },
-];
-
 export default function LeadsPage() {
   const [docs, setDocs] = useState<LeadDoc[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [source, setSource] = useState("all");
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [listError, setListError] = useState("");
@@ -44,7 +36,7 @@ export default function LeadsPage() {
     setListError("");
     try {
       const params = new URLSearchParams({
-        source,
+        source: "all",
         q: search,
         page: String(page),
         limit: String(limit),
@@ -76,7 +68,7 @@ export default function LeadsPage() {
     } finally {
       setLoading(false);
     }
-  }, [source, search, page]);
+  }, [search, page]);
 
   useEffect(() => {
     fetchLeads();
@@ -85,7 +77,7 @@ export default function LeadsPage() {
   const totalPages = Math.ceil(total / limit) || 1;
 
   const exportCSV = () => {
-    const params = new URLSearchParams({ source, q: search, format: "csv" });
+    const params = new URLSearchParams({ source: "all", q: search, format: "csv" });
     window.open(`/api/admin/leads?${params}`, "_blank");
   };
 
@@ -100,12 +92,11 @@ export default function LeadsPage() {
     });
   };
 
-  const badgeColor = (col?: string) => {
-    if (col === "leads") return "bg-green-100 text-green-700";
-    if (col === "contacts") return "bg-blue-100 text-blue-700";
-    if (col === "applications") return "bg-purple-100 text-purple-700";
-    return "bg-gray-100 text-gray-700";
-  };
+  const pageSummary = useMemo(() => {
+    const from = total === 0 ? 0 : (page - 1) * limit + 1;
+    const to = Math.min(page * limit, total);
+    return { from, to, total };
+  }, [page, limit, total]);
 
   return (
     <div className="space-y-6">
@@ -133,21 +124,6 @@ export default function LeadsPage() {
               className="pl-10 pr-4 py-2 border border-border rounded-lg text-sm w-72 focus:ring-2 focus:ring-brand"
             />
           </div>
-          <div className="flex items-center gap-2">
-            <FiFilter className="w-4 h-4 text-foreground-muted" />
-            <select
-              value={source}
-              onChange={(e) => {
-                setSource(e.target.value);
-                setPage(1);
-              }}
-              className="border border-border rounded-lg px-3 py-2 text-sm"
-            >
-              {sourceOptions.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
         </div>
         <button
           onClick={exportCSV}
@@ -160,7 +136,7 @@ export default function LeadsPage() {
 
       {/* Count */}
       <p className="text-sm text-foreground-muted">
-        Showing {docs.length} of {total} records
+        Showing {pageSummary.from}-{pageSummary.to} of {pageSummary.total} records
       </p>
 
       {/* Table */}
@@ -171,22 +147,20 @@ export default function LeadsPage() {
               <th className="text-left px-4 py-3 font-semibold text-foreground">Name</th>
               <th className="text-left px-4 py-3 font-semibold text-foreground">Email</th>
               <th className="text-left px-4 py-3 font-semibold text-foreground">Mobile</th>
-              <th className="text-left px-4 py-3 font-semibold text-foreground">Source</th>
               <th className="text-left px-4 py-3 font-semibold text-foreground">Page</th>
-              <th className="text-left px-4 py-3 font-semibold text-foreground">Type</th>
               <th className="text-left px-4 py-3 font-semibold text-foreground">Date</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={7} className="text-center py-12 text-foreground-muted">
+                <td colSpan={5} className="text-center py-12 text-foreground-muted">
                   Loading…
                 </td>
               </tr>
             ) : docs.length === 0 ? (
               <tr>
-                <td colSpan={7} className="text-center py-12 text-foreground-muted">
+                <td colSpan={5} className="text-center py-12 text-foreground-muted">
                   No records found.
                 </td>
               </tr>
@@ -202,16 +176,8 @@ export default function LeadsPage() {
                     <td className="px-4 py-3 font-medium text-foreground">{doc.name || "—"}</td>
                     <td className="px-4 py-3 text-foreground-muted">{doc.email || "—"}</td>
                     <td className="px-4 py-3 text-foreground-muted">{doc.mobile || "—"}</td>
-                    <td className="px-4 py-3">
-                      <span className="text-xs font-medium">{doc.formSource || "—"}</span>
-                    </td>
                     <td className="px-4 py-3 text-foreground-muted text-xs max-w-[180px] truncate">
                       {doc.submittedFromPath || "—"}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${badgeColor(doc._collection)}`}>
-                        {doc._collection || "—"}
-                      </span>
                     </td>
                     <td className="px-4 py-3 text-foreground-muted text-xs whitespace-nowrap">
                       {formatDate(doc.createdAt)}
@@ -219,7 +185,7 @@ export default function LeadsPage() {
                   </tr>
                   {expanded === doc._id && (
                     <tr key={`${doc._id}-detail`} className="bg-page-soft">
-                      <td colSpan={7} className="px-6 py-4">
+                      <td colSpan={5} className="px-6 py-4">
                         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 text-sm">
                           <div className="sm:col-span-2 lg:col-span-3">
                             <span className="font-semibold text-foreground">Submitted from page:</span>{" "}
@@ -227,12 +193,6 @@ export default function LeadsPage() {
                               {doc.submittedFromPath || "—"}
                             </span>
                           </div>
-                          {doc.formSource && (
-                            <div>
-                              <span className="font-semibold text-foreground">Form / widget:</span>{" "}
-                              <span className="text-foreground-muted">{doc.formSource}</span>
-                            </div>
-                          )}
                           {doc.destination && (
                             <div>
                               <span className="font-semibold text-foreground">Destination:</span>{" "}
@@ -243,12 +203,6 @@ export default function LeadsPage() {
                             <div>
                               <span className="font-semibold text-foreground">Service:</span>{" "}
                               <span className="text-foreground-muted">{doc.service}</span>
-                            </div>
-                          )}
-                          {doc.status && (
-                            <div>
-                              <span className="font-semibold text-foreground">Status:</span>{" "}
-                              <span className="text-foreground-muted">{doc.status}</span>
                             </div>
                           )}
                           {doc.message && (

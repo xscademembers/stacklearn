@@ -96,16 +96,13 @@ export async function GET(request: NextRequest) {
     );
 
     const headers = [
-      "Collection",
       "Name",
       "Email",
       "Mobile",
-      "Form Source",
       "Submitted From Page",
       "Destination",
       "Service",
       "Message",
-      "Status",
       "Created At",
     ];
     const escape = (v: unknown) => {
@@ -116,16 +113,13 @@ export async function GET(request: NextRequest) {
     };
     const rows = allDocs.map((d) =>
       [
-        d._collection,
         d.name,
         d.email,
         d.mobile,
-        d.formSource,
         d.submittedFromPath,
         d.destination,
         d.service,
         d.message,
-        d.status,
         d.createdAt ? new Date(d.createdAt as string).toISOString() : "",
       ]
         .map(escape)
@@ -177,9 +171,14 @@ export async function GET(request: NextRequest) {
   });
   } catch (error) {
     console.error("Admin leads GET:", error);
+    const errMsg = error instanceof Error ? error.message : "";
+    const tlsIssue =
+      errMsg.includes("SSL") || errMsg.toLowerCase().includes("tls");
     return NextResponse.json(
       {
-        message: MONGODB_NOT_CONFIGURED_MESSAGE,
+        message: tlsIssue
+          ? "MongoDB TLS/SSL handshake failed. Check Atlas Network Access (IP allow list) and VPN/firewall/antivirus (SSL inspection). Then restart the dev server."
+          : MONGODB_NOT_CONFIGURED_MESSAGE,
         docs: [],
         total: 0,
         page,

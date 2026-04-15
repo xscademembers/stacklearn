@@ -120,12 +120,15 @@ export async function POST(request: NextRequest) {
     console.error("Error capturing lead:", error);
     const errMsg = error instanceof Error ? error.message : "";
     const configIssue =
-      errMsg.includes("MongoDB") || errMsg.includes("MONGODB_URI");
+      errMsg.includes("MongoDB") ||
+      errMsg.includes("MONGODB_URI") ||
+      errMsg.includes("SSL") ||
+      errMsg.toLowerCase().includes("tls");
     return NextResponse.json(
       {
         success: false,
         message: configIssue
-          ? MONGODB_NOT_CONFIGURED_MESSAGE
+          ? "MongoDB connection failed. Check `MONGODB_URI`, Atlas Network Access (IP allow list), and if you are on VPN/firewall/antivirus (SSL inspection) try disabling it or switching networks. Then restart the dev server."
           : "Failed to capture lead. Check the database connection and try again.",
       },
       { status: configIssue ? 503 : 500 }
