@@ -7,6 +7,12 @@ type BlogBlock = {
   heading?: string;
   paragraph?: string;
   imageUrl?: string;
+  align?: "left" | "center" | "right";
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  color?: string;
+  linkUrl?: string;
 };
 
 type BlogDoc = {
@@ -22,6 +28,57 @@ type BlogDoc = {
 };
 
 export const dynamic = "force-dynamic";
+
+function toTextAlign(align?: BlogBlock["align"]): React.CSSProperties["textAlign"] {
+  if (align === "center") return "center";
+  if (align === "right") return "right";
+  return "left";
+}
+
+function BlockText({
+  as,
+  block,
+  children,
+}: {
+  as: "h2" | "p";
+  block: BlogBlock;
+  children: string;
+}) {
+  const style: React.CSSProperties = {
+    textAlign: toTextAlign(block.align),
+    fontWeight: block.bold ? 700 : undefined,
+    fontStyle: block.italic ? "italic" : undefined,
+    textDecoration: block.underline ? "underline" : undefined,
+    color: block.color || undefined,
+  };
+
+  const content =
+    block.linkUrl && /^https?:\/\//i.test(block.linkUrl) ? (
+      <a
+        href={block.linkUrl}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="hover:underline"
+      >
+        {children}
+      </a>
+    ) : (
+      children
+    );
+
+  if (as === "h2") {
+    return (
+      <h2 style={style} className="text-2xl font-bold text-foreground leading-snug">
+        {content}
+      </h2>
+    );
+  }
+  return (
+    <p style={style} className="text-foreground leading-relaxed whitespace-pre-wrap">
+      {content}
+    </p>
+  );
+}
 
 export default async function BlogDetailPage({
   params,
@@ -127,19 +184,19 @@ export default async function BlogDetailPage({
             ) : (
               <div className="space-y-10">
                 {blocks.map((b, idx) => (
-                  <section key={idx} className="rounded-2xl border border-border bg-surface p-8 space-y-5">
+                  <section key={idx} className="space-y-5">
                     {b.heading ? (
-                      <h2 className="text-2xl font-bold text-foreground leading-snug">
+                      <BlockText as="h2" block={b}>
                         {b.heading}
-                      </h2>
+                      </BlockText>
                     ) : null}
                     {b.paragraph ? (
-                      <p className="text-foreground leading-relaxed whitespace-pre-wrap">
+                      <BlockText as="p" block={b}>
                         {b.paragraph}
-                      </p>
+                      </BlockText>
                     ) : null}
                     {b.imageUrl ? (
-                      <div className="relative w-full h-60 md:h-80 rounded-xl overflow-hidden border border-border bg-page-soft">
+                      <div className="relative w-full h-60 md:h-80 rounded-xl overflow-hidden border border-border bg-surface">
                         <Image
                           src={b.imageUrl}
                           alt={b.heading || blog.title}

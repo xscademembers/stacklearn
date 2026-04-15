@@ -5,9 +5,16 @@ import { FiPlus, FiEdit2, FiTrash2, FiSave, FiX, FiUploadCloud } from "react-ico
 import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
 
 type BlogBlock = {
+  kind?: "heading" | "paragraph" | "image";
   heading: string;
   paragraph: string;
   imageUrl: string;
+  align?: "left" | "center" | "right";
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  color?: string;
+  linkUrl?: string;
 };
 
 interface Blog {
@@ -32,7 +39,20 @@ const emptyBlog = {
   category: "",
   image: "",
   content: "",
-  blocks: [{ heading: "", paragraph: "", imageUrl: "" }],
+  blocks: [
+    {
+      kind: "paragraph",
+      heading: "",
+      paragraph: "",
+      imageUrl: "",
+      align: "left",
+      bold: false,
+      italic: false,
+      underline: false,
+      color: "",
+      linkUrl: "",
+    },
+  ],
   published: false,
 };
 
@@ -89,15 +109,55 @@ export default function BlogsPage() {
   const ensureBlocks = (b: Partial<Blog>): BlogBlock[] => {
     if (Array.isArray(b.blocks) && b.blocks.length > 0) {
       return b.blocks.map((blk) => ({
+        kind:
+          blk?.kind === "heading" || blk?.kind === "paragraph" || blk?.kind === "image"
+            ? blk.kind
+            : blk?.imageUrl && !blk?.heading && !blk?.paragraph
+              ? "image"
+              : blk?.heading && !blk?.paragraph && !blk?.imageUrl
+                ? "heading"
+                : "paragraph",
         heading: blk?.heading || "",
         paragraph: blk?.paragraph || "",
         imageUrl: blk?.imageUrl || "",
+        align: blk?.align === "left" || blk?.align === "center" || blk?.align === "right" ? blk.align : "left",
+        bold: Boolean(blk?.bold),
+        italic: Boolean(blk?.italic),
+        underline: Boolean(blk?.underline),
+        color: typeof blk?.color === "string" ? blk.color : "",
+        linkUrl: typeof blk?.linkUrl === "string" ? blk.linkUrl : "",
       }));
     }
     if (typeof b.content === "string" && b.content.trim()) {
-      return [{ heading: "", paragraph: b.content, imageUrl: "" }];
+      return [
+        {
+          kind: "paragraph",
+          heading: "",
+          paragraph: b.content,
+          imageUrl: "",
+          align: "left",
+          bold: false,
+          italic: false,
+          underline: false,
+          color: "",
+          linkUrl: "",
+        },
+      ];
     }
-    return [{ heading: "", paragraph: "", imageUrl: "" }];
+    return [
+      {
+        kind: "paragraph",
+        heading: "",
+        paragraph: "",
+        imageUrl: "",
+        align: "left",
+        bold: false,
+        italic: false,
+        underline: false,
+        color: "",
+        linkUrl: "",
+      },
+    ];
   };
 
   const handleSave = async (mode: "save" | "publish" = "save") => {
@@ -242,19 +302,89 @@ export default function BlogsPage() {
             <section className="space-y-3">
               <header className="flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-foreground">Content Blocks</h3>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setEditing({
-                      ...editing,
-                      blocks: [...blocks, { heading: "", paragraph: "", imageUrl: "" }],
-                    })
-                  }
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors"
-                >
-                  <FiPlus className="w-4 h-4" />
-                  Add Block
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEditing({
+                        ...editing,
+                        blocks: [
+                          ...blocks,
+                          {
+                            kind: "heading",
+                            heading: "",
+                            paragraph: "",
+                            imageUrl: "",
+                            align: "left",
+                            bold: true,
+                            italic: false,
+                            underline: false,
+                            color: "",
+                            linkUrl: "",
+                          },
+                        ],
+                      })
+                    }
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
+                  >
+                    <FiPlus className="w-4 h-4" />
+                    Add Heading
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEditing({
+                        ...editing,
+                        blocks: [
+                          ...blocks,
+                          {
+                            kind: "paragraph",
+                            heading: "",
+                            paragraph: "",
+                            imageUrl: "",
+                            align: "left",
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            color: "",
+                            linkUrl: "",
+                          },
+                        ],
+                      })
+                    }
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
+                  >
+                    <FiPlus className="w-4 h-4" />
+                    Add Paragraph
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEditing({
+                        ...editing,
+                        blocks: [
+                          ...blocks,
+                          {
+                            kind: "image",
+                            heading: "",
+                            paragraph: "",
+                            imageUrl: "",
+                            align: "left",
+                            bold: false,
+                            italic: false,
+                            underline: false,
+                            color: "",
+                            linkUrl: "",
+                          },
+                        ],
+                      })
+                    }
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
+                  >
+                    <FiPlus className="w-4 h-4" />
+                    Add Image
+                  </button>
+                </div>
               </header>
 
               <div className="space-y-4">
@@ -267,7 +397,23 @@ export default function BlogsPage() {
                         onClick={() =>
                           setEditing({
                             ...editing,
-                            blocks: blocks.length === 1 ? [{ heading: "", paragraph: "", imageUrl: "" }] : blocks.filter((_, i) => i !== idx),
+                            blocks:
+                              blocks.length === 1
+                                ? [
+                                    {
+                                      kind: "paragraph",
+                                      heading: "",
+                                      paragraph: "",
+                                      imageUrl: "",
+                                      align: "left",
+                                      bold: false,
+                                      italic: false,
+                                      underline: false,
+                                      color: "",
+                                      linkUrl: "",
+                                    },
+                                  ]
+                                : blocks.filter((_, i) => i !== idx),
                           })
                         }
                         className="p-2 rounded-lg hover:bg-surface transition-colors text-foreground-muted hover:text-red-500"
@@ -278,47 +424,158 @@ export default function BlogsPage() {
                       </button>
                     </div>
 
+                    <div className="flex flex-wrap items-center gap-2">
+                      <div className="inline-flex items-center rounded-lg border border-border bg-surface p-1">
+                        {(["left", "center", "right"] as const).map((a) => (
+                          <button
+                            key={a}
+                            type="button"
+                            onClick={() => {
+                              const next = [...blocks];
+                              next[idx] = { ...next[idx], align: a };
+                              setEditing({ ...editing, blocks: next });
+                            }}
+                            className={`h-8 px-3 rounded-md text-xs font-semibold transition-colors motion-reduce:transition-none ${
+                              (blk.align || "left") === a
+                                ? "bg-brand text-white"
+                                : "text-foreground-muted hover:text-foreground hover:bg-page-soft"
+                            }`}
+                            aria-pressed={(blk.align || "left") === a}
+                            title={`Align ${a}`}
+                          >
+                            {a === "left" ? "Left" : a === "center" ? "Center" : "Right"}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="inline-flex items-center rounded-lg border border-border bg-surface p-1">
+                        {[
+                          { key: "bold", label: "B" },
+                          { key: "italic", label: "I" },
+                          { key: "underline", label: "U" },
+                        ].map((t) => (
+                          <button
+                            key={t.key}
+                            type="button"
+                            onClick={() => {
+                              const next = [...blocks];
+                              const curr = next[idx] as BlogBlock;
+                              next[idx] = { ...curr, [t.key]: !Boolean((curr as any)[t.key]) } as BlogBlock;
+                              setEditing({ ...editing, blocks: next });
+                            }}
+                            className={`h-8 w-8 rounded-md text-xs font-bold transition-colors motion-reduce:transition-none ${
+                              (blk as any)[t.key]
+                                ? "bg-brand text-white"
+                                : "text-foreground-muted hover:text-foreground hover:bg-page-soft"
+                            }`}
+                            aria-pressed={Boolean((blk as any)[t.key])}
+                            title={t.key}
+                          >
+                            {t.label}
+                          </button>
+                        ))}
+
+                        <label className="ml-1 inline-flex items-center gap-2 px-2">
+                          <span className="text-xs font-semibold text-foreground-muted">Color</span>
+                          <input
+                            type="color"
+                            value={blk.color && blk.color.startsWith("#") ? blk.color : "#111827"}
+                            onChange={(e) => {
+                              const next = [...blocks];
+                              next[idx] = { ...next[idx], color: e.target.value };
+                              setEditing({ ...editing, blocks: next });
+                            }}
+                            className="h-8 w-10 rounded-md border border-border bg-surface p-1"
+                            aria-label="Text color"
+                          />
+                        </label>
+                      </div>
+
+                      <div className="flex-1 min-w-[220px]">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="url"
+                            value={blk.linkUrl || ""}
+                            onChange={(e) => {
+                              const next = [...blocks];
+                              next[idx] = { ...next[idx], linkUrl: e.target.value };
+                              setEditing({ ...editing, blocks: next });
+                            }}
+                            placeholder="https://example.com"
+                            className="w-full px-3 h-9 border border-border rounded-lg text-sm bg-surface focus:ring-2 focus:ring-brand"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const next = [...blocks];
+                              const curr = next[idx];
+                              next[idx] = { ...curr, linkUrl: curr.linkUrl ? "" : (curr.linkUrl || "") };
+                              setEditing({ ...editing, blocks: next });
+                            }}
+                            className="h-9 px-3 rounded-lg border border-border bg-surface text-sm font-semibold hover:bg-page-soft transition-colors motion-reduce:transition-none"
+                            title="Add/Remove link"
+                          >
+                            Add Link
+                          </button>
+                        </div>
+                        <p className="mt-2 text-xs text-foreground-muted">
+                          Link works for the whole block (same as your screenshot’s “Add Link” concept).
+                        </p>
+                      </div>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="md:col-span-2">
-                        <label className="block text-sm font-semibold mb-1">Heading</label>
-                        <input
-                          type="text"
-                          value={blk.heading}
-                          onChange={(e) => {
-                            const next = [...blocks];
-                            next[idx] = { ...next[idx], heading: e.target.value };
-                            setEditing({ ...editing, blocks: next });
-                          }}
-                          className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
-                        />
-                      </div>
-                      <div className="md:col-span-2">
-                        <label className="block text-sm font-semibold mb-1">Paragraph</label>
-                        <textarea
-                          rows={5}
-                          value={blk.paragraph}
-                          onChange={(e) => {
-                            const next = [...blocks];
-                            next[idx] = { ...next[idx], paragraph: e.target.value };
-                            setEditing({ ...editing, blocks: next });
-                          }}
-                          className="w-full px-4 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
-                        />
-                      </div>
-                      <div className="md:col-span-2">
-                        <label className="block text-sm font-semibold mb-1">Image URL (optional)</label>
-                        <input
-                          type="text"
-                          value={blk.imageUrl}
-                          onChange={(e) => {
-                            const next = [...blocks];
-                            next[idx] = { ...next[idx], imageUrl: e.target.value };
-                            setEditing({ ...editing, blocks: next });
-                          }}
-                          className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
-                          placeholder="https://..."
-                        />
-                      </div>
+                      {blk.kind === "heading" ? (
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-semibold mb-1">Heading</label>
+                          <input
+                            type="text"
+                            value={blk.heading}
+                            onChange={(e) => {
+                              const next = [...blocks];
+                              next[idx] = { ...next[idx], heading: e.target.value, paragraph: "", imageUrl: "" };
+                              setEditing({ ...editing, blocks: next });
+                            }}
+                            className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                          />
+                        </div>
+                      ) : null}
+
+                      {blk.kind === "paragraph" ? (
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-semibold mb-1">Paragraph</label>
+                          <textarea
+                            rows={6}
+                            value={blk.paragraph}
+                            onChange={(e) => {
+                              const next = [...blocks];
+                              next[idx] = { ...next[idx], paragraph: e.target.value, heading: "", imageUrl: "" };
+                              setEditing({ ...editing, blocks: next });
+                            }}
+                            className="w-full px-4 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                          />
+                        </div>
+                      ) : null}
+
+                      {blk.kind === "image" ? (
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-semibold mb-1">Image URL</label>
+                          <input
+                            type="text"
+                            value={blk.imageUrl}
+                            onChange={(e) => {
+                              const next = [...blocks];
+                              next[idx] = { ...next[idx], imageUrl: e.target.value, heading: "", paragraph: "" };
+                              setEditing({ ...editing, blocks: next });
+                            }}
+                            className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                            placeholder="https://..."
+                          />
+                          <p className="mt-2 text-xs text-foreground-muted">
+                            Tip: paste a direct image URL (ends with .jpg/.png/.webp).
+                          </p>
+                        </div>
+                      ) : null}
                     </div>
                   </article>
                 ))}

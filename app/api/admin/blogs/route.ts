@@ -11,10 +11,80 @@ import { getAdminSession } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 type BlogBlock = {
+  kind?: "heading" | "paragraph" | "image";
   heading?: string;
   paragraph?: string;
   imageUrl?: string;
+  align?: "left" | "center" | "right";
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  color?: string;
+  linkUrl?: string;
 };
+
+function clampStr(v: unknown, maxLen: number): string {
+  if (typeof v !== "string") return "";
+  const s = v.trim();
+  if (!s) return "";
+  return s.length > maxLen ? s.slice(0, maxLen) : s;
+}
+
+function sanitizeColor(v: unknown): string {
+  const s = clampStr(v, 32);
+  if (!s) return "";
+  // allow hex, rgb/rgba, hsl/hsla, and CSS variables (e.g. var(--brand))
+  if (
+    /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(s) ||
+    /^(rgb|rgba|hsl|hsla)\([^)]*\)$/i.test(s) ||
+    /^var\(--[a-z0-9-_]+\)$/i.test(s)
+  ) {
+    return s;
+  }
+  return "";
+}
+
+function sanitizeAlign(v: unknown): "left" | "center" | "right" | undefined {
+  if (v === "left" || v === "center" || v === "right") return v;
+  return undefined;
+}
+
+function sanitizeLinkUrl(v: unknown): string {
+  const s = clampStr(v, 2048);
+  if (!s) return "";
+  // only allow http(s) links
+  if (/^https?:\/\//i.test(s)) return s;
+  return "";
+}
+
+function sanitizeBlock(b: unknown): BlogBlock {
+  const blk = (b ?? {}) as Record<string, unknown>;
+  const kind =
+    blk.kind === "heading" || blk.kind === "paragraph" || blk.kind === "image" ? blk.kind : undefined;
+
+  const heading = clampStr(blk.heading, 300);
+  const paragraph = clampStr(blk.paragraph, 20000);
+  const imageUrl = clampStr(blk.imageUrl, 2048);
+  const align = sanitizeAlign(blk.align);
+  const bold = typeof blk.bold === "boolean" ? blk.bold : undefined;
+  const italic = typeof blk.italic === "boolean" ? blk.italic : undefined;
+  const underline = typeof blk.underline === "boolean" ? blk.underline : undefined;
+  const color = sanitizeColor(blk.color);
+  const linkUrl = sanitizeLinkUrl(blk.linkUrl);
+
+  return {
+    kind,
+    heading,
+    paragraph,
+    imageUrl,
+    align,
+    bold,
+    italic,
+    underline,
+    color,
+    linkUrl,
+  };
+}
 
 function toSlug(input: string): string {
   return input
@@ -61,13 +131,7 @@ export async function POST(request: NextRequest) {
   }
 
   const cleanBlocks: BlogBlock[] = Array.isArray(blocks)
-    ? (blocks as BlogBlock[])
-        .map((b) => ({
-          heading: typeof b?.heading === "string" ? b.heading : "",
-          paragraph: typeof b?.paragraph === "string" ? b.paragraph : "",
-          imageUrl: typeof b?.imageUrl === "string" ? b.imageUrl : "",
-        }))
-        .filter((b) => (b.heading || b.paragraph || b.imageUrl))
+    ? (blocks as unknown[]).map(sanitizeBlock).filter((b) => (b.heading || b.paragraph || b.imageUrl))
     : [];
 
   const isPublished = Boolean(published);
@@ -113,12 +177,8 @@ export async function PUT(request: NextRequest) {
   }
 
   if (Array.isArray(updates.blocks)) {
-    updates.blocks = (updates.blocks as BlogBlock[])
-      .map((b) => ({
-        heading: typeof b?.heading === "string" ? b.heading : "",
-        paragraph: typeof b?.paragraph === "string" ? b.paragraph : "",
-        imageUrl: typeof b?.imageUrl === "string" ? b.imageUrl : "",
-      }))
+    updates.blocks = (updates.blocks as unknown[])
+      .map(sanitizeBlock)
       .filter((b) => (b.heading || b.paragraph || b.imageUrl));
   }
 
