@@ -58,13 +58,13 @@ export default function BlogPage() {
       </section>
 
       {/* Categories */}
-      <section className="py-8 bg-white border-b">
+      <section className="py-8 bg-surface border-b border-border">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center">
             {categories.map((category, index) => (
               <button
                 key={index}
-                className="px-6 py-2 border border-gray-300 rounded-full hover:bg-brand hover:text-white hover:border-brand transition-colors"
+                className="h-10 px-5 rounded-full border border-border bg-surface text-sm font-medium text-foreground hover:bg-page-soft hover:border-brand/40 transition-colors motion-reduce:transition-none"
               >
                 {category}
               </button>
@@ -74,28 +74,28 @@ export default function BlogPage() {
       </section>
 
       {/* Blog Grid */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-page-soft">
         <div className="container mx-auto px-4">
           <BlogGrid />
         </div>
       </section>
 
       {/* Newsletter */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-surface">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center bg-gray-50 p-8 rounded-xl">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Stay Updated with Study Abroad Insights</h2>
-            <p className="text-gray-600 mb-6">Get tips, news, and updates delivered directly to your inbox.</p>
+          <div className="max-w-2xl mx-auto text-center bg-page-soft p-8 rounded-2xl border border-border">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Stay Updated with Study Abroad Insights</h2>
+            <p className="text-foreground-muted mb-6">Get tips, news, and updates delivered directly to your inbox.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
               <input
                 type="text"
                 placeholder="Your Name"
-                className="w-full h-12 px-4 border border-gray-300 rounded-lg"
+                className="w-full h-12 px-4 border border-border rounded-lg bg-surface text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-brand/40"
               />
               <input
                 type="email"
                 placeholder="Your Email"
-                className="w-full h-12 px-4 border border-gray-300 rounded-lg"
+                className="w-full h-12 px-4 border border-border rounded-lg bg-surface text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-brand/40"
               />
               <button className="w-full h-12 px-6 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors whitespace-nowrap motion-reduce:transition-none">
                 Subscribe Now
@@ -170,7 +170,7 @@ async function BlogGrid() {
   }
 
   return (
-    <div className="grid md:grid-cols-3 gap-8">
+    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
       {blogs.map((blog) => {
         const dateValue = blog.publishedAt || blog.createdAt;
         const date = dateValue ? new Date(dateValue).toLocaleDateString("en-IN") : "";
@@ -178,32 +178,58 @@ async function BlogGrid() {
           <Link
             key={blog._id}
             href={`/blog/${blog.slug}`}
-            className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all motion-reduce:transition-none"
+            className="group h-full rounded-2xl border border-border bg-surface overflow-hidden hover:border-brand/40 hover:shadow-lg transition-all motion-reduce:transition-none"
           >
-            <div className="relative h-48 overflow-hidden bg-gray-100">
-              {blog.image ? (
-                <Image
-                  src={blog.image}
-                  alt={blog.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-300 motion-reduce:transition-none"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              ) : null}
-            </div>
-            <div className="p-6">
-              <span className="text-sm text-brand font-semibold">{blog.category || "Blog"}</span>
-              <h3 className="text-xl font-bold text-gray-900 mt-2 mb-3 group-hover:text-brand transition-colors line-clamp-2 motion-reduce:transition-none">
-                {blog.title}
-              </h3>
-              {blog.excerpt ? <p className="text-gray-600 mb-4 line-clamp-2">{blog.excerpt}</p> : null}
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">{date}</span>
-                <span className="text-brand font-semibold group-hover:underline">
-                  Read More →
-                </span>
+            <article className="flex h-full flex-col">
+              <header className="relative h-52 overflow-hidden bg-page-soft">
+                {blog.image ? (
+                  <Image
+                    src={blog.image}
+                    alt={blog.title}
+                    fill
+                    className="object-cover group-hover:scale-[1.03] transition-transform duration-300 motion-reduce:transition-none"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand/10 via-transparent to-accent/10" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                <div className="absolute left-4 right-4 bottom-4 flex items-end justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-white/90 truncate">
+                      {blog.category || "Blog"}
+                    </p>
+                    <h3 className="mt-1 text-lg font-bold text-white leading-snug line-clamp-2">
+                      {blog.title}
+                    </h3>
+                  </div>
+                  {date ? (
+                    <span className="shrink-0 rounded-full bg-white/10 px-3 py-1 text-[11px] font-medium text-white/90 backdrop-blur">
+                      {date}
+                    </span>
+                  ) : null}
+                </div>
+              </header>
+              <div className="p-6 flex-1 flex flex-col">
+                {blog.excerpt ? (
+                  <p className="text-sm leading-relaxed text-foreground-muted line-clamp-3">
+                    {blog.excerpt}
+                  </p>
+                ) : (
+                  <p className="text-sm leading-relaxed text-foreground-muted">
+                    Read the full article for tips, insights, and guidance.
+                  </p>
+                )}
+                <footer className="mt-6 flex items-center justify-between">
+                  <span className="text-sm font-semibold text-brand group-hover:underline">
+                    Read article
+                  </span>
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-page-soft text-foreground-muted group-hover:text-brand group-hover:border-brand/40 transition-colors motion-reduce:transition-none">
+                    →
+                  </span>
+                </footer>
               </div>
-            </div>
+            </article>
           </Link>
         );
       })}
