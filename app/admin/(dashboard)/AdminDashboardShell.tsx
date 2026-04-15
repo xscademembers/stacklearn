@@ -8,12 +8,14 @@ import {
   FiMenu,
   FiX,
   FiPhone,
+  FiFileText,
   FiLogOut,
   FiChevronRight,
 } from "react-icons/fi";
 
 const navItems = [
   { href: "/admin/contact-info", label: "Contact Information", icon: FiPhone },
+  { href: "/admin/blogs", label: "Blogs", icon: FiFileText },
 ];
 
 export default function AdminDashboardShell({
