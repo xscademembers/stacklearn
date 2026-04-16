@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import GlobalClientWidgets from "@/components/GlobalClientWidgets";
+import SiteFrame from "@/components/SiteFrame";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,10 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <Header />
-        <GlobalClientWidgets />
-        <main className="min-h-screen pt-28">{children}</main>
-        <Footer />
+        <SiteFrame>{children}</SiteFrame>
       </body>
     </html>
   );
