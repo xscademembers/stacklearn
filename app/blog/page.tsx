@@ -19,15 +19,6 @@ type BlogListItem = {
   publishedAt?: string | Date | null;
 };
 
-const categories = [
-  "Study Abroad Tips",
-  "Test Preparation",
-  "Visa & Application Guidance",
-  "Scholarships",
-  "Student Life Abroad",
-  "News & Updates",
-];
-
 export default function BlogPage() {
   return (
     <div className="pb-0">
@@ -47,29 +38,6 @@ export default function BlogPage() {
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl font-bold mb-4">Resources & Insights</h1>
           <p className="text-xl mb-8">Your guide to studying abroad — expert tips, student experiences, and global education updates.</p>
-          <div className="max-w-md mx-auto">
-            <input
-              type="text"
-              placeholder="Search Articles..."
-              className="w-full px-6 py-3 rounded-full text-gray-900"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Categories */}
-      <section className="py-8 bg-surface border-b border-border">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category, index) => (
-              <button
-                key={index}
-                className="h-10 px-5 rounded-full border border-border bg-surface text-sm font-medium text-foreground hover:bg-page-soft hover:border-brand/40 transition-colors motion-reduce:transition-none"
-              >
-                {category}
-              </button>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -77,31 +45,6 @@ export default function BlogPage() {
       <section className="py-20 bg-page-soft">
         <div className="container mx-auto px-4">
           <BlogGrid />
-        </div>
-      </section>
-
-      {/* Newsletter */}
-      <section className="py-16 bg-surface">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center bg-page-soft p-8 rounded-2xl border border-border">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Stay Updated with Study Abroad Insights</h2>
-            <p className="text-foreground-muted mb-6">Get tips, news, and updates delivered directly to your inbox.</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full h-12 px-4 border border-border rounded-lg bg-surface text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-brand/40"
-              />
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="w-full h-12 px-4 border border-border rounded-lg bg-surface text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-brand/40"
-              />
-              <button className="w-full h-12 px-6 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors whitespace-nowrap motion-reduce:transition-none">
-                Subscribe Now
-              </button>
-            </div>
-          </div>
         </div>
       </section>
 

@@ -54,7 +54,7 @@ const emptyBlog = {
     },
   ],
   published: false,
-};
+} satisfies Partial<Blog>;
 
 export default function BlogsPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);

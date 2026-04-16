@@ -79,16 +79,6 @@ export default function SuccessStoriesPage() {
               <option>Business</option>
               <option>IT</option>
             </select>
-            <select className="px-4 py-2 border border-gray-300 rounded-lg w-full sm:w-auto">
-              <option>All Years</option>
-              <option>2024</option>
-              <option>2025</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Search by name or university"
-              className="px-4 py-2 border border-gray-300 rounded-lg w-full sm:w-64"
-            />
             <button className="px-6 py-2 bg-brand text-white rounded-lg hover:bg-brand-strong transition-colors w-full sm:w-auto">
               Apply Filter
             </button>
@@ -125,62 +115,6 @@ export default function SuccessStoriesPage() {
                   >
                     Read Full Story →
                   </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid gap-8 text-center sm:grid-cols-2 md:grid-cols-4">
-            {[
-              { label: "Successful Admissions", value: "500+" },
-              { label: "Scholarships Secured", value: "100+" },
-              { label: "Visa Success Rate", value: "97%" },
-              { label: "Partner Universities", value: "30+" },
-            ].map((stat, index) => (
-              <div key={index}>
-                <div className="text-4xl font-bold text-brand mb-2">{stat.value}</div>
-                <div className="text-gray-600">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Video Testimonials */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4 md:px-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">Video Testimonials</h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-2">
-            {[
-              { name: "Arjun Mehta", info: "MSc Data Science • University of Edinburgh, UK", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" },
-              { name: "Sneha Reddy", info: "MBA • University of Toronto, Canada", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" },
-              { name: "Vikram Singh", info: "MEng • University of Melbourne, Australia", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400" },
-              { name: "Priya Nair", info: "MS Computer Science • Columbia University, USA", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400" },
-            ].map((testimonial, i) => (
-              <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden group cursor-pointer hover:shadow-xl transition-all">
-                <div className="relative h-40 overflow-hidden">
-                  <Image
-                    src={testimonial.img}
-                    alt={testimonial.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6 text-brand ml-1" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                  <p className="text-sm text-gray-600">{testimonial.info}</p>
                 </div>
               </div>
             ))}
