@@ -282,3 +282,21 @@ html {
   outline: 2px solid rgb(var(--color-brand));
   outline-offset: 2px;
 }
+
+/* Blog rich text (inline HTML from admin editor + public posts) */
+.blog-rich a,
+.blog-rich a:hover {
+  text-decoration: none;
+  color: rgb(var(--color-brand-strong));
+}
+
+.blog-rich strong,
+.blog-rich b {
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blog-rich * {
+    transition: none !important;
+  }
+}

@@ -12,6 +12,8 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
+import RichTextField from "@/components/admin/RichTextField";
+import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/sanitize-blog-html";
 
 type BlogBlock = {
   kind?: "heading" | "paragraph" | "image";
@@ -98,7 +100,7 @@ function BlockTextPreview({
         href={block.linkUrl}
         target="_blank"
         rel="noreferrer noopener"
-        className="hover:underline"
+        className="no-underline hover:no-underline"
       >
         {children}
       </a>
@@ -117,6 +119,43 @@ function BlockTextPreview({
     <p style={style} className="text-foreground leading-relaxed whitespace-pre-wrap">
       {content}
     </p>
+  );
+}
+
+function BlockMixedPreview({
+  variant,
+  block,
+  text,
+}: {
+  variant: "heading" | "paragraph";
+  block: BlogBlock;
+  text: string;
+}) {
+  if (!text) return null;
+  if (looksLikeHtml(text)) {
+    const safe = sanitizeBlogHtml(text);
+    const align = toTextAlign(block.align);
+    if (variant === "heading") {
+      return (
+        <h2
+          className="blog-rich text-xl md:text-2xl font-bold text-foreground leading-snug"
+          style={{ textAlign: align }}
+          dangerouslySetInnerHTML={{ __html: safe }}
+        />
+      );
+    }
+    return (
+      <div
+        className="blog-rich text-foreground leading-relaxed whitespace-pre-wrap break-words"
+        style={{ textAlign: align }}
+        dangerouslySetInnerHTML={{ __html: safe }}
+      />
+    );
+  }
+  return (
+    <BlockTextPreview as={variant === "heading" ? "h2" : "p"} block={block}>
+      {text}
+    </BlockTextPreview>
   );
 }
 
@@ -170,7 +209,7 @@ export default function BlogsPage() {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
 
-  const ensureBlocks = (b: Partial<Blog>): BlogBlock[] => {
+  const coerceBlogBlocks = (b: Partial<Blog>): BlogBlock[] => {
     if (Array.isArray(b.blocks) && b.blocks.length > 0) {
       return b.blocks.map((blk) => ({
         kind:
@@ -181,8 +220,8 @@ export default function BlogsPage() {
               : blk?.heading && !blk?.paragraph && !blk?.imageUrl
                 ? "heading"
                 : "paragraph",
-        heading: blk?.heading || "",
-        paragraph: blk?.paragraph || "",
+        heading: typeof blk?.heading === "string" ? blk.heading : "",
+        paragraph: typeof blk?.paragraph === "string" ? blk.paragraph : "",
         imageUrl: blk?.imageUrl || "",
         align: blk?.align === "left" || blk?.align === "center" || blk?.align === "right" ? blk.align : "left",
         bold: Boolean(blk?.bold),
@@ -224,6 +263,23 @@ export default function BlogsPage() {
     ];
   };
 
+  const persistBlogBlocks = (b: Partial<Blog>): BlogBlock[] =>
+    coerceBlogBlocks(b).map((blk) => {
+      if (blk.kind === "heading" || blk.kind === "paragraph") {
+        return {
+          ...blk,
+          heading: sanitizeBlogHtml(blk.heading),
+          paragraph: sanitizeBlogHtml(blk.paragraph),
+          bold: false,
+          italic: false,
+          underline: false,
+          color: "",
+          linkUrl: "",
+        };
+      }
+      return blk;
+    });
+
   const handleSave = async (mode: "save" | "publish" = "save") => {
     if (!editing) return;
     setSaving(true);
@@ -232,7 +288,7 @@ export default function BlogsPage() {
       const payload = {
         ...editing,
         published: mode === "publish" ? true : Boolean(editing.published),
-        blocks: ensureBlocks(editing),
+        blocks: persistBlogBlocks(editing),
       };
       const method = editing._id ? "PUT" : "POST";
       const res = await adminFetch("/api/admin/blogs", {
@@ -291,7 +347,7 @@ export default function BlogsPage() {
   };
 
   if (editing) {
-    const blocks = ensureBlocks(editing);
+    const blocks = coerceBlogBlocks(editing);
 
     const setBlocks = (next: BlogBlock[]) => setEditing({ ...editing, blocks: next });
 
@@ -399,7 +455,7 @@ export default function BlogsPage() {
                           paragraph: "",
                           imageUrl: "",
                           align: "left",
-                          bold: true,
+                          bold: false,
                           italic: false,
                           underline: false,
                           color: "",
@@ -551,123 +607,54 @@ export default function BlogsPage() {
                             </button>
                           ))}
                         </div>
-
-                        <div className="inline-flex items-center rounded-lg border border-border bg-surface p-1">
-                          {([
-                            { key: "bold", label: "B" },
-                            { key: "italic", label: "I" },
-                            { key: "underline", label: "U" },
-                          ] as const).map((t) => (
-                            <button
-                              key={t.key}
-                              type="button"
-                              onClick={() => {
-                                const next = [...blocks];
-                                next[idx] = { ...next[idx], [t.key]: !Boolean(next[idx]?.[t.key]) };
-                                setBlocks(next);
-                              }}
-                              className={`h-8 w-8 rounded-md text-xs font-bold transition-colors motion-reduce:transition-none ${
-                                blk[t.key]
-                                  ? "bg-brand text-white"
-                                  : "text-foreground-muted hover:text-foreground hover:bg-page-soft"
-                              }`}
-                              aria-pressed={Boolean(blk[t.key])}
-                              title={t.key}
-                            >
-                              {t.label}
-                            </button>
-                          ))}
-
-                          <label className="ml-1 inline-flex items-center gap-2 px-2">
-                            <span className="text-xs font-semibold text-foreground-muted">Color</span>
-                            <input
-                              type="color"
-                              value={blk.color && blk.color.startsWith("#") ? blk.color : "#111827"}
-                              onChange={(e) => {
-                                const next = [...blocks];
-                                next[idx] = { ...next[idx], color: e.target.value };
-                                setBlocks(next);
-                              }}
-                              className="h-8 w-10 rounded-md border border-border bg-surface p-1"
-                              aria-label="Text color"
-                            />
-                          </label>
-                        </div>
-
-                        <div className="flex-1 min-w-[240px]">
-                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto] sm:items-center">
-                            <input
-                              type="url"
-                              value={blk.linkUrl || ""}
-                              onChange={(e) => {
-                                const next = [...blocks];
-                                next[idx] = { ...next[idx], linkUrl: e.target.value };
-                                setBlocks(next);
-                              }}
-                              placeholder="https://example.com"
-                              className="w-full px-3 h-9 border border-border rounded-lg text-sm bg-surface focus:ring-2 focus:ring-brand"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const next = [...blocks];
-                                next[idx] = { ...next[idx], linkUrl: "" };
-                                setBlocks(next);
-                              }}
-                              className="h-9 px-3 rounded-lg border border-border bg-surface text-sm font-semibold hover:bg-page-soft transition-colors motion-reduce:transition-none disabled:opacity-50"
-                              disabled={!blk.linkUrl}
-                              title="Clear link"
-                            >
-                              Clear Link
-                            </button>
-                          </div>
-                          <p className="mt-2 text-xs text-foreground-muted">
-                            Add a full URL (starts with http/https). In preview, the block becomes clickable.
+                        {(blk.kind === "heading" || blk.kind === "paragraph") && (
+                          <p className="text-xs text-foreground-muted">
+                            Select words or letters, then use the toolbar for bold, color, links, and more.
                           </p>
-                        </div>
+                        )}
                       </div>
 
                       <div className="grid grid-cols-1 gap-4">
                         {blk.kind === "heading" ? (
                           <div>
-                            <label className="block text-sm font-semibold mb-1">Heading</label>
-                            <input
-                              type="text"
+                            <label className="block text-sm font-semibold mb-2">Heading</label>
+                            <RichTextField
+                              aria-label="Heading content"
+                              multiline={false}
                               value={blk.heading}
-                              onChange={(e) => {
+                              onChange={(html) => {
                                 const next = [...blocks];
                                 next[idx] = {
                                   ...next[idx],
-                                  heading: e.target.value,
+                                  heading: html,
                                   paragraph: "",
                                   imageUrl: "",
                                   kind: "heading",
                                 };
                                 setBlocks(next);
                               }}
-                              className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
                             />
                           </div>
                         ) : null}
 
                         {blk.kind === "paragraph" ? (
                           <div>
-                            <label className="block text-sm font-semibold mb-1">Paragraph</label>
-                            <textarea
-                              rows={6}
+                            <label className="block text-sm font-semibold mb-2">Paragraph</label>
+                            <RichTextField
+                              aria-label="Paragraph content"
+                              multiline
                               value={blk.paragraph}
-                              onChange={(e) => {
+                              onChange={(html) => {
                                 const next = [...blocks];
                                 next[idx] = {
                                   ...next[idx],
-                                  paragraph: e.target.value,
+                                  paragraph: html,
                                   heading: "",
                                   imageUrl: "",
                                   kind: "paragraph",
                                 };
                                 setBlocks(next);
                               }}
-                              className="w-full px-4 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
                             />
                           </div>
                         ) : null}
@@ -800,16 +787,8 @@ export default function BlogsPage() {
               ) : (
                 blocks.map((b, idx) => (
                   <section key={idx} className="space-y-4">
-                    {b.heading ? (
-                      <BlockTextPreview as="h2" block={b}>
-                        {b.heading}
-                      </BlockTextPreview>
-                    ) : null}
-                    {b.paragraph ? (
-                      <BlockTextPreview as="p" block={b}>
-                        {b.paragraph}
-                      </BlockTextPreview>
-                    ) : null}
+                    {b.heading ? <BlockMixedPreview variant="heading" block={b} text={b.heading} /> : null}
+                    {b.paragraph ? <BlockMixedPreview variant="paragraph" block={b} text={b.paragraph} /> : null}
                     {b.imageUrl ? (
                       <div className="rounded-xl border border-border bg-page-soft overflow-hidden">
                         {/* eslint-disable-next-line @next/next/no-img-element */}

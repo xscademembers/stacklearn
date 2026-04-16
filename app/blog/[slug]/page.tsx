@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { COLLECTIONS, getDatabase, isMongoConfigured } from "@/lib/mongodb";
+import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/sanitize-blog-html";
 
 type BlogBlock = {
   heading?: string;
@@ -58,7 +59,7 @@ function BlockText({
         href={block.linkUrl}
         target="_blank"
         rel="noreferrer noopener"
-        className="hover:underline"
+        className="no-underline hover:no-underline"
       >
         {children}
       </a>
@@ -77,6 +78,43 @@ function BlockText({
     <p style={style} className="text-foreground leading-relaxed whitespace-pre-wrap">
       {content}
     </p>
+  );
+}
+
+function RenderBlockRichText({
+  variant,
+  block,
+  text,
+}: {
+  variant: "heading" | "paragraph";
+  block: BlogBlock;
+  text: string;
+}) {
+  if (!text) return null;
+  if (looksLikeHtml(text)) {
+    const safe = sanitizeBlogHtml(text);
+    const align = toTextAlign(block.align);
+    if (variant === "heading") {
+      return (
+        <h2
+          className="blog-rich text-2xl font-bold text-foreground leading-snug"
+          style={{ textAlign: align }}
+          dangerouslySetInnerHTML={{ __html: safe }}
+        />
+      );
+    }
+    return (
+      <div
+        className="blog-rich text-foreground leading-relaxed whitespace-pre-wrap break-words"
+        style={{ textAlign: align }}
+        dangerouslySetInnerHTML={{ __html: safe }}
+      />
+    );
+  }
+  return (
+    <BlockText as={variant === "heading" ? "h2" : "p"} block={block}>
+      {text}
+    </BlockText>
   );
 }
 
@@ -185,16 +223,8 @@ export default async function BlogDetailPage({
               <div className="space-y-10">
                 {blocks.map((b, idx) => (
                   <section key={idx} className="space-y-5">
-                    {b.heading ? (
-                      <BlockText as="h2" block={b}>
-                        {b.heading}
-                      </BlockText>
-                    ) : null}
-                    {b.paragraph ? (
-                      <BlockText as="p" block={b}>
-                        {b.paragraph}
-                      </BlockText>
-                    ) : null}
+                    {b.heading ? <RenderBlockRichText variant="heading" block={b} text={b.heading} /> : null}
+                    {b.paragraph ? <RenderBlockRichText variant="paragraph" block={b} text={b.paragraph} /> : null}
                     {b.imageUrl ? (
                       <div className="relative w-full h-60 md:h-80 rounded-xl overflow-hidden border border-border bg-surface">
                         <Image
