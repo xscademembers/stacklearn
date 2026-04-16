@@ -16,6 +16,52 @@ function isSafeCssColorValue(value: string): boolean {
   return false;
 }
 
+/** Keep only safe inline declarations (execCommand + styleWithCSS uses spans). */
+function sanitizeSpanStyle(raw: string): string {
+  const out: string[] = [];
+  const chunks = String(raw || "")
+    .split(";")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  for (const chunk of chunks) {
+    const idx = chunk.indexOf(":");
+    if (idx === -1) continue;
+    const prop = chunk.slice(0, idx).trim().toLowerCase();
+    const val = chunk.slice(idx + 1).trim();
+    if (!val || /url\s*\(|expression|@import|javascript\s*:/i.test(val)) continue;
+
+    if (prop === "color" && isSafeCssColorValue(val)) {
+      out.push(`color: ${val}`);
+      continue;
+    }
+    if (prop === "font-weight") {
+      const v = val.replace(/\s+/g, "").toLowerCase();
+      if (/^(bold|bolder|normal|[1-9]00)$/.test(v)) {
+        out.push(`font-weight: ${val.replace(/\s+/g, " ")}`);
+      }
+      continue;
+    }
+    if (prop === "font-style") {
+      const v = val.toLowerCase().replace(/\s+/g, "");
+      if (v === "italic" || v === "normal" || v === "oblique") {
+        out.push(`font-style: ${val.replace(/\s+/g, " ")}`);
+      }
+      continue;
+    }
+    if (prop === "text-decoration" || prop === "text-decoration-line") {
+      const low = val.toLowerCase();
+      if (low.includes("underline")) {
+        out.push("text-decoration: underline");
+      } else if (low === "none") {
+        out.push("text-decoration: none");
+      }
+    }
+  }
+
+  return out.join("; ");
+}
+
 function installSanitizeHooks() {
   if (hooksInstalled) return;
   hooksInstalled = true;
@@ -37,15 +83,9 @@ function installSanitizeHooks() {
     }
 
     if (data.attrName === "style" && el.tagName === "SPAN") {
-      const m = String(data.attrValue || "").match(/color\s*:\s*([^;]+)/i);
-      if (m) {
-        const c = m[1].trim();
-        if (isSafeCssColorValue(c)) {
-          data.attrValue = `color: ${c}`;
-          return;
-        }
-      }
-      data.attrValue = "";
+      const cleaned = sanitizeSpanStyle(String(data.attrValue || ""));
+      data.attrValue = cleaned;
+      return;
     }
 
     if (data.attrName === "href" && el.tagName === "A") {

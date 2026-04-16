@@ -42,6 +42,14 @@ export default function RichTextField({
       const el = editorRef.current;
       if (!el) return;
       el.focus();
+      // Use semantic <b>/<i>/<u> so formatting survives our HTML sanitizer (span-only color rules).
+      if (command === "bold" || command === "italic" || command === "underline") {
+        try {
+          document.execCommand("styleWithCSS", false, "false");
+        } catch {
+          // ignore
+        }
+      }
       try {
         document.execCommand(command, false, valueArg);
       } catch {
@@ -86,7 +94,7 @@ export default function RichTextField({
 
   useEffect(() => {
     try {
-      document.execCommand("styleWithCSS", false, "true");
+      document.execCommand("styleWithCSS", false, "false");
     } catch {
       // ignore
     }
