@@ -690,23 +690,6 @@ export default function BlogsPage() {
                 })}
               </div>
 
-              <details className="rounded-lg border border-border bg-surface px-4 py-3">
-                <summary className="cursor-pointer text-sm font-medium text-foreground flex items-center gap-2">
-                  <FiUploadCloud className="w-4 h-4" />
-                  Legacy content (optional)
-                </summary>
-                <div className="mt-3">
-                  <label className="block text-xs font-semibold mb-1 text-foreground-muted">Content (text)</label>
-                  <textarea
-                    rows={6}
-                    value={editing.content || ""}
-                    onChange={(e) => setEditing({ ...editing, content: e.target.value })}
-                    className="w-full px-4 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand font-mono bg-surface"
-                    placeholder="If you paste old content here, it will be used only when blocks are empty."
-                  />
-                </div>
-              </details>
-
               <div className="flex items-center justify-between gap-4 pt-1">
                 <label className="flex items-center gap-2 text-sm">
                   <input

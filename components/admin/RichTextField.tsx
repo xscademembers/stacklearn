@@ -1,7 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FiBold, FiItalic, FiUnderline, FiLink, FiLink2 } from "react-icons/fi";
+
+/** Body text default — matches app foreground (slate-900). */
+const DEFAULT_TEXT_COLOR = "#0f172a";
 
 type RichTextFieldProps = {
   value: string;
@@ -26,6 +29,7 @@ export default function RichTextField({
 }: RichTextFieldProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const syncingRef = useRef(false);
+  const [pickerColor, setPickerColor] = useState(DEFAULT_TEXT_COLOR);
 
   const emit = useCallback(() => {
     const el = editorRef.current;
@@ -48,6 +52,27 @@ export default function RichTextField({
     [emit]
   );
 
+  const applyForeColor = useCallback(
+    (hex: string) => {
+      const el = editorRef.current;
+      if (!el) return;
+      el.focus();
+      try {
+        document.execCommand("styleWithCSS", false, "true");
+      } catch {
+        // ignore
+      }
+      try {
+        document.execCommand("foreColor", false, hex);
+      } catch {
+        // ignore
+      }
+      setPickerColor(hex);
+      emit();
+    },
+    [emit]
+  );
+
   const applyLink = useCallback(() => {
     const url = window.prompt("Link URL (https://…)", "https://");
     if (!url) return;
@@ -58,6 +83,14 @@ export default function RichTextField({
     }
     exec("createLink", trimmed);
   }, [exec]);
+
+  useEffect(() => {
+    try {
+      document.execCommand("styleWithCSS", false, "true");
+    } catch {
+      // ignore
+    }
+  }, []);
 
   useEffect(() => {
     const el = editorRef.current;
@@ -116,13 +149,22 @@ export default function RichTextField({
           <span className="text-xs font-semibold text-foreground-muted">Color</span>
           <input
             type="color"
-            defaultValue="#111827"
-            onMouseDown={(e) => e.preventDefault()}
-            onChange={(e) => exec("foreColor", e.target.value)}
+            value={pickerColor}
+            onChange={(e) => applyForeColor(e.target.value)}
             className="h-9 w-11 cursor-pointer rounded-lg border border-border bg-surface p-1"
             aria-label="Text color"
           />
         </label>
+        <button
+          type="button"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => applyForeColor(DEFAULT_TEXT_COLOR)}
+          className="h-9 rounded-lg border border-border bg-surface px-2 text-xs font-semibold text-foreground hover:bg-page-soft transition-colors motion-reduce:transition-none"
+          title="Apply default text color to selection"
+          aria-label="Default text color"
+        >
+          Default
+        </button>
 
         <span className="mx-1 h-6 w-px bg-border" aria-hidden />
 
