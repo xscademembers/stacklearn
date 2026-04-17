@@ -249,7 +249,7 @@ export default function DestinationsPageClient({ hero }: { hero: DestinationsHer
           <div className="absolute bottom-20 right-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-20 md:py-28 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-4xl text-left">
             <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-brand-soft mb-4">
               {hero.kicker}
             </p>
@@ -262,17 +262,17 @@ export default function DestinationsPageClient({ hero }: { hero: DestinationsHer
                 Choose Your <span className="text-accent">Study Destination</span>
               </h1>
             )}
-            <blockquote className="text-base md:text-lg text-white/85 leading-relaxed mb-8 max-w-3xl mx-auto italic border-l-4 border-accent pl-5 text-left whitespace-pre-line">
+            <blockquote className="text-base md:text-lg text-white/85 leading-relaxed mb-8 max-w-3xl italic border-l-4 border-accent pl-5 whitespace-pre-line">
               &ldquo;{hero.quote || DEFAULT_HERO_QUOTE}&rdquo;
             </blockquote>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-start sm:flex-wrap">
               <BookConsultButton variant="white" className="inline-flex items-center gap-2">
                 Talk to a Country Expert
                 <FiArrowRight className="w-4 h-4" />
               </BookConsultButton>
               <Link
                 href="#destinations"
-                className="px-8 py-4 border-2 border-white/40 text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 inline-flex items-center gap-2 justify-center"
+                className="px-8 py-4 border-2 border-white/40 text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 inline-flex items-center gap-2 justify-center motion-reduce:transition-none"
               >
                 Explore Destinations
                 <FiChevronDown className="w-4 h-4" />

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiArrowRight, FiCheck, FiChevronDown, FiClock, FiBriefcase, FiDollarSign, FiBookOpen, FiGlobe } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
-import DestinationYoutubeShort from "@/components/DestinationYoutubeShort";
+import { DestinationYoutubeEmbed } from "@/components/DestinationYoutubeShort";
 
 const keyReasons = [
   {
@@ -201,48 +201,51 @@ export default function AustraliaPage() {
           <div className="absolute bottom-20 right-20 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
         <div className="container mx-auto px-6 md:px-8 py-20 md:py-28 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <Image src="https://flagcdn.com/w80/au.png" alt="Australia Flag" width={64} height={44} className="rounded shadow-lg" />
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center lg:gap-12">
+            <div className="max-w-2xl text-left">
+              <div className="mb-6 flex items-center justify-start gap-4">
+                <Image src="https://flagcdn.com/w80/au.png" alt="Australia Flag" width={64} height={44} className="rounded shadow-lg" />
+              </div>
+              <p className="mb-4 text-xs uppercase tracking-[0.25em] text-white/70 md:text-sm">
+                Study Destination
+              </p>
+              <h1 className="mb-6 text-3xl font-extrabold leading-tight md:text-4xl lg:text-5xl">
+                Study in <span className="text-accent">Australia</span>
+              </h1>
+              <p className="mb-8 max-w-2xl text-base leading-relaxed text-white/85 md:text-lg">
+                Australia is a top-3 global study destination offering world-class education, high
+                living standards, and a welcoming, multicultural environment. With 95% of universities
+                globally ranked and over 22,000 courses available, it is ideal for diverse academic
+                pursuits. Key advantages include post-study work rights (Subclass 485), safe cities,
+                and pathways to permanent residency.
+              </p>
+              <p className="mb-8 max-w-2xl text-sm leading-relaxed text-white/80 md:text-base">
+                At Stack Learn, we guide you with strategic university selection, application support,
+                and complete Australia student visa assistance &mdash; ensuring a confident start to
+                your international journey.
+              </p>
+              <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:justify-start">
+                <BookConsultButton variant="white" className="inline-flex items-center gap-2">
+                  Talk to Australia Expert
+                  <FiArrowRight className="h-4 w-4" />
+                </BookConsultButton>
+                <Link
+                  href="https://9356bd51-32b1-4639-9cc0-0661ac5d0a2d.usrfiles.com/ugd/9356bd_b6b995f87bf94938a94db8ec3c04a642.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/40 px-8 py-4 font-semibold text-white transition-all duration-300 hover:bg-white/10 motion-reduce:transition-none"
+                >
+                  Download Brochure
+                  <FiArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
             </div>
-            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-white/70 mb-4">
-              Study Destination
-            </p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
-              Study in <span className="text-accent">Australia</span>
-            </h1>
-            <p className="text-base md:text-lg text-white/85 leading-relaxed mb-8 max-w-3xl mx-auto">
-              Australia is a top-3 global study destination offering world-class education, high
-              living standards, and a welcoming, multicultural environment. With 95% of universities
-              globally ranked and over 22,000 courses available, it is ideal for diverse academic
-              pursuits. Key advantages include post-study work rights (Subclass 485), safe cities,
-              and pathways to permanent residency.
-            </p>
-            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-8 max-w-3xl mx-auto">
-              At Stack Learn, we guide you with strategic university selection, application support,
-              and complete Australia student visa assistance &mdash; ensuring a confident start to
-              your international journey.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <BookConsultButton variant="white" className="inline-flex items-center gap-2">
-                Talk to Australia Expert
-                <FiArrowRight className="w-4 h-4" />
-              </BookConsultButton>
-              <Link
-                href="https://9356bd51-32b1-4639-9cc0-0661ac5d0a2d.usrfiles.com/ugd/9356bd_b6b995f87bf94938a94db8ec3c04a642.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-8 py-4 border-2 border-white/40 text-white rounded-full font-semibold hover:bg-white/10 transition-all duration-300 inline-flex items-center gap-2 justify-center"
-              >
-                Download Brochure
-                <FiArrowRight className="w-4 h-4" />
-              </Link>
+            <div className="flex justify-center lg:justify-end">
+              <DestinationYoutubeEmbed destinationKey="australia" countryLabel="Australia" />
             </div>
           </div>
         </div>
       </section>
-
-      <DestinationYoutubeShort destinationKey="australia" countryLabel="Australia" />
 
       {/* Quick Facts Bar */}
       <section className="py-10 md:py-12 bg-white border-b border-slate-100">

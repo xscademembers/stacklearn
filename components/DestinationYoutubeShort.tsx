@@ -6,14 +6,11 @@ import type { DestinationShortKey } from "@/lib/destination-shorts-defaults";
 
 type Props = {
   destinationKey: DestinationShortKey;
-  /** Visible section heading, e.g. "United Kingdom" */
+  /** Accessible title context, e.g. "United Kingdom" */
   countryLabel: string;
 };
 
-export default function DestinationYoutubeShort({
-  destinationKey,
-  countryLabel,
-}: Props) {
+export function useDestinationShortVideoId(destinationKey: DestinationShortKey): string | null {
   const [videoId, setVideoId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,6 +31,34 @@ export default function DestinationYoutubeShort({
       cancelled = true;
     };
   }, [destinationKey]);
+
+  return videoId;
+}
+
+/** Video only — for hero right column (no headings or extra copy). */
+export function DestinationYoutubeEmbed({ destinationKey, countryLabel }: Props) {
+  const videoId = useDestinationShortVideoId(destinationKey);
+  if (!videoId) return null;
+
+  const embedSrc = youtubeEmbedUrl(videoId);
+
+  return (
+    <div className="relative w-full aspect-[9/16] max-h-[min(72vh,560px)] max-w-[min(100%,380px)] mx-auto lg:mx-0 lg:ml-auto rounded-2xl overflow-hidden border border-white/25 bg-black shadow-2xl ring-1 ring-white/10 motion-reduce:transition-none">
+      <iframe
+        src={embedSrc}
+        title={`YouTube Short: Study in ${countryLabel}`}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+        className="absolute inset-0 h-full w-full"
+      />
+    </div>
+  );
+}
+
+/** Full-width section with title + embed (kept for any page that still wants a standalone block). */
+export default function DestinationYoutubeShort({ destinationKey, countryLabel }: Props) {
+  const videoId = useDestinationShortVideoId(destinationKey);
 
   if (!videoId) return null;
 
@@ -71,7 +96,7 @@ export default function DestinationYoutubeShort({
               href={watchHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-semibold text-brand hover:text-brand-strong underline-offset-2 hover:underline"
+              className="text-sm font-semibold text-brand hover:text-brand-strong underline-offset-2 hover:underline motion-reduce:transition-none"
             >
               Open in YouTube
             </a>
