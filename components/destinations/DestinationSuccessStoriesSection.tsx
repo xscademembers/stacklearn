@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { FiArrowRight } from "react-icons/fi";
 import type { PublicSuccessStory } from "@/lib/get-success-stories";
 
 type Props = {
@@ -92,15 +90,6 @@ export default function DestinationSuccessStoriesSection({ destinationSlug, coun
                 <blockquote className="text-sm text-foreground-muted italic leading-relaxed text-center m-0 flex-1 line-clamp-4">
                   &ldquo;{s.story}&rdquo;
                 </blockquote>
-                <div className="mt-4 pt-4 border-t border-border text-center">
-                  <Link
-                    href="/success-stories"
-                    className="inline-flex items-center gap-2 text-sm font-bold text-brand hover:text-brand-strong transition-colors motion-reduce:transition-none"
-                  >
-                    Read more success stories
-                    <FiArrowRight className="w-4 h-4" aria-hidden />
-                  </Link>
-                </div>
               </article>
             </li>
           ))}

@@ -23,7 +23,7 @@ export default async function Home() {
   const latestBlogs = await getLatestPublishedBlogCards(3);
   const blogHighlights =
     latestBlogs.length > 0 ? { ...cms.blogHighlights, blogs: latestBlogs } : cms.blogHighlights;
-  const latestSuccessStories = await getLatestSuccessStoriesForHome(4);
+  const latestSuccessStories = await getLatestSuccessStoriesForHome(24);
 
   return (
     <div className="w-full">

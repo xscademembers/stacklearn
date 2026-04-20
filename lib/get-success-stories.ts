@@ -34,6 +34,28 @@ function serialize(doc: Record<string, unknown>): PublicSuccessStory {
   };
 }
 
+/** All stories, newest first (dashboard updates). */
+export async function getAllSuccessStoriesSorted(): Promise<PublicSuccessStory[]> {
+  if (!isMongoConfigured()) return [];
+  try {
+    const db = await getDatabase();
+    const docs = await db
+      .collection(COLLECTIONS.SUCCESS_STORIES)
+      .aggregate([
+        {
+          $addFields: {
+            _sortAt: { $ifNull: ["$updatedAt", "$createdAt"] },
+          },
+        },
+        { $sort: { _sortAt: -1 } },
+      ])
+      .toArray();
+    return docs.map((d) => serialize(d as Record<string, unknown>));
+  } catch {
+    return [];
+  }
+}
+
 /** Latest stories by most recently updated (fallback: created). */
 export async function getLatestSuccessStoriesForHome(limit = 4): Promise<PublicSuccessStory[]> {
   if (!isMongoConfigured()) return [];
