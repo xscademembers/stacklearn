@@ -25,11 +25,16 @@ export async function GET(request: NextRequest) {
   }
 
   if (dest) {
-    const limit = clampLimit(request.nextUrl.searchParams.get("limit"), 24, 12);
     if (!isDestinationSuccessStorySlug(dest)) {
       return NextResponse.json({ successStories: [] });
     }
-    const successStories = await getSuccessStoriesForDestinationSlug(dest, limit);
+    const limParam = request.nextUrl.searchParams.get("limit");
+    let cap: number | undefined;
+    if (limParam != null && limParam !== "") {
+      const n = Number.parseInt(limParam, 10);
+      if (Number.isFinite(n) && n >= 1) cap = Math.min(n, 500);
+    }
+    const successStories = await getSuccessStoriesForDestinationSlug(dest, cap);
     return NextResponse.json({ successStories });
   }
 

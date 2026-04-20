@@ -81,14 +81,16 @@ export async function getLatestSuccessStoriesForHome(limit = 4): Promise<PublicS
 
 /**
  * Stories for a destination hub page, newest first.
- * Fetches a window then filters by `country` text vs destination slug aliases.
+ * Scans all stories and filters by `country` vs destination slug aliases.
+ * Pass `limit` > 0 to cap count; omit or use 0 for every matching story.
  */
 export async function getSuccessStoriesForDestinationSlug(
   slug: string,
-  limit = 12
+  limit?: number
 ): Promise<PublicSuccessStory[]> {
   if (!isDestinationSuccessStorySlug(slug)) return [];
   if (!isMongoConfigured()) return [];
+  const max = typeof limit === "number" && limit > 0 ? limit : Number.POSITIVE_INFINITY;
   try {
     const db = await getDatabase();
     const docs = await db
@@ -100,7 +102,6 @@ export async function getSuccessStoriesForDestinationSlug(
           },
         },
         { $sort: { _sortAt: -1 } },
-        { $limit: 80 },
       ])
       .toArray();
 
@@ -109,7 +110,7 @@ export async function getSuccessStoriesForDestinationSlug(
       const row = serialize(d as Record<string, unknown>);
       if (!countryMatchesDestinationSlug(row.country, slug)) continue;
       out.push(row);
-      if (out.length >= limit) break;
+      if (out.length >= max) break;
     }
     return out;
   } catch {
