@@ -21,8 +21,7 @@ export default async function Home() {
   const homeContent = await getMergedPageContent("home");
   const cms = buildHomeCmsProps(homeContent);
   const latestBlogs = await getLatestPublishedBlogCards(3);
-  const blogHighlights =
-    latestBlogs.length > 0 ? { ...cms.blogHighlights, blogs: latestBlogs } : cms.blogHighlights;
+  const blogHighlights = { ...cms.blogHighlights, blogs: latestBlogs };
   const latestSuccessStories = await getLatestSuccessStoriesForHome(24);
 
   return (

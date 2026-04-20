@@ -27,30 +27,32 @@ export default function BlogHighlights({ content }: { content: BlogHighlightsCms
           </p>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
-          {blogs.map((blog, index) => (
+          {blogs.map((blog) => (
             <Link
-              key={index}
+              key={blog.href}
               href={blog.href}
-              className="group bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-brand hover:shadow-2xl transition-all duration-300 hover-lift"
+              className="group bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-brand hover:shadow-2xl transition-all duration-300 hover-lift motion-reduce:transition-none motion-reduce:hover:shadow-none"
             >
               <div className="relative h-56 overflow-hidden">
                 <Image
                   src={blog.image}
                   alt={blog.title}
                   fill
-                  className="object-cover group-hover:scale-125 transition-transform duration-500"
+                  className="object-cover transition-transform duration-500 group-hover:scale-125 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none motion-reduce:group-hover:opacity-0" />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-brand transition-colors duration-300 line-clamp-2">
+                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-brand transition-colors duration-300 line-clamp-2 motion-reduce:transition-none">
                   {blog.title}
                 </h3>
                 <p className="text-slate-700 mb-4 line-clamp-2 leading-relaxed">{blog.excerpt}</p>
-                <span className="inline-flex items-center gap-2 text-brand font-bold group-hover:gap-3 transition-all duration-300">
+                <span className="inline-flex items-center gap-2 text-brand font-bold transition-all duration-300 group-hover:gap-3 motion-reduce:transition-none">
                   Read More
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
+                    →
+                  </span>
                 </span>
               </div>
             </Link>

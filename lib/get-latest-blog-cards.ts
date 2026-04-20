@@ -29,10 +29,19 @@ export async function getLatestPublishedBlogCards(limit: number): Promise<BlogCa
     const db = await getDatabase();
     const docs = (await db
       .collection(COLLECTIONS.BLOGS)
-      .find({ published: true })
-      .sort({ publishedAt: -1, createdAt: -1 })
-      .limit(limit)
-      .project({ title: 1, slug: 1, excerpt: 1, image: 1 })
+      .aggregate([
+        { $match: { published: true } },
+        {
+          $addFields: {
+            _sortAt: {
+              $ifNull: ["$updatedAt", { $ifNull: ["$publishedAt", "$createdAt"] }],
+            },
+          },
+        },
+        { $sort: { _sortAt: -1 } },
+        { $limit: limit },
+        { $project: { title: 1, slug: 1, excerpt: 1, image: 1 } },
+      ])
       .toArray()) as unknown as BlogDoc[];
 
     return docs
