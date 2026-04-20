@@ -6,6 +6,7 @@ import Link from "next/link";
 import { FiArrowRight, FiCheck, FiChevronDown, FiClock, FiBriefcase, FiDollarSign, FiBookOpen, FiGlobe } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
 import { DestinationYoutubeEmbed } from "@/components/DestinationYoutubeShort";
+import DestinationSuccessStoriesSection from "@/components/destinations/DestinationSuccessStoriesSection";
 
 const keyReasons = [
   {
@@ -738,6 +739,8 @@ export default function GermanyPage() {
           </div>
         </div>
       </section>
+
+      <DestinationSuccessStoriesSection destinationSlug="germany" countryLabel="Germany" />
 
       {/* FAQs */}
       <section className="py-16 md:py-24 bg-white">

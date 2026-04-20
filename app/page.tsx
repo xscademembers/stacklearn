@@ -13,6 +13,7 @@ import FAQSection from "@/components/home/FAQSection";
 import { getMergedPageContent } from "@/lib/get-merged-page-content";
 import { buildHomeCmsProps } from "@/lib/build-home-cms";
 import { getLatestPublishedBlogCards } from "@/lib/get-latest-blog-cards";
+import { getLatestSuccessStoriesForHome } from "@/lib/get-success-stories";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function Home() {
   const latestBlogs = await getLatestPublishedBlogCards(3);
   const blogHighlights =
     latestBlogs.length > 0 ? { ...cms.blogHighlights, blogs: latestBlogs } : cms.blogHighlights;
+  const latestSuccessStories = await getLatestSuccessStoriesForHome(4);
 
   return (
     <div className="w-full">
@@ -33,7 +35,14 @@ export default async function Home() {
       <PopularDestinations content={cms.popularDestinations} />
       <PopularTrainingPrograms content={cms.popularTraining} />
       <ProcessSection content={cms.process} />
-      <SuccessStories content={cms.successStories} />
+      <SuccessStories
+        content={{
+          titleLead: cms.successStories.titleLead,
+          titleGradient: cms.successStories.titleGradient,
+          subheading: cms.successStories.subheading,
+        }}
+        stories={latestSuccessStories}
+      />
       <ScholarshipPromotion content={cms.scholarshipPromo} />
       <BlogHighlights content={blogHighlights} />
       <FAQSection content={cms.faq} />

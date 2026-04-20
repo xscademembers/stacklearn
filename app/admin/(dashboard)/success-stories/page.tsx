@@ -3,6 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { FiEdit2, FiPlus, FiSave, FiTrash2, FiX } from "react-icons/fi";
 import { adminFetch, isAbortOrTimeoutError } from "@/lib/admin-fetch";
+import {
+  SUCCESS_STORY_COUNTRY_OPTIONS,
+  SUCCESS_STORY_COUNTRY_OTHER,
+  countryFieldToSelectValue,
+  resolveToCanonicalCountry,
+} from "@/lib/success-story-country-options";
 
 interface SuccessStory {
   _id: string;
@@ -13,6 +19,11 @@ interface SuccessStory {
   story: string;
   createdAt: string;
   updatedAt?: string;
+}
+
+function editingRecordKey(editing: Partial<SuccessStory> | null): string | null {
+  if (!editing) return null;
+  return typeof editing._id === "string" && editing._id ? editing._id : "__new__";
 }
 
 const emptyStory: Partial<SuccessStory> = {
@@ -30,6 +41,20 @@ export default function AdminSuccessStoriesPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [listError, setListError] = useState("");
+  const [countryMenu, setCountryMenu] = useState("");
+
+  const recordKey = editingRecordKey(editing);
+
+  useEffect(() => {
+    if (recordKey === null) {
+      setCountryMenu("");
+      return;
+    }
+    if (!editing) return;
+    setCountryMenu(countryFieldToSelectValue(editing.country));
+    // Only re-sync when opening the editor or switching records (not on every keystroke).
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally omit `editing` identity
+  }, [recordKey]);
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
@@ -68,6 +93,10 @@ export default function AdminSuccessStoriesPage() {
 
   const handleSave = async () => {
     if (!editing) return;
+    if (countryMenu === SUCCESS_STORY_COUNTRY_OTHER && !(editing.country || "").trim()) {
+      setError('When "Other" is selected, enter the country name.');
+      return;
+    }
     setSaving(true);
     setError("");
     try {
@@ -106,6 +135,8 @@ export default function AdminSuccessStoriesPage() {
   };
 
   if (editing) {
+    const showOtherCountry = countryMenu === SUCCESS_STORY_COUNTRY_OTHER;
+
     return (
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="flex items-center justify-between gap-4">
@@ -141,14 +172,56 @@ export default function AdminSuccessStoriesPage() {
               <label htmlFor="ss-country" className="block text-sm font-semibold mb-2">
                 Country
               </label>
-              <input
+              <select
                 id="ss-country"
-                type="text"
-                value={editing.country || ""}
-                onChange={(e) => setEditing({ ...editing, country: e.target.value })}
+                value={countryMenu}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  if (v === "") {
+                    setCountryMenu("");
+                    setEditing({ ...editing, country: "" });
+                    return;
+                  }
+                  if (v === SUCCESS_STORY_COUNTRY_OTHER) {
+                    setCountryMenu(SUCCESS_STORY_COUNTRY_OTHER);
+                    const prev = (editing.country || "").trim();
+                    const canon = resolveToCanonicalCountry(prev);
+                    setEditing({ ...editing, country: canon ? "" : prev });
+                    return;
+                  }
+                  setCountryMenu(v);
+                  setEditing({ ...editing, country: v });
+                }}
                 className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
-                autoComplete="country-name"
-              />
+              >
+                <option value="">Select country…</option>
+                {SUCCESS_STORY_COUNTRY_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+                <option value={SUCCESS_STORY_COUNTRY_OTHER}>Other (type below)</option>
+              </select>
+              {showOtherCountry ? (
+                <div className="mt-3">
+                  <label htmlFor="ss-country-other" className="block text-xs font-semibold text-foreground-muted mb-2">
+                    Country name (custom)
+                  </label>
+                  <input
+                    id="ss-country-other"
+                    type="text"
+                    value={editing.country || ""}
+                    onChange={(e) => setEditing({ ...editing, country: e.target.value })}
+                    className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                    placeholder="e.g. France, UAE"
+                    autoComplete="off"
+                  />
+                </div>
+              ) : null}
+              <p className="mt-2 text-xs text-foreground-muted leading-relaxed">
+                Pick a country so this story appears on the matching destination page. Use &ldquo;Other&rdquo; only if
+                the study destination is not in the list.
+              </p>
             </div>
             <div>
               <label htmlFor="ss-university" className="block text-sm font-semibold mb-2">
