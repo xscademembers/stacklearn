@@ -9,6 +9,7 @@ import {
   FiX,
   FiPhone,
   FiFileText,
+  FiAward,
   FiLogOut,
   FiChevronRight,
 } from "react-icons/fi";
@@ -16,6 +17,7 @@ import {
 const navItems = [
   { href: "/admin/contact-info", label: "Contact Information", icon: FiPhone },
   { href: "/admin/blogs", label: "Blogs", icon: FiFileText },
+  { href: "/admin/success-stories", label: "Success Stories", icon: FiAward },
 ];
 
 export default function AdminDashboardShell({

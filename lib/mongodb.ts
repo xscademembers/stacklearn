@@ -76,6 +76,7 @@ export const COLLECTIONS = {
   APPLICATIONS: "applications",
   CONTACTS: "contacts",
   BLOGS: "blogs",
+  SUCCESS_STORIES: "success_stories",
   TESTIMONIALS: "testimonials",
   COURSES: "courses",
   SITE_SETTINGS: "site_settings",
