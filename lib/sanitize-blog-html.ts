@@ -15,6 +15,10 @@ function isDomLikeElement(node: unknown): node is {
   );
 }
 
+function tagIs(el: { tagName: string }, name: string): boolean {
+  return el.tagName.toUpperCase() === name.toUpperCase();
+}
+
 /** Reject dangerous CSS / schemes inside a `color:` value. */
 function isSafeCssColorValue(value: string): boolean {
   const v = value.trim();
@@ -81,10 +85,11 @@ function installSanitizeHooks() {
 
   DOMPurify.addHook("uponSanitizeAttribute", (node, data) => {
     if (!isDomLikeElement(node)) return;
+    if (!data || typeof data !== "object") return;
     const el = node;
 
     if (data.attrName === "color") {
-      if (el.tagName === "FONT") {
+      if (tagIs(el, "FONT")) {
         const raw = String(data.attrValue || "").trim();
         if (!isSafeCssColorValue(raw)) {
           data.attrValue = "";
@@ -95,13 +100,13 @@ function installSanitizeHooks() {
       return;
     }
 
-    if (data.attrName === "style" && el.tagName === "SPAN") {
+    if (data.attrName === "style" && tagIs(el, "SPAN")) {
       const cleaned = sanitizeSpanStyle(String(data.attrValue || ""));
       data.attrValue = cleaned;
       return;
     }
 
-    if (data.attrName === "href" && el.tagName === "A") {
+    if (data.attrName === "href" && tagIs(el, "A")) {
       const v = String(data.attrValue || "").trim();
       if (!/^https?:\/\//i.test(v)) {
         data.attrValue = "";
@@ -111,7 +116,7 @@ function installSanitizeHooks() {
 
   DOMPurify.addHook("afterSanitizeAttributes", (node) => {
     if (!isDomLikeElement(node)) return;
-    if (node.tagName === "A") {
+    if (tagIs(node, "A")) {
       node.setAttribute("rel", "noopener noreferrer");
       node.setAttribute("target", "_blank");
     }
@@ -123,16 +128,29 @@ function installSanitizeHooks() {
  * Allowed: basic inline formatting + links (http/https only).
  * Supports `<font color>` from legacy execCommand output as well as `<span style="color:...">`.
  */
+/** Last-resort if DOMPurify/jsdom fails in a serverless bundle (avoid 500 on blog pages). */
+function stripHtmlFallback(input: string): string {
+  return String(input || "")
+    .replace(/\0/g, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function sanitizeBlogHtml(dirty: string): string {
-  installSanitizeHooks();
-  const input = typeof dirty === "string" ? dirty : "";
-  return DOMPurify.sanitize(input, {
-    ALLOWED_TAGS: ["b", "strong", "i", "em", "u", "span", "br", "a", "font"],
-    ALLOWED_ATTR: ["href", "rel", "target", "style", "color"],
-    ALLOW_DATA_ATTR: false,
-    ALLOW_ARIA_ATTR: false,
-    KEEP_CONTENT: true,
-  });
+  const input = typeof dirty === "string" ? dirty.replace(/\0/g, "") : "";
+  try {
+    installSanitizeHooks();
+    return DOMPurify.sanitize(input, {
+      ALLOWED_TAGS: ["b", "strong", "i", "em", "u", "span", "br", "a", "font"],
+      ALLOWED_ATTR: ["href", "rel", "target", "style", "color"],
+      ALLOW_DATA_ATTR: false,
+      ALLOW_ARIA_ATTR: false,
+      KEEP_CONTENT: true,
+    });
+  } catch {
+    return stripHtmlFallback(input);
+  }
 }
 
 export function looksLikeHtml(value: string): boolean {

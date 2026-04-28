@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Let Node load these on the server — bundling jsdom for serverless often causes runtime crashes (e.g. Vercel 500 on blog pages).
+  serverExternalPackages: ["isomorphic-dompurify", "jsdom"],
   // Image optimization configuration
   images: {
     // New recommended config (replaces deprecated images.domains)
