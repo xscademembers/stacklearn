@@ -126,12 +126,11 @@ async function BlogGrid() {
             <article className="flex h-full flex-col">
               <header className="relative h-52 overflow-hidden bg-page-soft">
                 {blog.image ? (
-                  <Image
+                  // eslint-disable-next-line @next/next/no-img-element -- cover URLs come from admin / any host
+                  <img
                     src={blog.image}
                     alt={blog.title}
-                    fill
-                    className="object-cover group-hover:scale-[1.03] transition-transform duration-300 motion-reduce:transition-none"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                   />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-brand/10 via-transparent to-accent/10" />

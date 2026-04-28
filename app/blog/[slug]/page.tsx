@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { COLLECTIONS, getDatabase, isMongoConfigured } from "@/lib/mongodb";
 import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/sanitize-blog-html";
@@ -29,6 +28,14 @@ type BlogDoc = {
 };
 
 export const dynamic = "force-dynamic";
+
+function normalizeSlugParam(raw: string): string {
+  try {
+    return decodeURIComponent(raw).trim();
+  } catch {
+    return raw.trim();
+  }
+}
 
 function toTextAlign(align?: BlogBlock["align"]): React.CSSProperties["textAlign"] {
   if (align === "center") return "center";
@@ -123,15 +130,21 @@ export default async function BlogDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
-  if (!slug) notFound();
+  const { slug: slugParam } = await params;
+  if (!slugParam) notFound();
 
   if (!isMongoConfigured()) notFound();
+
+  const slug = normalizeSlugParam(slugParam);
+  if (!slug) notFound();
 
   const db = await getDatabase();
   const blog = (await db
     .collection(COLLECTIONS.BLOGS)
-    .findOne({ slug, published: true })) as unknown as BlogDoc | null;
+    .findOne({
+      published: true,
+      $or: [{ slug }, { slug: slugParam.trim() }],
+    })) as unknown as BlogDoc | null;
 
   if (!blog) notFound();
 
@@ -202,13 +215,13 @@ export default async function BlogDetailPage({
         <div className="container mx-auto px-4 py-10">
           {blog.image ? (
             <section className="mb-10">
-              <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden border border-border bg-surface">
-                <Image
+              <div className="relative w-full overflow-hidden rounded-2xl border border-border bg-surface">
+                {/* eslint-disable-next-line @next/next/no-img-element -- admin may use any http(s) image host */}
+                <img
                   src={blog.image}
                   alt={blog.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 900px"
+                  className="block max-h-[24rem] w-full object-cover md:max-h-[28rem]"
+                  loading="eager"
                 />
               </div>
             </section>
@@ -226,13 +239,13 @@ export default async function BlogDetailPage({
                     {b.heading ? <RenderBlockRichText variant="heading" block={b} text={b.heading} /> : null}
                     {b.paragraph ? <RenderBlockRichText variant="paragraph" block={b} text={b.paragraph} /> : null}
                     {b.imageUrl ? (
-                      <div className="relative w-full h-60 md:h-80 rounded-xl overflow-hidden border border-border bg-surface">
-                        <Image
+                      <div className="relative w-full overflow-hidden rounded-xl border border-border bg-surface">
+                        {/* eslint-disable-next-line @next/next/no-img-element -- block URLs come from admin */}
+                        <img
                           src={b.imageUrl}
                           alt={b.heading || blog.title}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, 768px"
+                          className="block max-h-80 w-full object-cover md:max-h-[22rem]"
+                          loading="lazy"
                         />
                       </div>
                     ) : null}

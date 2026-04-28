@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { BlogCard } from "@/lib/cms-home-content";
 
 export type BlogHighlightsCms = {
@@ -34,12 +33,11 @@ export default function BlogHighlights({ content }: { content: BlogHighlightsCms
               className="group bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-brand hover:shadow-2xl transition-all duration-300 hover-lift motion-reduce:transition-none motion-reduce:hover:shadow-none"
             >
               <div className="relative h-56 overflow-hidden">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element -- URLs from Mongo / admin */}
+                <img
                   src={blog.image}
                   alt={blog.title}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-125 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-125 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none motion-reduce:group-hover:opacity-0" />
               </div>

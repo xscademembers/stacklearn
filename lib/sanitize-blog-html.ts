@@ -2,6 +2,19 @@ import DOMPurify from "isomorphic-dompurify";
 
 let hooksInstalled = false;
 
+/** DOM-like node from DOMPurify (browser Element or jsdom); avoid `instanceof Element` — not defined on Node. */
+function isDomLikeElement(node: unknown): node is {
+  tagName: string;
+  setAttribute: (name: string, value: string) => void;
+} {
+  return (
+    typeof node === "object" &&
+    node !== null &&
+    typeof (node as { tagName?: unknown }).tagName === "string" &&
+    typeof (node as { setAttribute?: unknown }).setAttribute === "function"
+  );
+}
+
 /** Reject dangerous CSS / schemes inside a `color:` value. */
 function isSafeCssColorValue(value: string): boolean {
   const v = value.trim();
@@ -67,7 +80,7 @@ function installSanitizeHooks() {
   hooksInstalled = true;
 
   DOMPurify.addHook("uponSanitizeAttribute", (node, data) => {
-    if (!(node instanceof Element)) return;
+    if (!isDomLikeElement(node)) return;
     const el = node;
 
     if (data.attrName === "color") {
@@ -97,7 +110,7 @@ function installSanitizeHooks() {
   });
 
   DOMPurify.addHook("afterSanitizeAttributes", (node) => {
-    if (!(node instanceof Element)) return;
+    if (!isDomLikeElement(node)) return;
     if (node.tagName === "A") {
       node.setAttribute("rel", "noopener noreferrer");
       node.setAttribute("target", "_blank");
