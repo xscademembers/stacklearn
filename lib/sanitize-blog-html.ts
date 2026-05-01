@@ -1,25 +1,8 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 
-let hooksInstalled = false;
+type SanitizeOptions = NonNullable<Parameters<typeof sanitizeHtml>[1]>;
 
-/** DOM-like node from DOMPurify (browser Element or jsdom); avoid `instanceof Element` — not defined on Node. */
-function isDomLikeElement(node: unknown): node is {
-  tagName: string;
-  setAttribute: (name: string, value: string) => void;
-} {
-  return (
-    typeof node === "object" &&
-    node !== null &&
-    typeof (node as { tagName?: unknown }).tagName === "string" &&
-    typeof (node as { setAttribute?: unknown }).setAttribute === "function"
-  );
-}
-
-function tagIs(el: { tagName: string }, name: string): boolean {
-  return el.tagName.toUpperCase() === name.toUpperCase();
-}
-
-/** Reject dangerous CSS / schemes inside a `color:` value. */
+/** Reject dangerous CSS / schemes inside a `color:` value (font tag + inline styles). */
 function isSafeCssColorValue(value: string): boolean {
   const v = value.trim();
   if (!v) return false;
@@ -28,107 +11,11 @@ function isSafeCssColorValue(value: string): boolean {
   if (/^rgba?\([^)]*\)$/i.test(v)) return true;
   if (/^hsla?\([^)]*\)$/i.test(v)) return true;
   if (/^currentcolor$/i.test(v)) return true;
-  // Named colors (e.g. gold, tomato) — conservative: letters only, reasonable length
   if (/^[a-z]+$/i.test(v) && v.length <= 40) return true;
   return false;
 }
 
-/** Keep only safe inline declarations (execCommand + styleWithCSS uses spans). */
-function sanitizeSpanStyle(raw: string): string {
-  const out: string[] = [];
-  const chunks = String(raw || "")
-    .split(";")
-    .map((s) => s.trim())
-    .filter(Boolean);
-
-  for (const chunk of chunks) {
-    const idx = chunk.indexOf(":");
-    if (idx === -1) continue;
-    const prop = chunk.slice(0, idx).trim().toLowerCase();
-    const val = chunk.slice(idx + 1).trim();
-    if (!val || /url\s*\(|expression|@import|javascript\s*:/i.test(val)) continue;
-
-    if (prop === "color" && isSafeCssColorValue(val)) {
-      out.push(`color: ${val}`);
-      continue;
-    }
-    if (prop === "font-weight") {
-      const v = val.replace(/\s+/g, "").toLowerCase();
-      if (/^(bold|bolder|normal|[1-9]00)$/.test(v)) {
-        out.push(`font-weight: ${val.replace(/\s+/g, " ")}`);
-      }
-      continue;
-    }
-    if (prop === "font-style") {
-      const v = val.toLowerCase().replace(/\s+/g, "");
-      if (v === "italic" || v === "normal" || v === "oblique") {
-        out.push(`font-style: ${val.replace(/\s+/g, " ")}`);
-      }
-      continue;
-    }
-    if (prop === "text-decoration" || prop === "text-decoration-line") {
-      const low = val.toLowerCase();
-      if (low.includes("underline")) {
-        out.push("text-decoration: underline");
-      } else if (low === "none") {
-        out.push("text-decoration: none");
-      }
-    }
-  }
-
-  return out.join("; ");
-}
-
-function installSanitizeHooks() {
-  if (hooksInstalled) return;
-  hooksInstalled = true;
-
-  DOMPurify.addHook("uponSanitizeAttribute", (node, data) => {
-    if (!isDomLikeElement(node)) return;
-    if (!data || typeof data !== "object") return;
-    const el = node;
-
-    if (data.attrName === "color") {
-      if (tagIs(el, "FONT")) {
-        const raw = String(data.attrValue || "").trim();
-        if (!isSafeCssColorValue(raw)) {
-          data.attrValue = "";
-        }
-        return;
-      }
-      data.keepAttr = false;
-      return;
-    }
-
-    if (data.attrName === "style" && tagIs(el, "SPAN")) {
-      const cleaned = sanitizeSpanStyle(String(data.attrValue || ""));
-      data.attrValue = cleaned;
-      return;
-    }
-
-    if (data.attrName === "href" && tagIs(el, "A")) {
-      const v = String(data.attrValue || "").trim();
-      if (!/^https?:\/\//i.test(v)) {
-        data.attrValue = "";
-      }
-    }
-  });
-
-  DOMPurify.addHook("afterSanitizeAttributes", (node) => {
-    if (!isDomLikeElement(node)) return;
-    if (tagIs(node, "A")) {
-      node.setAttribute("rel", "noopener noreferrer");
-      node.setAttribute("target", "_blank");
-    }
-  });
-}
-
-/**
- * Sanitize inline HTML used inside blog heading/paragraph blocks.
- * Allowed: basic inline formatting + links (http/https only).
- * Supports `<font color>` from legacy execCommand output as well as `<span style="color:...">`.
- */
-/** Last-resort if DOMPurify/jsdom fails in a serverless bundle (avoid 500 on blog pages). */
+/** Last-resort if sanitization throws (should be rare with sanitize-html). */
 function stripHtmlFallback(input: string): string {
   return String(input || "")
     .replace(/\0/g, "")
@@ -137,17 +24,72 @@ function stripHtmlFallback(input: string): string {
     .trim();
 }
 
+/**
+ * Style allowlist for `<span style="...">`. Keys match the fake selector sanitize-html uses per tag (see postcssParse in sanitize-html).
+ */
+const SPAN_STYLE_RULES: Record<string, RegExp[]> = {
+  color: [
+    /^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i,
+    /^rgba?\([^)]*\)$/i,
+    /^hsla?\([^)]*\)$/i,
+    /^currentcolor$/i,
+    /^var\(--[a-z0-9-_]+\)$/i,
+    /^[a-z]{1,40}$/i,
+  ],
+  "font-weight": [/^[1-9]00$/, /^(bold|bolder|normal)$/i],
+  "font-style": [/^(italic|normal|oblique)$/i],
+  "text-decoration": [/underline/i, /^none$/i],
+  "text-decoration-line": [/underline/i, /^none$/i],
+};
+
+const BLOG_SANITIZE_OPTIONS: SanitizeOptions = {
+  allowedTags: ["b", "strong", "i", "em", "u", "span", "br", "a", "font"],
+  allowedAttributes: {
+    a: ["href", "target", "rel"],
+    span: ["style"],
+    font: ["color"],
+  },
+  allowedStyles: {
+    span: SPAN_STYLE_RULES,
+    "*": SPAN_STYLE_RULES,
+  },
+  allowedSchemes: ["http", "https"],
+  allowedSchemesAppliedToAttributes: ["href"],
+  transformTags: {
+    a: (tagName, attribs) => {
+      const href = String(attribs.href || "").trim();
+      if (!/^https?:\/\//i.test(href)) {
+        return { tagName: "span", attribs: {} as Record<string, string> };
+      }
+      return {
+        tagName: "a",
+        attribs: {
+          href,
+          target: "_blank",
+          rel: "noopener noreferrer",
+        },
+      };
+    },
+    font: (_tagName, attribs) => {
+      const next = { ...attribs };
+      const raw = String(next.color || "").trim();
+      if (raw && !isSafeCssColorValue(raw)) {
+        delete next.color;
+      }
+      return { tagName: "font", attribs: next };
+    },
+  },
+};
+
+/**
+ * Sanitize inline HTML used inside blog heading/paragraph blocks.
+ * Uses `sanitize-html` (htmlparser2) — no JSDOM — so it is safe on Vercel serverless.
+ * Allowed: basic inline formatting + links (http/https only).
+ */
 export function sanitizeBlogHtml(dirty: string): string {
   const input = typeof dirty === "string" ? dirty.replace(/\0/g, "") : "";
   try {
-    installSanitizeHooks();
-    return DOMPurify.sanitize(input, {
-      ALLOWED_TAGS: ["b", "strong", "i", "em", "u", "span", "br", "a", "font"],
-      ALLOWED_ATTR: ["href", "rel", "target", "style", "color"],
-      ALLOW_DATA_ATTR: false,
-      ALLOW_ARIA_ATTR: false,
-      KEEP_CONTENT: true,
-    });
+    return sanitizeHtml(input, BLOG_SANITIZE_OPTIONS);
   } catch {
     return stripHtmlFallback(input);
   }
