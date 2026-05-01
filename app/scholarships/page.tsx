@@ -2,7 +2,8 @@ import ScholarshipsPageClient from "./ScholarshipsPageClient";
 import { getMergedPageContent } from "@/lib/get-merged-page-content";
 import { getCmsField } from "@/lib/cms-merge-sections";
 
-export const dynamic = "force-dynamic";
+/** CDN ISR — scholarships CMS. */
+export const revalidate = 60;
 
 const DEFAULT_HERO_IMAGE =
   "https://images.pexels.com/photos/7092614/pexels-photo-7092614.jpeg?auto=compress&cs=tinysrgb&w=1600";

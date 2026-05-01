@@ -9,7 +9,8 @@ import {
   type ServicesPageBodyCms,
 } from "@/lib/cms-services-content";
 
-export const dynamic = "force-dynamic";
+/** CDN ISR — services CMS. */
+export const revalidate = 60;
 
 const DEFAULT_HERO = {
   kicker: "Study Abroad Services",

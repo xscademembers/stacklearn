@@ -3,7 +3,8 @@ import { getCmsField } from "@/lib/cms-merge-sections";
 import { getContactSettings } from "@/lib/contact-settings";
 import ContactPageClient from "./ContactPageClient";
 
-export const dynamic = "force-dynamic";
+/** CDN ISR — contact CMS + site settings (Mongo). */
+export const revalidate = 60;
 
 const DEFAULT_HERO_IMAGE =
   "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=1600";

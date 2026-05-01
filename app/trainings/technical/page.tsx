@@ -7,7 +7,8 @@ import { technicalCourses } from "@/lib/technical-courses-data";
 import { getMergedPageContent } from "@/lib/get-merged-page-content";
 import { getCmsField } from "@/lib/cms-merge-sections";
 
-export const dynamic = "force-dynamic";
+/** CDN ISR — trainings hub CMS. */
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Technical Training Courses | StackLearn",

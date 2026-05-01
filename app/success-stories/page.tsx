@@ -3,7 +3,8 @@ import Link from "next/link";
 import { isMongoConfigured, MONGODB_NOT_CONFIGURED_MESSAGE } from "@/lib/mongodb";
 import { getAllSuccessStoriesSorted } from "@/lib/get-success-stories";
 
-export const dynamic = "force-dynamic";
+/** CDN ISR — success stories list (Mongo). */
+export const revalidate = 60;
 
 export default async function SuccessStoriesPage() {
   const mongoOk = isMongoConfigured();

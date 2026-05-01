@@ -15,14 +15,17 @@ import { buildHomeCmsProps } from "@/lib/build-home-cms";
 import { getLatestPublishedBlogCards } from "@/lib/get-latest-blog-cards";
 import { getLatestSuccessStoriesForHome } from "@/lib/get-success-stories";
 
-export const dynamic = "force-dynamic";
+/** CDN ISR — Mongo/CMS-backed home (see `lib/public-page-revalidate.ts`). */
+export const revalidate = 60;
 
 export default async function Home() {
-  const homeContent = await getMergedPageContent("home");
+  const [homeContent, latestBlogs, latestSuccessStories] = await Promise.all([
+    getMergedPageContent("home"),
+    getLatestPublishedBlogCards(3),
+    getLatestSuccessStoriesForHome(24),
+  ]);
   const cms = buildHomeCmsProps(homeContent);
-  const latestBlogs = await getLatestPublishedBlogCards(3);
   const blogHighlights = { ...cms.blogHighlights, blogs: latestBlogs };
-  const latestSuccessStories = await getLatestSuccessStoriesForHome(24);
 
   return (
     <div className="w-full">

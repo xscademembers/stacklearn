@@ -5,7 +5,8 @@ import BookConsultButton from "@/components/BookConsultButton";
 import { getMergedPageContent } from "@/lib/get-merged-page-content";
 import { getCmsField } from "@/lib/cms-merge-sections";
 
-export const dynamic = "force-dynamic";
+/** CDN ISR — test prep CMS. */
+export const revalidate = 60;
 
 const tests = [
   {

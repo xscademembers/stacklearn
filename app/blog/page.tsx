@@ -6,7 +6,8 @@ import {
   isMongoConfigured,
 } from "@/lib/mongodb";
 
-export const dynamic = "force-dynamic";
+/** CDN ISR — blog listing (Mongo). */
+export const revalidate = 60;
 
 type BlogListItem = {
   _id: string;

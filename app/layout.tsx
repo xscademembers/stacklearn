@@ -3,7 +3,12 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import SiteFrame from "@/components/SiteFrame";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+  adjustFontFallback: true,
+});
 
 export const metadata: Metadata = {
   title: "Stack Learn - Best Study Abroad Consultancy for Indian Students",

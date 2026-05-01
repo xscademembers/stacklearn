@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { COLLECTIONS, getDatabase, isMongoConfigured } from "@/lib/mongodb";
 import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/sanitize-blog-html";
 
+/** CDN ISR — published post body (Mongo). */
+export const revalidate = 60;
+
 type BlogBlock = {
   heading?: string;
   paragraph?: string;
@@ -26,8 +29,6 @@ type BlogDoc = {
   publishedAt?: string | Date | null;
   createdAt?: string | Date;
 };
-
-export const dynamic = "force-dynamic";
 
 function normalizeSlugParam(raw: string): string {
   try {

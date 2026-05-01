@@ -44,7 +44,8 @@ const nextConfig = {
     // Skip optimization for external images to avoid 404 issues
     unoptimized: process.env.NODE_ENV === 'development',
     formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 60,
+    /** Cache optimized images longer at the CDN (fewer origin hits on Vercel). */
+    minimumCacheTTL: 86_400,
     // Production image optimization
     dangerouslyAllowSVG: false,
     contentDispositionType: "attachment",
@@ -59,7 +60,7 @@ const nextConfig = {
   output: "standalone",
   // Experimental features for better performance
   experimental: {
-    optimizePackageImports: ["react-icons"],
+    optimizePackageImports: ["react-icons", "framer-motion", "swiper"],
   },
 };
 

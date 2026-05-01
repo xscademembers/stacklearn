@@ -13,7 +13,8 @@ import {
   type AboutDiffItem,
 } from "@/lib/cms-about-content";
 
-export const dynamic = "force-dynamic";
+/** CDN ISR — about CMS. */
+export const revalidate = 60;
 
 const DEFAULT_ABOUT_HERO =
   "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1600";
