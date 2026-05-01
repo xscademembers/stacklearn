@@ -125,28 +125,50 @@ function RenderBlockRichText({
   );
 }
 
+function slugFromRouteParams(raw: string | string[] | undefined): string {
+  if (typeof raw === "string") return raw;
+  if (Array.isArray(raw) && raw[0]) return raw[0];
+  return "";
+}
+
+/** Mongo / legacy payloads may store non-strings; avoid React/render crashes. */
+function coerceRichText(v: unknown): string {
+  if (typeof v === "string") return v;
+  if (v == null) return "";
+  return String(v);
+}
+
 export default async function BlogDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  /** Next may omit `params` in some contexts; awaiting undefined throws on destructure → 500. */
+  params?: Promise<{ slug?: string | string[] }>;
 }) {
-  const { slug: slugParam } = await params;
+  const resolved = params != null ? await params : {};
+  const slugParam = slugFromRouteParams(resolved.slug);
   if (!slugParam) notFound();
 
   if (!isMongoConfigured()) notFound();
 
-  const slug = normalizeSlugParam(slugParam);
-  if (!slug) notFound();
+  const slugNormalized = normalizeSlugParam(slugParam).toLowerCase();
+  if (!slugNormalized) notFound();
 
-  const db = await getDatabase();
-  const blog = (await db
-    .collection(COLLECTIONS.BLOGS)
-    .findOne({
-      published: true,
-      $or: [{ slug }, { slug: slugParam.trim() }],
-    })) as unknown as BlogDoc | null;
+  let blog: BlogDoc | null = null;
+  try {
+    const db = await getDatabase();
+    blog = (await db
+      .collection(COLLECTIONS.BLOGS)
+      .findOne({
+        published: true,
+        $or: [{ slug: slugNormalized }, { slug: slugParam.trim() }],
+      })) as unknown as BlogDoc | null;
+  } catch {
+    notFound();
+  }
 
   if (!blog) notFound();
+
+  const displayTitle = coerceRichText(blog.title).trim() || "Blog post";
 
   const dateValue = blog.publishedAt || blog.createdAt;
   const date = dateValue ? new Date(dateValue).toLocaleDateString("en-IN") : "";
@@ -166,7 +188,7 @@ export default async function BlogDetailPage({
               Blog
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-foreground">{blog.title}</span>
+            <span className="text-foreground">{displayTitle}</span>
           </nav>
 
           <div className="mt-6 grid gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-end">
@@ -175,7 +197,7 @@ export default async function BlogDetailPage({
                 {blog.category || "Blog"}
               </p>
               <h1 className="mt-3 text-3xl md:text-4xl font-bold text-foreground leading-tight">
-                {blog.title}
+                {displayTitle}
               </h1>
               {blog.excerpt ? (
                 <p className="mt-4 text-base md:text-lg leading-relaxed text-foreground-muted max-w-2xl">
@@ -219,7 +241,7 @@ export default async function BlogDetailPage({
                 {/* eslint-disable-next-line @next/next/no-img-element -- admin may use any http(s) image host */}
                 <img
                   src={blog.image}
-                  alt={blog.title}
+                  alt={displayTitle}
                   className="block max-h-[24rem] w-full object-cover md:max-h-[28rem]"
                   loading="eager"
                 />
@@ -236,14 +258,18 @@ export default async function BlogDetailPage({
               <div className="space-y-10">
                 {blocks.map((b, idx) => (
                   <section key={idx} className="space-y-5">
-                    {b.heading ? <RenderBlockRichText variant="heading" block={b} text={b.heading} /> : null}
-                    {b.paragraph ? <RenderBlockRichText variant="paragraph" block={b} text={b.paragraph} /> : null}
+                    {b.heading ? (
+                      <RenderBlockRichText variant="heading" block={b} text={coerceRichText(b.heading)} />
+                    ) : null}
+                    {b.paragraph ? (
+                      <RenderBlockRichText variant="paragraph" block={b} text={coerceRichText(b.paragraph)} />
+                    ) : null}
                     {b.imageUrl ? (
                       <div className="relative w-full overflow-hidden rounded-xl border border-border bg-surface">
                         {/* eslint-disable-next-line @next/next/no-img-element -- block URLs come from admin */}
                         <img
                           src={b.imageUrl}
-                          alt={b.heading || blog.title}
+                          alt={coerceRichText(b.heading) || displayTitle}
                           className="block max-h-80 w-full object-cover md:max-h-[22rem]"
                           loading="lazy"
                         />
