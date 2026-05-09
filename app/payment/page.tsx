@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { FiCreditCard, FiCheck } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { withSubmissionContext } from "@/lib/submissionPayload";
+import IndiaPhoneInput from "@/components/forms/IndiaPhoneInput";
 
 export default function PaymentPage() {
   const pathname = usePathname();
@@ -35,6 +36,10 @@ export default function PaymentPage() {
       !formData.amount
     ) {
       setSaveError("Please fill all required fields.");
+      return;
+    }
+    if (!/^\d{10}$/.test(formData.mobile)) {
+      setSaveError("Please enter a valid 10-digit mobile number.");
       return;
     }
     setDetailsLocked(true);
@@ -172,13 +177,13 @@ export default function PaymentPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Mobile Number *</label>
-                <input
-                  type="tel"
+                <IndiaPhoneInput
                   required
                   value={formData.mobile}
-                  onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                  placeholder="+ 91 78993 38507"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand"
+                  onChange={(next) => setFormData({ ...formData, mobile: next })}
+                  className="w-full border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-brand"
+                  inputClassName="w-full px-4 py-3 outline-none"
+                  placeholder="10-digit mobile number"
                 />
               </div>
               <div>

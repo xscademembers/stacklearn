@@ -6,19 +6,38 @@ import {
   MONGODB_NOT_CONFIGURED_MESSAGE,
 } from "@/lib/mongodb";
 import { clampStr } from "@/lib/api/submissionStrings";
+import { isValidIndianMobile10, normalizeIndianMobile10 } from "@/lib/india-phone";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as Record<string, unknown>;
     const submittedFromPath =
       clampStr(body.submittedFromPath, 512) || null;
     const formSource = clampStr(body.formSource, 128) || "apply_page";
-    const { name, email, mobile, preferredCountry, course, level, qualification, institution } = body;
+    const name = clampStr(body.name, 200);
+    const email = clampStr(body.email, 320).toLowerCase();
+    const mobileRaw = clampStr(body.mobile, 40);
+    const mobile = normalizeIndianMobile10(mobileRaw);
+    const preferredCountry = clampStr(body.preferredCountry, 200) || null;
+    const course = clampStr(body.course, 500) || null;
+    const level = clampStr(body.level, 200) || null;
+    const qualification = clampStr(body.qualification, 200) || null;
+    const institution = clampStr(body.institution, 500) || null;
 
     // Validate required fields
     if (!name || !email || !mobile) {
       return NextResponse.json(
         { success: false, message: "Name, email, and mobile are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidIndianMobile10(mobile)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Mobile number must be 10 digits (India) with +91 by default.",
+        },
         { status: 400 }
       );
     }
@@ -35,10 +54,10 @@ export async function POST(request: NextRequest) {
 
     // Check for duplicate application (same email and course)
     const existingApplication = await collection.findOne({
-      email: email.toLowerCase(),
-      preferredCountry,
-      course,
-      level,
+      email,
+      ...(preferredCountry ? { preferredCountry } : {}),
+      ...(course ? { course } : {}),
+      ...(level ? { level } : {}),
     });
 
     if (existingApplication) {
@@ -55,7 +74,14 @@ export async function POST(request: NextRequest) {
     const result = await collection.insertOne({
       applicationId,
       ...body,
-      email: email.toLowerCase(),
+      name,
+      email,
+      mobile,
+      preferredCountry,
+      course,
+      level,
+      qualification,
+      institution,
       submittedFromPath,
       formSource,
       status: "pending",

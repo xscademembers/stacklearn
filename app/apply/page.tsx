@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { FiArrowRight, FiArrowLeft, FiCheck } from "react-icons/fi";
 import { withSubmissionContext } from "@/lib/submissionPayload";
+import IndiaPhoneInput from "@/components/forms/IndiaPhoneInput";
 
 const steps = [
   "Personal Details",
@@ -54,6 +55,7 @@ export default function ApplyPage() {
       if (!formData.email.trim()) newErrors.email = "Email is required";
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Invalid email format";
       if (!formData.mobile.trim()) newErrors.mobile = "Mobile number is required";
+      else if (!/^\d{10}$/.test(formData.mobile)) newErrors.mobile = "Enter a valid 10-digit mobile number";
       if (!formData.gender) newErrors.gender = "Please select gender";
     } else if (step === 2) {
       if (!formData.qualification) newErrors.qualification = "Qualification is required";
@@ -245,13 +247,18 @@ export default function ApplyPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Mobile Number *
                   </label>
-                  <input
-                    type="tel"
+                  <IndiaPhoneInput
                     required
                     value={formData.mobile}
-                    onChange={(e) => { setFormData({ ...formData, mobile: e.target.value }); setErrors({ ...errors, mobile: "" }); }}
-                    placeholder="+ 91 78993 38507"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.mobile ? 'border-accent' : 'border-gray-300'}`}
+                    onChange={(next) => {
+                      setFormData({ ...formData, mobile: next });
+                      setErrors({ ...errors, mobile: "" });
+                    }}
+                    className={`w-full border rounded-lg focus-within:ring-2 focus-within:ring-brand ${
+                      errors.mobile ? "border-accent" : "border-gray-300"
+                    }`}
+                    inputClassName="w-full px-4 py-3 outline-none"
+                    placeholder="10-digit mobile number"
                   />
                   {errors.mobile && <p className="text-accent text-sm mt-1">{errors.mobile}</p>}
                 </div>

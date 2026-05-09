@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { FiX } from "react-icons/fi";
 import { withSubmissionContext } from "@/lib/submissionPayload";
+import IndiaPhoneInput from "@/components/forms/IndiaPhoneInput";
 
 interface ScholarshipInterestPopupProps {
   isOpen: boolean;
@@ -113,14 +114,16 @@ export default function ScholarshipInterestPopup({
           <div className="grid gap-4 md:grid-cols-2">
             <label className="text-sm text-gray-700">
               Mobile Number *
-              <input
-                type="tel"
-                required
-                value={formData.mobile}
-                onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-colors focus:border-brand"
-                placeholder="+ 91 78993 38507"
-              />
+              <div className="mt-2">
+                <IndiaPhoneInput
+                  required
+                  value={formData.mobile}
+                  onChange={(next) => setFormData({ ...formData, mobile: next })}
+                  className="w-full rounded-lg border border-gray-300 focus-within:border-brand transition-colors"
+                  inputClassName="w-full px-4 py-3 outline-none"
+                  placeholder="10-digit mobile number"
+                />
+              </div>
             </label>
             <label className="text-sm text-gray-700">
               Destination Country

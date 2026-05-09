@@ -6,6 +6,7 @@ import {
   MONGODB_NOT_CONFIGURED_MESSAGE,
 } from "@/lib/mongodb";
 import { clampStr } from "@/lib/api/submissionStrings";
+import { isValidIndianMobile10, normalizeIndianMobile10 } from "@/lib/india-phone";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,13 +20,24 @@ export async function POST(request: NextRequest) {
       200
     );
     const email = clampStr(body.email, 320).toLowerCase();
-    const mobile = clampStr(body.mobile ?? body.phoneNumber, 40);
+    const mobileRaw = clampStr(body.mobile ?? body.phoneNumber, 40);
+    const mobile = normalizeIndianMobile10(mobileRaw);
     const destination = clampStr(body.destination, 200) || null;
     const message = clampStr(body.message, 8000) || null;
 
     if (!name || !email || !mobile) {
       return NextResponse.json(
         { success: false, message: "Name, email, and mobile are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidIndianMobile10(mobile)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Mobile number must be 10 digits (India) with +91 by default.",
+        },
         { status: 400 }
       );
     }

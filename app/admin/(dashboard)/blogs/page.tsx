@@ -16,10 +16,15 @@ import RichTextField from "@/components/admin/RichTextField";
 import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/sanitize-blog-html";
 
 type BlogBlock = {
-  kind?: "heading" | "paragraph" | "image";
+  kind?: "heading" | "paragraph" | "image" | "table";
   heading: string;
   paragraph: string;
   imageUrl: string;
+  table?: {
+    caption?: string;
+    columns: string[];
+    rows: string[][];
+  };
   align?: "left" | "center" | "right";
   bold?: boolean;
   italic?: boolean;
@@ -56,6 +61,7 @@ const emptyBlog = {
       heading: "",
       paragraph: "",
       imageUrl: "",
+      table: undefined,
       align: "left",
       bold: false,
       italic: false,
@@ -75,6 +81,263 @@ function toTextAlign(align?: BlogBlock["align"]): React.CSSProperties["textAlign
 
 function isValidHttpUrl(url?: string) {
   return typeof url === "string" && /^https?:\/\//i.test(url.trim());
+}
+
+function clampText(v: unknown, maxLen: number): string {
+  if (typeof v !== "string") return "";
+  const s = v.trim();
+  if (!s) return "";
+  return s.length > maxLen ? s.slice(0, maxLen) : s;
+}
+
+function coerceTable(v: unknown): NonNullable<BlogBlock["table"]> | undefined {
+  if (!v || typeof v !== "object") return undefined;
+  const t = v as Record<string, unknown>;
+
+  const columnsRaw = Array.isArray(t.columns) ? (t.columns as unknown[]) : [];
+  const rowsRaw = Array.isArray(t.rows) ? (t.rows as unknown[]) : [];
+
+  const columns = columnsRaw.map((c) => clampText(c, 80));
+  const rows = rowsRaw
+    .map((r) => (Array.isArray(r) ? (r as unknown[]) : []))
+    .map((r) => r.map((cell) => clampText(cell, 400)));
+
+  const safeColumns = columns.filter((c) => c.length > 0);
+  const hasAnyCell = rows.some((r) => r.some((cell) => cell.length > 0));
+  if (safeColumns.length === 0 && !hasAnyCell) return undefined;
+
+  const width = Math.max(
+    safeColumns.length,
+    rows.reduce((m, r) => Math.max(m, r.length), 0)
+  );
+  const normalizedColumns =
+    safeColumns.length > 0 ? [...safeColumns, ...Array.from({ length: Math.max(0, width - safeColumns.length) }, () => "")] : Array.from({ length: width }, () => "");
+  const normalizedRows = rows.map((r) => [...r, ...Array.from({ length: Math.max(0, width - r.length) }, () => "")]);
+
+  return {
+    caption: clampText(t.caption, 160),
+    columns: normalizedColumns,
+    rows: normalizedRows,
+  };
+}
+
+function TablePreview({ table }: { table: NonNullable<BlogBlock["table"]> }) {
+  const columns = table.columns ?? [];
+  const rows = table.rows ?? [];
+  const hasHeader = columns.some((c) => c.trim().length > 0);
+  const width = Math.max(
+    columns.length,
+    rows.reduce((m, r) => Math.max(m, r.length), 0)
+  );
+  if (width === 0) return null;
+
+  const normalizedColumns = [...columns, ...Array.from({ length: Math.max(0, width - columns.length) }, () => "")];
+  const normalizedRows = rows.map((r) => [...r, ...Array.from({ length: Math.max(0, width - r.length) }, () => "")]);
+
+  return (
+    <div className="rounded-xl border border-border bg-page-soft overflow-hidden">
+      <div className="w-full overflow-x-auto">
+        <table className="min-w-[32rem] w-full text-sm">
+          {table.caption ? (
+            <caption className="text-left px-4 py-3 text-xs font-semibold text-foreground-muted">
+              {table.caption}
+            </caption>
+          ) : null}
+          {hasHeader ? (
+            <thead>
+              <tr className="border-b border-border bg-surface">
+                {normalizedColumns.map((c, i) => (
+                  <th key={i} scope="col" className="px-4 py-3 text-left font-semibold text-foreground">
+                    {c || "—"}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+          ) : null}
+          <tbody>
+            {normalizedRows.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={width}
+                  className="px-4 py-4 text-foreground-muted"
+                >
+                  No rows yet.
+                </td>
+              </tr>
+            ) : (
+              normalizedRows.map((r, ri) => (
+                <tr key={ri} className="border-b border-border last:border-b-0">
+                  {r.slice(0, width).map((cell, ci) => (
+                    <td key={ci} className="px-4 py-3 text-foreground whitespace-pre-wrap break-words">
+                      {cell || "—"}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function TableEditor({
+  block,
+  onChange,
+}: {
+  block: BlogBlock;
+  onChange: (next: BlogBlock) => void;
+}) {
+  const table = block.table ?? { caption: "", columns: ["", ""], rows: [["", ""]] };
+  const columns = table.columns.length > 0 ? table.columns : ["", ""];
+  const rows = table.rows.length > 0 ? table.rows : [["", ""]];
+  const width = Math.max(
+    columns.length,
+    rows.reduce((m, r) => Math.max(m, r.length), 0),
+    1
+  );
+  const safeColumns = [...columns, ...Array.from({ length: Math.max(0, width - columns.length) }, () => "")];
+  const safeRows = rows.map((r) => [...r, ...Array.from({ length: Math.max(0, width - r.length) }, () => "")]);
+
+  const setTable = (next: NonNullable<BlogBlock["table"]>) =>
+    onChange({
+      ...block,
+      kind: "table",
+      table: next,
+      heading: "",
+      paragraph: "",
+      imageUrl: "",
+    });
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="block text-sm font-semibold mb-1">Table caption (optional)</label>
+        <input
+          type="text"
+          value={table.caption || ""}
+          onChange={(e) => setTable({ ...table, caption: e.target.value })}
+          className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+          placeholder="e.g. Course fee comparison"
+        />
+      </div>
+
+      <div className="grid gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm font-semibold text-foreground">Columns</p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                const nextCols = [...safeColumns, ""];
+                const nextRows = safeRows.map((r) => [...r, ""]);
+                setTable({ ...table, columns: nextCols, rows: nextRows });
+              }}
+              className="px-3 h-9 rounded-lg border border-border bg-surface text-sm font-medium hover:bg-page-soft transition-colors motion-reduce:transition-none"
+            >
+              + Column
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (safeColumns.length <= 1) return;
+                const nextCols = safeColumns.slice(0, -1);
+                const nextRows = safeRows.map((r) => r.slice(0, -1));
+                setTable({ ...table, columns: nextCols, rows: nextRows });
+              }}
+              disabled={safeColumns.length <= 1}
+              className="px-3 h-9 rounded-lg border border-border bg-surface text-sm font-medium hover:bg-page-soft transition-colors disabled:opacity-60 motion-reduce:transition-none"
+            >
+              − Column
+            </button>
+          </div>
+        </div>
+
+        <div className="grid gap-2">
+          {safeColumns.map((c, i) => (
+            <div key={i} className="grid grid-cols-[6rem_1fr] items-center gap-3">
+              <span className="text-xs font-semibold text-foreground-muted">Col {i + 1}</span>
+              <input
+                type="text"
+                value={c}
+                onChange={(e) => {
+                  const next = [...safeColumns];
+                  next[i] = e.target.value;
+                  setTable({ ...table, columns: next, rows: safeRows });
+                }}
+                className="w-full px-4 h-10 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                placeholder={`Header ${i + 1}`}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm font-semibold text-foreground">Rows</p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setTable({ ...table, columns: safeColumns, rows: [...safeRows, Array.from({ length: safeColumns.length }, () => "")] })}
+              className="px-3 h-9 rounded-lg border border-border bg-surface text-sm font-medium hover:bg-page-soft transition-colors motion-reduce:transition-none"
+            >
+              + Row
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (safeRows.length <= 1) return;
+                setTable({ ...table, columns: safeColumns, rows: safeRows.slice(0, -1) });
+              }}
+              disabled={safeRows.length <= 1}
+              className="px-3 h-9 rounded-lg border border-border bg-surface text-sm font-medium hover:bg-page-soft transition-colors disabled:opacity-60 motion-reduce:transition-none"
+            >
+              − Row
+            </button>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-border bg-surface overflow-hidden">
+          <div className="w-full overflow-x-auto">
+            <table className="min-w-[32rem] w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-page-soft">
+                  {safeColumns.map((c, i) => (
+                    <th key={i} className="px-3 py-2 text-left text-xs font-semibold text-foreground-muted">
+                      {c || `Col ${i + 1}`}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {safeRows.map((r, ri) => (
+                  <tr key={ri} className="border-b border-border last:border-b-0">
+                    {r.slice(0, safeColumns.length).map((cell, ci) => (
+                      <td key={ci} className="px-3 py-2">
+                        <input
+                          type="text"
+                          value={cell}
+                          onChange={(e) => {
+                            const nextRows = safeRows.map((row) => [...row]);
+                            nextRows[ri][ci] = e.target.value;
+                            setTable({ ...table, columns: safeColumns, rows: nextRows });
+                          }}
+                          className="w-full px-3 h-10 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                          placeholder={`R${ri + 1}C${ci + 1}`}
+                        />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function BlockTextPreview({
@@ -213,9 +476,11 @@ export default function BlogsPage() {
     if (Array.isArray(b.blocks) && b.blocks.length > 0) {
       return b.blocks.map((blk) => ({
         kind:
-          blk?.kind === "heading" || blk?.kind === "paragraph" || blk?.kind === "image"
+          blk?.kind === "heading" || blk?.kind === "paragraph" || blk?.kind === "image" || blk?.kind === "table"
             ? blk.kind
-            : blk?.imageUrl && !blk?.heading && !blk?.paragraph
+            : blk?.table && !blk?.imageUrl && !blk?.heading && !blk?.paragraph
+              ? "table"
+              : blk?.imageUrl && !blk?.heading && !blk?.paragraph
               ? "image"
               : blk?.heading && !blk?.paragraph && !blk?.imageUrl
                 ? "heading"
@@ -223,6 +488,7 @@ export default function BlogsPage() {
         heading: typeof blk?.heading === "string" ? blk.heading : "",
         paragraph: typeof blk?.paragraph === "string" ? blk.paragraph : "",
         imageUrl: blk?.imageUrl || "",
+        table: coerceTable(blk?.table),
         align: blk?.align === "left" || blk?.align === "center" || blk?.align === "right" ? blk.align : "left",
         bold: Boolean(blk?.bold),
         italic: Boolean(blk?.italic),
@@ -238,6 +504,7 @@ export default function BlogsPage() {
           heading: "",
           paragraph: b.content,
           imageUrl: "",
+          table: undefined,
           align: "left",
           bold: false,
           italic: false,
@@ -253,6 +520,7 @@ export default function BlogsPage() {
         heading: "",
         paragraph: "",
         imageUrl: "",
+        table: undefined,
         align: "left",
         bold: false,
         italic: false,
@@ -270,6 +538,20 @@ export default function BlogsPage() {
           ...blk,
           heading: sanitizeBlogHtml(blk.heading),
           paragraph: sanitizeBlogHtml(blk.paragraph),
+          bold: false,
+          italic: false,
+          underline: false,
+          color: "",
+          linkUrl: "",
+        };
+      }
+      if (blk.kind === "table") {
+        return {
+          ...blk,
+          heading: "",
+          paragraph: "",
+          imageUrl: "",
+          table: coerceTable(blk.table),
           bold: false,
           italic: false,
           underline: false,
@@ -443,86 +725,18 @@ export default function BlogsPage() {
             <div className="space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h4 className="text-sm font-semibold text-foreground">Content Blocks</h4>
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setBlocks([
-                        ...blocks,
-                        {
-                          kind: "heading",
-                          heading: "",
-                          paragraph: "",
-                          imageUrl: "",
-                          align: "left",
-                          bold: false,
-                          italic: false,
-                          underline: false,
-                          color: "",
-                          linkUrl: "",
-                        },
-                      ])
-                    }
-                    className="flex items-center gap-2 px-3 h-9 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
-                  >
-                    <FiPlus className="w-4 h-4" />
-                    Heading
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setBlocks([
-                        ...blocks,
-                        {
-                          kind: "paragraph",
-                          heading: "",
-                          paragraph: "",
-                          imageUrl: "",
-                          align: "left",
-                          bold: false,
-                          italic: false,
-                          underline: false,
-                          color: "",
-                          linkUrl: "",
-                        },
-                      ])
-                    }
-                    className="flex items-center gap-2 px-3 h-9 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
-                  >
-                    <FiPlus className="w-4 h-4" />
-                    Paragraph
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setBlocks([
-                        ...blocks,
-                        {
-                          kind: "image",
-                          heading: "",
-                          paragraph: "",
-                          imageUrl: "",
-                          align: "left",
-                          bold: false,
-                          italic: false,
-                          underline: false,
-                          color: "",
-                          linkUrl: "",
-                        },
-                      ])
-                    }
-                    className="flex items-center gap-2 px-3 h-9 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
-                  >
-                    <FiPlus className="w-4 h-4" />
-                    Image
-                  </button>
-                </div>
               </div>
 
               <div className="space-y-4">
                 {blocks.map((blk, idx) => {
                   const kindLabel =
-                    blk.kind === "heading" ? "Heading" : blk.kind === "image" ? "Image" : "Paragraph";
+                    blk.kind === "heading"
+                      ? "Heading"
+                      : blk.kind === "image"
+                        ? "Image"
+                        : blk.kind === "table"
+                          ? "Table"
+                          : "Paragraph";
                   return (
                     <article key={idx} className="rounded-xl border border-border bg-page-soft p-4 space-y-4">
                       <header className="flex items-center justify-between gap-3">
@@ -684,10 +898,127 @@ export default function BlogsPage() {
                             </p>
                           </div>
                         ) : null}
+
+                        {blk.kind === "table" ? (
+                          <div>
+                            <label className="block text-sm font-semibold mb-2">Table</label>
+                            <TableEditor
+                              block={blk}
+                              onChange={(nextBlk) => {
+                                const next = [...blocks];
+                                next[idx] = nextBlk;
+                                setBlocks(next);
+                              }}
+                            />
+                          </div>
+                        ) : null}
                       </div>
                     </article>
                   );
                 })}
+              </div>
+
+              <div className="flex flex-wrap items-center justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setBlocks([
+                      ...blocks,
+                      {
+                        kind: "heading",
+                        heading: "",
+                        paragraph: "",
+                        imageUrl: "",
+                        table: undefined,
+                        align: "left",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        color: "",
+                        linkUrl: "",
+                      },
+                    ])
+                  }
+                  className="flex items-center gap-2 px-3 h-9 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
+                >
+                  <FiPlus className="w-4 h-4" />
+                  Heading
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setBlocks([
+                      ...blocks,
+                      {
+                        kind: "paragraph",
+                        heading: "",
+                        paragraph: "",
+                        imageUrl: "",
+                        table: undefined,
+                        align: "left",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        color: "",
+                        linkUrl: "",
+                      },
+                    ])
+                  }
+                  className="flex items-center gap-2 px-3 h-9 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
+                >
+                  <FiPlus className="w-4 h-4" />
+                  Paragraph
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setBlocks([
+                      ...blocks,
+                      {
+                        kind: "image",
+                        heading: "",
+                        paragraph: "",
+                        imageUrl: "",
+                        table: undefined,
+                        align: "left",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        color: "",
+                        linkUrl: "",
+                      },
+                    ])
+                  }
+                  className="flex items-center gap-2 px-3 h-9 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
+                >
+                  <FiPlus className="w-4 h-4" />
+                  Image
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setBlocks([
+                      ...blocks,
+                      {
+                        kind: "table",
+                        heading: "",
+                        paragraph: "",
+                        imageUrl: "",
+                        table: { caption: "", columns: ["", ""], rows: [["", ""]] },
+                        align: "left",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        color: "",
+                        linkUrl: "",
+                      },
+                    ])
+                  }
+                  className="flex items-center gap-2 px-3 h-9 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
+                >
+                  <FiPlus className="w-4 h-4" />
+                  Table
+                </button>
               </div>
 
               <div className="flex items-center justify-between gap-4 pt-1">
@@ -782,6 +1113,7 @@ export default function BlogsPage() {
                         />
                       </div>
                     ) : null}
+                    {b.kind === "table" && b.table ? <TablePreview table={b.table} /> : null}
                   </section>
                 ))
               )}

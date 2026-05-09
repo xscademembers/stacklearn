@@ -11,10 +11,15 @@ import { getAdminSession } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 type BlogBlock = {
-  kind?: "heading" | "paragraph" | "image";
+  kind?: "heading" | "paragraph" | "image" | "table";
   heading?: string;
   paragraph?: string;
   imageUrl?: string;
+  table?: {
+    caption?: string;
+    columns?: string[];
+    rows?: string[][];
+  };
   align?: "left" | "center" | "right";
   bold?: boolean;
   italic?: boolean;
@@ -57,14 +62,47 @@ function sanitizeLinkUrl(v: unknown): string {
   return "";
 }
 
+function sanitizeTable(v: unknown): BlogBlock["table"] | undefined {
+  if (!v || typeof v !== "object") return undefined;
+  const t = v as Record<string, unknown>;
+  const caption = clampStr(t.caption, 160);
+  const columnsRaw = Array.isArray(t.columns) ? (t.columns as unknown[]) : [];
+  const rowsRaw = Array.isArray(t.rows) ? (t.rows as unknown[]) : [];
+
+  const columns = columnsRaw.map((c) => clampStr(c, 80));
+  const rows = rowsRaw
+    .map((r) => (Array.isArray(r) ? (r as unknown[]) : []))
+    .map((r) => r.map((cell) => clampStr(cell, 400)));
+
+  const safeColumns = columns.filter((c) => c.length > 0);
+  const hasAnyCell = rows.some((r) => r.some((cell) => cell.length > 0));
+  if (safeColumns.length === 0 && !hasAnyCell) return undefined;
+
+  const width = Math.max(
+    safeColumns.length,
+    rows.reduce((m, r) => Math.max(m, r.length), 0)
+  );
+
+  const normalizedColumns =
+    safeColumns.length > 0
+      ? [...safeColumns, ...Array.from({ length: Math.max(0, width - safeColumns.length) }, () => "")]
+      : Array.from({ length: width }, () => "");
+  const normalizedRows = rows.map((r) => [...r, ...Array.from({ length: Math.max(0, width - r.length) }, () => "")]);
+
+  return { caption, columns: normalizedColumns, rows: normalizedRows };
+}
+
 function sanitizeBlock(b: unknown): BlogBlock {
   const blk = (b ?? {}) as Record<string, unknown>;
   const kind =
-    blk.kind === "heading" || blk.kind === "paragraph" || blk.kind === "image" ? blk.kind : undefined;
+    blk.kind === "heading" || blk.kind === "paragraph" || blk.kind === "image" || blk.kind === "table"
+      ? blk.kind
+      : undefined;
 
   const heading = clampStr(blk.heading, 300);
   const paragraph = clampStr(blk.paragraph, 20000);
   const imageUrl = clampStr(blk.imageUrl, 2048);
+  const table = sanitizeTable(blk.table);
   const align = sanitizeAlign(blk.align);
   const bold = typeof blk.bold === "boolean" ? blk.bold : undefined;
   const italic = typeof blk.italic === "boolean" ? blk.italic : undefined;
@@ -77,6 +115,7 @@ function sanitizeBlock(b: unknown): BlogBlock {
     heading,
     paragraph,
     imageUrl,
+    table,
     align,
     bold,
     italic,
@@ -131,7 +170,9 @@ export async function POST(request: NextRequest) {
   }
 
   const cleanBlocks: BlogBlock[] = Array.isArray(blocks)
-    ? (blocks as unknown[]).map(sanitizeBlock).filter((b) => (b.heading || b.paragraph || b.imageUrl))
+    ? (blocks as unknown[])
+        .map(sanitizeBlock)
+        .filter((b) => (b.heading || b.paragraph || b.imageUrl || b.table))
     : [];
 
   const isPublished = Boolean(published);
@@ -179,7 +220,7 @@ export async function PUT(request: NextRequest) {
   if (Array.isArray(updates.blocks)) {
     updates.blocks = (updates.blocks as unknown[])
       .map(sanitizeBlock)
-      .filter((b) => (b.heading || b.paragraph || b.imageUrl));
+      .filter((b) => (b.heading || b.paragraph || b.imageUrl || b.table));
   }
 
   const now = new Date();

@@ -9,6 +9,7 @@ import BookConsultButton from "../BookConsultButton";
 import { withSubmissionContext } from "@/lib/submissionPayload";
 import type { CmsPageSection } from "@/lib/cms-page-templates";
 import { getCmsField } from "@/lib/cms-merge-sections";
+import IndiaPhoneInput from "@/components/forms/IndiaPhoneInput";
 
 const DEFAULT_HERO_IMAGE =
   "https://images.pexels.com/photos/3184396/pexels-photo-3184396.jpeg?auto=compress&cs=tinysrgb&w=1600";
@@ -207,15 +208,13 @@ export default function HeroSection({ cmsSections }: HeroSectionProps) {
                   <label className="block text-sm font-semibold text-slate-700 mb-1">
                     Mobile Number *
                   </label>
-                  <input
-                    type="tel"
+                  <IndiaPhoneInput
                     required
                     value={formData.mobile}
-                    onChange={(e) =>
-                      setFormData({ ...formData, mobile: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-brand focus:border-brand transition-all bg-page-soft hover:bg-surface"
-                    placeholder="+ 91 78993 38507"
+                    onChange={(next) => setFormData({ ...formData, mobile: next })}
+                    className="w-full border-2 border-border rounded-xl bg-page-soft hover:bg-surface focus-within:ring-2 focus-within:ring-brand focus-within:border-brand transition-all"
+                    inputClassName="w-full px-4 py-3 bg-transparent outline-none"
+                    placeholder="10-digit mobile number"
                   />
                 </div>
                 <div>

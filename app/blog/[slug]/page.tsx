@@ -7,9 +7,15 @@ import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/sanitize-blog-html";
 export const revalidate = 60;
 
 type BlogBlock = {
+  kind?: "heading" | "paragraph" | "image" | "table";
   heading?: string;
   paragraph?: string;
   imageUrl?: string;
+  table?: {
+    caption?: string;
+    columns?: string[];
+    rows?: string[][];
+  };
   align?: "left" | "center" | "right";
   bold?: boolean;
   italic?: boolean;
@@ -137,6 +143,98 @@ function coerceRichText(v: unknown): string {
   if (typeof v === "string") return v;
   if (v == null) return "";
   return String(v);
+}
+
+function clampText(v: unknown, maxLen: number): string {
+  if (typeof v !== "string") return "";
+  const s = v.trim();
+  if (!s) return "";
+  return s.length > maxLen ? s.slice(0, maxLen) : s;
+}
+
+function coerceTable(v: unknown): NonNullable<BlogBlock["table"]> | null {
+  if (!v || typeof v !== "object") return null;
+  const t = v as Record<string, unknown>;
+  const caption = clampText(t.caption, 160);
+
+  const columnsRaw = Array.isArray(t.columns) ? (t.columns as unknown[]) : [];
+  const rowsRaw = Array.isArray(t.rows) ? (t.rows as unknown[]) : [];
+
+  const columns = columnsRaw.map((c) => clampText(c, 80));
+  const rows = rowsRaw
+    .map((r) => (Array.isArray(r) ? (r as unknown[]) : []))
+    .map((r) => r.map((cell) => clampText(cell, 400)));
+
+  const safeColumns = columns.filter((c) => c.length > 0);
+  const hasAnyCell = rows.some((r) => r.some((cell) => cell.length > 0));
+  if (safeColumns.length === 0 && !hasAnyCell) return null;
+
+  const width = Math.max(
+    safeColumns.length,
+    rows.reduce((m, r) => Math.max(m, r.length), 0)
+  );
+  if (width <= 0) return null;
+
+  const normalizedColumns =
+    safeColumns.length > 0
+      ? [...safeColumns, ...Array.from({ length: Math.max(0, width - safeColumns.length) }, () => "")]
+      : Array.from({ length: width }, () => "");
+  const normalizedRows = rows.map((r) => [...r, ...Array.from({ length: Math.max(0, width - r.length) }, () => "")]);
+
+  return { caption, columns: normalizedColumns, rows: normalizedRows };
+}
+
+function RenderTable({ block }: { block: BlogBlock }) {
+  const t = coerceTable(block.table);
+  if (!t) return null;
+
+  const columns = t.columns ?? [];
+  const rows = t.rows ?? [];
+  const hasHeader = columns.some((c) => c.trim().length > 0);
+  const width = Math.max(
+    columns.length,
+    rows.reduce((m, r) => Math.max(m, r.length), 0)
+  );
+  if (width === 0) return null;
+
+  const normalizedColumns = [...columns, ...Array.from({ length: Math.max(0, width - columns.length) }, () => "")];
+  const normalizedRows = rows.map((r) => [...r, ...Array.from({ length: Math.max(0, width - r.length) }, () => "")]);
+
+  return (
+    <div className="rounded-2xl border border-border bg-surface overflow-hidden">
+      <div className="w-full overflow-x-auto">
+        <table className="min-w-[36rem] w-full text-sm">
+          {t.caption ? (
+            <caption className="text-left px-4 py-3 text-xs font-semibold text-foreground-muted">
+              {t.caption}
+            </caption>
+          ) : null}
+          {hasHeader ? (
+            <thead>
+              <tr className="border-b border-border bg-page-soft">
+                {normalizedColumns.map((c, i) => (
+                  <th key={i} scope="col" className="px-4 py-3 text-left font-semibold text-foreground whitespace-nowrap">
+                    {c || "—"}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+          ) : null}
+          <tbody>
+            {normalizedRows.map((r, ri) => (
+              <tr key={ri} className="border-b border-border last:border-b-0">
+                {r.slice(0, width).map((cell, ci) => (
+                  <td key={ci} className="px-4 py-3 text-foreground whitespace-pre-wrap break-words align-top">
+                    {cell || "—"}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
 export default async function BlogDetailPage({
@@ -276,6 +374,7 @@ export default async function BlogDetailPage({
                         />
                       </div>
                     ) : null}
+                    {b.kind === "table" || b.table ? <RenderTable block={b} /> : null}
                   </section>
                 ))}
               </div>
