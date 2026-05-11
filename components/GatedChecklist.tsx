@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { FiLock, FiCheckCircle } from "react-icons/fi";
+import { FiCheckCircle } from "react-icons/fi";
 import EnquiryPopup from "./EnquiryPopup";
 
 interface GatedChecklistProps {
@@ -68,31 +68,16 @@ export default function GatedChecklist({ slug, items }: GatedChecklistProps) {
     );
   }
 
-  /* ── Locked: show gate ── */
+  /* ── Locked: single CTA (opens enquiry to unlock) ── */
   return (
     <>
       <button
         type="button"
         onClick={() => setPopupOpen(true)}
-        className="group w-full rounded-2xl border-2 border-dashed border-brand/30 bg-gradient-to-br from-brand/5 via-brand/10 to-purple-100/40 p-8 md:p-10 text-center transition-all duration-300 hover:border-brand/60 hover:shadow-lg hover:shadow-brand/10 hover:scale-[1.01] cursor-pointer"
+        className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-semibold text-white shadow-sm hover:bg-brand-strong hover:shadow-md motion-reduce:transition-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        aria-label="Get free checklist — opens a short form to unlock the full list"
       >
-        <div className="flex flex-col items-center gap-4">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand/10 text-brand group-hover:bg-brand/20 transition-colors">
-            <FiLock className="w-7 h-7" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-slate-900">
-              🔓 Unlock Final Checklist
-            </h3>
-            <p className="mt-2 text-sm text-slate-600 max-w-md mx-auto">
-              Get the complete checklist for free — just share your details so
-              our counsellors can assist you better.
-            </p>
-          </div>
-          <span className="inline-flex items-center gap-2 px-6 py-3 bg-brand text-white rounded-full font-semibold text-sm group-hover:shadow-lg group-hover:shadow-brand/40 transition-all">
-            Get Free Checklist
-          </span>
-        </div>
+        Get Free Checklist
       </button>
 
       <EnquiryPopup
