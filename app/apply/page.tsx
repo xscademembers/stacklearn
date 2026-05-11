@@ -6,6 +6,12 @@ import { usePathname } from "next/navigation";
 import { FiArrowRight, FiArrowLeft, FiCheck } from "react-icons/fi";
 import { withSubmissionContext } from "@/lib/submissionPayload";
 import IndiaPhoneInput from "@/components/forms/IndiaPhoneInput";
+import DestinationCountryFields from "@/components/forms/DestinationCountryFields";
+import {
+  destinationFieldPayload,
+  formatDestinationDisplay,
+  validateDestinationOtherRequired,
+} from "@/lib/destination-form-options";
 
 const steps = [
   "Personal Details",
@@ -36,7 +42,8 @@ export default function ApplyPage() {
     englishTest: "",
     score: "",
     // Step 3
-    preferredCountry: "",
+    preferredCountrySelect: "",
+    otherPreferredCountry: "",
     course: "",
     level: "",
     intake: "",
@@ -62,7 +69,12 @@ export default function ApplyPage() {
       if (!formData.institution.trim()) newErrors.institution = "Institution name is required";
       if (!formData.year) newErrors.year = "Passing year is required";
     } else if (step === 3) {
-      if (!formData.preferredCountry) newErrors.preferredCountry = "Please select a country";
+      if (!formData.preferredCountrySelect) newErrors.preferredCountry = "Please select a country";
+      const otherErr = validateDestinationOtherRequired(
+        formData.preferredCountrySelect,
+        formData.otherPreferredCountry
+      );
+      if (otherErr) newErrors.otherPreferredCountry = otherErr;
       if (!formData.course.trim()) newErrors.course = "Course preference is required";
       if (!formData.level) newErrors.level = "Please select study level";
     }
@@ -90,13 +102,26 @@ export default function ApplyPage() {
     setSubmitError("");
     
     try {
-      const { documents: _documents, ...rest } = formData;
+      const {
+        documents: _documents,
+        preferredCountrySelect,
+        otherPreferredCountry,
+        ...rest
+      } = formData;
+      const preferredCountry = destinationFieldPayload(
+        preferredCountrySelect,
+        otherPreferredCountry
+      );
       const response = await fetch("/api/applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
           withSubmissionContext(
-            { ...rest, documentCount: formData.documents.length },
+            {
+              ...rest,
+              preferredCountry,
+              documentCount: formData.documents.length,
+            },
             pathname,
             "apply_page"
           )
@@ -254,11 +279,9 @@ export default function ApplyPage() {
                       setFormData({ ...formData, mobile: next });
                       setErrors({ ...errors, mobile: "" });
                     }}
-                    className={`w-full border rounded-lg focus-within:ring-2 focus-within:ring-brand ${
-                      errors.mobile ? "border-accent" : "border-gray-300"
-                    }`}
-                    inputClassName="w-full px-4 py-3 outline-none"
-                    placeholder="10-digit mobile number"
+                    invalid={!!errors.mobile}
+                    className="w-full"
+                    fieldClassName="[&>span]:py-3 [&>input]:py-3 [&>input]:px-4"
                   />
                   {errors.mobile && <p className="text-accent text-sm mt-1">{errors.mobile}</p>}
                 </div>
@@ -383,21 +406,35 @@ export default function ApplyPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Preferred Country *
                   </label>
-                  <select
-                    required
-                    value={formData.preferredCountry}
-                    onChange={(e) => { setFormData({ ...formData, preferredCountry: e.target.value }); setErrors({ ...errors, preferredCountry: "" }); }}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${errors.preferredCountry ? 'border-accent' : 'border-gray-300'}`}
-                  >
-                    <option value="">Select</option>
-                    <option value="uk">United Kingdom</option>
-                    <option value="usa">United States</option>
-                    <option value="canada">Canada</option>
-                    <option value="australia">Australia</option>
-                    <option value="germany">Germany</option>
-                    <option value="ireland">Ireland</option>
-                  </select>
-                  {errors.preferredCountry && <p className="text-accent text-sm mt-1">{errors.preferredCountry}</p>}
+                  <DestinationCountryFields
+                    selectValue={formData.preferredCountrySelect}
+                    otherDestinationName={formData.otherPreferredCountry}
+                    onSelectChange={(preferredCountrySelect) => {
+                      setFormData((prev) => ({ ...prev, preferredCountrySelect }));
+                      setErrors((e) => ({
+                        ...e,
+                        preferredCountry: "",
+                        otherPreferredCountry: "",
+                      }));
+                    }}
+                    onOtherChange={(otherPreferredCountry) => {
+                      setFormData((prev) => ({ ...prev, otherPreferredCountry }));
+                      setErrors((e) => ({ ...e, otherPreferredCountry: "" }));
+                    }}
+                    selectClassName={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${
+                      errors.preferredCountry ? "border-accent" : "border-gray-300"
+                    }`}
+                    otherInputClassName={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand ${
+                      errors.otherPreferredCountry ? "border-accent" : "border-gray-300"
+                    }`}
+                    emptyOptionLabel="Select"
+                    otherFieldLabel="Specify country"
+                    otherInputId="apply-preferred-other"
+                    otherError={errors.otherPreferredCountry}
+                  />
+                  {errors.preferredCountry && (
+                    <p className="text-accent text-sm mt-1">{errors.preferredCountry}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -522,7 +559,13 @@ export default function ApplyPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Preferences</h3>
-                  <p className="text-gray-600">Country: {formData.preferredCountry}</p>
+                  <p className="text-gray-600">
+                    Country:{" "}
+                    {formatDestinationDisplay(
+                      formData.preferredCountrySelect,
+                      formData.otherPreferredCountry
+                    )}
+                  </p>
                   <p className="text-gray-600">Course: {formData.course}</p>
                   <p className="text-gray-600">Level: {formData.level}</p>
                 </div>

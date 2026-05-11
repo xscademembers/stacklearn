@@ -1,23 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { successStoryMetaLine, type PublicSuccessStory } from "@/lib/success-story-public";
 
-export type SuccessStoriesCms = {
-  titleLead: string;
-  titleGradient: string;
-  subheading: string;
-};
-
 type Props = {
-  content: SuccessStoriesCms;
   stories: PublicSuccessStory[];
+  /** Stable id fragment for `aria-labelledby`, e.g. `service-profile-evaluation` */
+  sectionId: string;
+  /** Line below the “Success Stories” heading */
+  subtitle: string;
 };
 
-export default function SuccessStories({ content, stories }: Props) {
+export default function CmsSuccessStoriesCarousel({ stories, sectionId, subtitle }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev">("next");
+
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [stories]);
+
+  useEffect(() => {
+    if (!stories.length) return;
+    setCurrentIndex((i) => Math.min(i, Math.max(0, stories.length - 1)));
+  }, [stories]);
 
   if (stories.length === 0) return null;
 
@@ -32,17 +38,19 @@ export default function SuccessStories({ content, stories }: Props) {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-page-soft" aria-labelledby="home-success-stories-heading">
+    <section
+      className="border-t border-border bg-page-soft py-16 md:py-24"
+      aria-labelledby={`success-stories-${sectionId}`}
+    >
       <div className="container mx-auto px-4 md:px-8">
-        <header className="text-center mb-10 md:mb-16 max-w-3xl mx-auto">
-          <h2 id="home-success-stories-heading" className="text-3xl md:text-5xl font-extrabold text-foreground mb-4 text-balance">
-            {content.titleLead}{" "}
-            <span className="gradient-text">{content.titleGradient}</span>
+        <header className="mx-auto mb-10 max-w-3xl text-center md:mb-14">
+          <h2 id={`success-stories-${sectionId}`} className="mb-4 text-3xl font-extrabold text-foreground md:text-4xl">
+            Success <span className="gradient-text">Stories</span>
           </h2>
-          <p className="text-base md:text-xl text-foreground-muted font-medium">{content.subheading}</p>
+          <p className="text-base text-foreground-muted md:text-lg">{subtitle}</p>
         </header>
 
-        <div className="relative max-w-6xl mx-auto px-10 md:px-14">
+        <div className="relative mx-auto max-w-6xl px-10 md:px-14">
           <div className="overflow-hidden rounded-2xl">
             <div
               className={`flex will-change-transform transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none motion-reduce:duration-0 ${
@@ -52,8 +60,8 @@ export default function SuccessStories({ content, stories }: Props) {
             >
               {stories.map((s) => (
                 <div key={s._id} className="min-w-full shrink-0 px-2 md:px-4">
-                  <article className="mx-auto max-w-2xl rounded-2xl border border-border bg-surface p-8 md:p-10 text-center shadow-sm">
-                    <div className="relative inline-block mb-6">
+                  <article className="mx-auto max-w-2xl rounded-2xl border border-border bg-surface p-8 text-center shadow-sm md:p-10">
+                    <div className="relative mb-6 inline-block">
                       <div className="relative mx-auto h-28 w-28">
                         {s.imageUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
@@ -69,15 +77,15 @@ export default function SuccessStories({ content, stories }: Props) {
                         )}
                       </div>
                       <span
-                        className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-accent text-white text-xs font-bold shadow"
+                        className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-bold text-white shadow"
                         aria-hidden
                       >
                         ✓
                       </span>
                     </div>
-                    <h3 className="text-2xl font-extrabold text-foreground mb-2">{s.name}</h3>
-                    <p className="text-brand font-bold mb-4 text-lg">{successStoryMetaLine(s)}</p>
-                    <blockquote className="text-foreground-muted italic text-lg leading-relaxed m-0 whitespace-pre-wrap">
+                    <h3 className="mb-2 text-2xl font-extrabold text-foreground">{s.name}</h3>
+                    <p className="mb-4 text-lg font-bold text-brand">{successStoryMetaLine(s)}</p>
+                    <blockquote className="m-0 whitespace-pre-wrap text-lg italic leading-relaxed text-foreground-muted">
                       &ldquo;{s.story}&rdquo;
                     </blockquote>
                   </article>
@@ -89,18 +97,18 @@ export default function SuccessStories({ content, stories }: Props) {
           <button
             type="button"
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-surface p-3 shadow-md hover:bg-page-soft transition-colors motion-reduce:transition-none"
+            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-surface p-3 shadow-md transition-colors motion-reduce:transition-none hover:bg-page-soft"
             aria-label="Previous story"
           >
-            <FiChevronLeft className="w-6 h-6 text-foreground" aria-hidden />
+            <FiChevronLeft className="h-6 w-6 text-foreground" aria-hidden />
           </button>
           <button
             type="button"
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-surface p-3 shadow-md hover:bg-page-soft transition-colors motion-reduce:transition-none"
+            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-surface p-3 shadow-md transition-colors motion-reduce:transition-none hover:bg-page-soft"
             aria-label="Next story"
           >
-            <FiChevronRight className="w-6 h-6 text-foreground" aria-hidden />
+            <FiChevronRight className="h-6 w-6 text-foreground" aria-hidden />
           </button>
 
           <div className="mt-8 flex justify-center gap-2" aria-label="Story slides">

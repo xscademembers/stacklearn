@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ServiceSuccessStoriesSection from "@/components/services/ServiceSuccessStoriesSection";
 import { FiArrowRight, FiCheckCircle } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
 
@@ -159,19 +160,10 @@ export default function VisaAssistancePage() {
         </div>
       </section>
 
-      {/* Success Stories */}
-      <section className="py-16 md:py-20 bg-gray-50">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-              Success <span className="gradient-text">Stories</span>
-            </h2>
-            <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-              We have successfully guided students through visa approvals across multiple countries. From straightforward cases to complex profiles involving education gaps or financial clarifications &mdash; our structured approach improves approval chances. Your visa approval is our priority.
-            </p>
-          </div>
-        </div>
-      </section>
+      <ServiceSuccessStoriesSection
+        serviceSlug="visa-assistance"
+        serviceLabel="Student Visa Assistance"
+      />
 
       {/* FAQs */}
       <section className="py-16 md:py-20 bg-white">

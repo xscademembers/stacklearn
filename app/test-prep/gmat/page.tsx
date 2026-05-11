@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import BookConsultButton from "@/components/BookConsultButton";
+import TestPrepSuccessStoriesSection from "@/components/test-prep/TestPrepSuccessStoriesSection";
 import { FiArrowRight } from "react-icons/fi";
 
 export const metadata: Metadata = {
@@ -283,6 +284,8 @@ export default function GMATPage() {
           </div>
         </div>
       </section>
+
+      <TestPrepSuccessStoriesSection testPrepSlug="gmat" />
 
       {/* CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">

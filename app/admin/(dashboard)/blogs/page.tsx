@@ -16,7 +16,7 @@ import RichTextField from "@/components/admin/RichTextField";
 import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/sanitize-blog-html";
 
 type BlogBlock = {
-  kind?: "heading" | "paragraph" | "image" | "table";
+  kind?: "heading" | "paragraph" | "image" | "table" | "checklist";
   heading: string;
   paragraph: string;
   imageUrl: string;
@@ -25,6 +25,7 @@ type BlogBlock = {
     columns: string[];
     rows: string[][];
   };
+  checklist?: string;
   align?: "left" | "center" | "right";
   bold?: boolean;
   italic?: boolean;
@@ -476,9 +477,11 @@ export default function BlogsPage() {
     if (Array.isArray(b.blocks) && b.blocks.length > 0) {
       return b.blocks.map((blk) => ({
         kind:
-          blk?.kind === "heading" || blk?.kind === "paragraph" || blk?.kind === "image" || blk?.kind === "table"
+          blk?.kind === "heading" || blk?.kind === "paragraph" || blk?.kind === "image" || blk?.kind === "table" || blk?.kind === "checklist"
             ? blk.kind
-            : blk?.table && !blk?.imageUrl && !blk?.heading && !blk?.paragraph
+            : blk?.checklist && !blk?.table && !blk?.imageUrl && !blk?.heading && !blk?.paragraph
+              ? "checklist"
+              : blk?.table && !blk?.imageUrl && !blk?.heading && !blk?.paragraph
               ? "table"
               : blk?.imageUrl && !blk?.heading && !blk?.paragraph
               ? "image"
@@ -489,6 +492,7 @@ export default function BlogsPage() {
         paragraph: typeof blk?.paragraph === "string" ? blk.paragraph : "",
         imageUrl: blk?.imageUrl || "",
         table: coerceTable(blk?.table),
+        checklist: typeof blk?.checklist === "string" ? blk.checklist : "",
         align: blk?.align === "left" || blk?.align === "center" || blk?.align === "right" ? blk.align : "left",
         bold: Boolean(blk?.bold),
         italic: Boolean(blk?.italic),
@@ -552,6 +556,20 @@ export default function BlogsPage() {
           paragraph: "",
           imageUrl: "",
           table: coerceTable(blk.table),
+          bold: false,
+          italic: false,
+          underline: false,
+          color: "",
+          linkUrl: "",
+        };
+      }
+      if (blk.kind === "checklist") {
+        return {
+          ...blk,
+          heading: "",
+          paragraph: "",
+          imageUrl: "",
+          table: undefined,
           bold: false,
           italic: false,
           underline: false,
@@ -736,7 +754,9 @@ export default function BlogsPage() {
                         ? "Image"
                         : blk.kind === "table"
                           ? "Table"
-                          : "Paragraph";
+                          : blk.kind === "checklist"
+                            ? "Checklist"
+                            : "Paragraph";
                   return (
                     <article key={idx} className="rounded-xl border border-border bg-page-soft p-4 space-y-4">
                       <header className="flex items-center justify-between gap-3">
@@ -912,6 +932,33 @@ export default function BlogsPage() {
                             />
                           </div>
                         ) : null}
+
+                        {blk.kind === "checklist" ? (
+                          <div>
+                            <label className="block text-sm font-semibold mb-2">Checklist items (one per line)</label>
+                            <textarea
+                              rows={6}
+                              value={blk.checklist || ""}
+                              onChange={(e) => {
+                                const next = [...blocks];
+                                next[idx] = {
+                                  ...next[idx],
+                                  checklist: e.target.value,
+                                  heading: "",
+                                  paragraph: "",
+                                  imageUrl: "",
+                                  kind: "checklist",
+                                };
+                                setBlocks(next);
+                              }}
+                              className="w-full px-4 py-3 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface font-mono"
+                              placeholder={"Step 1: Research universities\nStep 2: Prepare documents\nStep 3: Apply for visa"}
+                            />
+                            <p className="mt-2 text-xs text-foreground-muted">
+                              Each line becomes one checklist item. On the public blog, readers must fill out the enquiry form to unlock this checklist.
+                            </p>
+                          </div>
+                        ) : null}
                       </div>
                     </article>
                   );
@@ -1019,6 +1066,32 @@ export default function BlogsPage() {
                   <FiPlus className="w-4 h-4" />
                   Table
                 </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setBlocks([
+                      ...blocks,
+                      {
+                        kind: "checklist",
+                        heading: "",
+                        paragraph: "",
+                        imageUrl: "",
+                        table: undefined,
+                        checklist: "",
+                        align: "left",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        color: "",
+                        linkUrl: "",
+                      },
+                    ])
+                  }
+                  className="flex items-center gap-2 px-3 h-9 rounded-lg border border-border bg-page-soft text-sm font-medium hover:bg-border transition-colors motion-reduce:transition-none"
+                >
+                  <FiPlus className="w-4 h-4" />
+                  Checklist
+                </button>
               </div>
 
               <div className="flex items-center justify-between gap-4 pt-1">
@@ -1114,6 +1187,19 @@ export default function BlogsPage() {
                       </div>
                     ) : null}
                     {b.kind === "table" && b.table ? <TablePreview table={b.table} /> : null}
+                    {b.kind === "checklist" && b.checklist ? (
+                      <div className="rounded-xl border border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 p-5 space-y-3">
+                        <p className="text-xs font-semibold tracking-wide text-green-700 uppercase">🔒 Gated Checklist (preview)</p>
+                        <ul className="space-y-2">
+                          {b.checklist.split("\n").filter((l: string) => l.trim()).map((item: string, ci: number) => (
+                            <li key={ci} className="flex items-start gap-2 text-sm text-slate-800">
+                              <span className="mt-0.5 flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-green-100 text-green-600 text-xs font-bold">✓</span>
+                              <span>{item.trim()}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
                   </section>
                 ))
               )}

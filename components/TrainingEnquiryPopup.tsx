@@ -139,8 +139,6 @@ export default function TrainingEnquiryPopup({
                       setFormData((prev) => ({ ...prev, phoneNumber: next }))
                     }
                     className="w-full"
-                    inputClassName="w-full px-3 py-2 text-sm bg-white outline-none"
-                    placeholder="10-digit mobile number"
                   />
                 </div>
               </div>

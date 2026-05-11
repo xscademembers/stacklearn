@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { FiArrowRight, FiCheckCircle } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import ServiceSuccessStoriesSection from "@/components/services/ServiceSuccessStoriesSection";
 
 const whyHelp = [
   "Understand loan eligibility clearly",
@@ -259,6 +260,11 @@ export default function EducationLoanPage() {
           </div>
         </div>
       </section>
+
+      <ServiceSuccessStoriesSection
+        serviceSlug="education-loan"
+        serviceLabel="Education Loan Assistance"
+      />
 
       {/* FAQs */}
       <section className="py-16 md:py-20 bg-white">

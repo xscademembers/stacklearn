@@ -5,12 +5,26 @@ import { usePathname } from "next/navigation";
 import { FiX } from "react-icons/fi";
 import { withSubmissionContext } from "@/lib/submissionPayload";
 import IndiaPhoneInput from "@/components/forms/IndiaPhoneInput";
+import DestinationCountryFields from "@/components/forms/DestinationCountryFields";
+import {
+  countryLabelToDestinationSelect,
+  DESTINATION_SELECT_OTHER,
+  destinationFieldPayload,
+} from "@/lib/destination-form-options";
 
 interface ScholarshipInterestPopupProps {
   isOpen: boolean;
   scholarshipName: string;
   countryLabel: string;
   onContinue: () => void;
+}
+
+function initialDestinationForLabel(countryLabel: string) {
+  const mapped = countryLabelToDestinationSelect(countryLabel);
+  return {
+    destinationSelect: mapped || DESTINATION_SELECT_OTHER,
+    otherDestinationName: mapped ? "" : countryLabel.trim(),
+  };
 }
 
 export default function ScholarshipInterestPopup({
@@ -22,13 +36,13 @@ export default function ScholarshipInterestPopup({
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(() => ({
     name: "",
     email: "",
     mobile: "",
-    destination: countryLabel,
+    ...initialDestinationForLabel(countryLabel),
     message: `Interested in ${scholarshipName}`,
-  });
+  }));
 
   if (!isOpen) return null;
 
@@ -37,13 +51,24 @@ export default function ScholarshipInterestPopup({
     setIsLoading(true);
     setError("");
 
+    const destination = destinationFieldPayload(
+      formData.destinationSelect,
+      formData.otherDestinationName
+    );
+
     try {
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
           withSubmissionContext(
-            { ...formData },
+            {
+              name: formData.name,
+              email: formData.email,
+              mobile: formData.mobile,
+              destination,
+              message: formData.message,
+            },
             pathname,
             "scholarship_interest_popup"
           )
@@ -119,22 +144,28 @@ export default function ScholarshipInterestPopup({
                   required
                   value={formData.mobile}
                   onChange={(next) => setFormData({ ...formData, mobile: next })}
-                  className="w-full rounded-lg border border-gray-300 focus-within:border-brand transition-colors"
-                  inputClassName="w-full px-4 py-3 outline-none"
-                  placeholder="10-digit mobile number"
+                  className="w-full"
+                  fieldClassName="[&>span]:py-3 [&>input]:py-3 [&>input]:px-4"
                 />
               </div>
             </label>
-            <label className="text-sm text-gray-700">
-              Destination Country
-              <input
-                type="text"
-                value={formData.destination}
-                onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
-                className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-colors focus:border-brand"
-                placeholder="Country"
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Destination Country</label>
+              <DestinationCountryFields
+                selectValue={formData.destinationSelect}
+                otherDestinationName={formData.otherDestinationName}
+                onSelectChange={(destinationSelect) =>
+                  setFormData((prev) => ({ ...prev, destinationSelect }))
+                }
+                onOtherChange={(otherDestinationName) =>
+                  setFormData((prev) => ({ ...prev, otherDestinationName }))
+                }
+                selectClassName="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-colors focus:border-brand"
+                otherInputClassName="mt-1 w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-colors focus:border-brand"
+                emptyOptionLabel="Select a country"
+                otherInputId="scholarship-destination-other"
               />
-            </label>
+            </div>
           </div>
 
           {error ? <p className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</p> : null}

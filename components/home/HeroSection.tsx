@@ -10,6 +10,8 @@ import { withSubmissionContext } from "@/lib/submissionPayload";
 import type { CmsPageSection } from "@/lib/cms-page-templates";
 import { getCmsField } from "@/lib/cms-merge-sections";
 import IndiaPhoneInput from "@/components/forms/IndiaPhoneInput";
+import DestinationCountryFields from "@/components/forms/DestinationCountryFields";
+import { destinationFieldPayload } from "@/lib/destination-form-options";
 
 const DEFAULT_HERO_IMAGE =
   "https://images.pexels.com/photos/3184396/pexels-photo-3184396.jpeg?auto=compress&cs=tinysrgb&w=1600";
@@ -24,7 +26,8 @@ export default function HeroSection({ cmsSections }: HeroSectionProps) {
     name: "",
     email: "",
     mobile: "",
-    destination: "",
+    destinationSelect: "",
+    otherDestinationName: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -50,7 +53,19 @@ export default function HeroSection({ cmsSections }: HeroSectionProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
-          withSubmissionContext({ ...formData }, pathname, "home_hero_form")
+          withSubmissionContext(
+            {
+              name: formData.name,
+              email: formData.email,
+              mobile: formData.mobile,
+              destination: destinationFieldPayload(
+                formData.destinationSelect,
+                formData.otherDestinationName
+              ),
+            },
+            pathname,
+            "home_hero_form"
+          )
         ),
       });
       
@@ -58,7 +73,13 @@ export default function HeroSection({ cmsSections }: HeroSectionProps) {
       
       if (response.ok) {
         setSuccess(true);
-        setFormData({ name: "", email: "", mobile: "", destination: "" });
+        setFormData({
+          name: "",
+          email: "",
+          mobile: "",
+          destinationSelect: "",
+          otherDestinationName: "",
+        });
       } else {
         setError(data.message || "Something went wrong. Please try again.");
       }
@@ -212,29 +233,28 @@ export default function HeroSection({ cmsSections }: HeroSectionProps) {
                     required
                     value={formData.mobile}
                     onChange={(next) => setFormData({ ...formData, mobile: next })}
-                    className="w-full border-2 border-border rounded-xl bg-page-soft hover:bg-surface focus-within:ring-2 focus-within:ring-brand focus-within:border-brand transition-all"
-                    inputClassName="w-full px-4 py-3 bg-transparent outline-none"
-                    placeholder="10-digit mobile number"
+                    className="w-full"
+                    fieldClassName="rounded-xl border-2 border-border bg-page-soft hover:bg-surface motion-safe:transition-colors [&>span]:py-3 [&>input]:py-3 [&>input]:pr-4"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">
                     Destination Country
                   </label>
-                  <select
-                    value={formData.destination}
-                    onChange={(e) =>
-                      setFormData({ ...formData, destination: e.target.value })
+                  <DestinationCountryFields
+                    selectValue={formData.destinationSelect}
+                    otherDestinationName={formData.otherDestinationName}
+                    onSelectChange={(destinationSelect) =>
+                      setFormData((prev) => ({ ...prev, destinationSelect }))
                     }
-                    className="w-full px-4 py-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-brand focus:border-brand transition-all bg-page-soft hover:bg-surface"
-                  >
-                    <option value="">Select a country</option>
-                    <option value="uk">United Kingdom</option>
-                    <option value="usa">United States</option>
-                    <option value="canada">Canada</option>
-                    <option value="australia">Australia</option>
-                    <option value="germany">Germany</option>
-                  </select>
+                    onOtherChange={(otherDestinationName) =>
+                      setFormData((prev) => ({ ...prev, otherDestinationName }))
+                    }
+                    selectClassName="w-full px-4 py-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-brand focus:border-brand transition-all bg-page-soft hover:bg-surface"
+                    otherInputClassName="w-full px-4 py-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-brand focus:border-brand transition-all bg-page-soft"
+                    emptyOptionLabel="Select a country"
+                    otherInputId="hero-destination-other"
+                  />
                 </div>
                 {error && (
                   <div className="p-3 bg-accent-soft border border-accent/20 rounded-lg text-accent text-sm">

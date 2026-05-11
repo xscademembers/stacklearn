@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import BookConsultButton from "@/components/BookConsultButton";
 import ScholarshipInterestPopup from "@/components/ScholarshipInterestPopup";
 import { allScholarships, scholarshipsByCountry } from "@/lib/scholarships-data";
+import ScholarshipSuccessStoriesBlock from "@/components/scholarships/ScholarshipSuccessStoriesBlock";
+import type { PublicSuccessStory } from "@/lib/success-story-public";
 
 export type ScholarshipsHeroCms = {
   heading: string;
@@ -15,7 +16,13 @@ export type ScholarshipsHeroCms = {
   heroImage: string;
 };
 
-export default function ScholarshipsPageClient({ hero }: { hero: ScholarshipsHeroCms }) {
+export default function ScholarshipsPageClient({
+  hero,
+  successStories = [],
+}: {
+  hero: ScholarshipsHeroCms;
+  successStories?: PublicSuccessStory[];
+}) {
   const router = useRouter();
   const [filters, setFilters] = useState({
     country: "",
@@ -127,6 +134,7 @@ export default function ScholarshipsPageClient({ hero }: { hero: ScholarshipsHer
 
       {selectedScholarship ? (
         <ScholarshipInterestPopup
+          key={selectedScholarship.slug}
           isOpen
           scholarshipName={selectedScholarship.name}
           countryLabel={selectedScholarship.countryLabel}
@@ -178,50 +186,7 @@ export default function ScholarshipsPageClient({ hero }: { hero: ScholarshipsHer
         </div>
       </section>
 
-      {/* Scholarship Success Stories */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Scholarship Success Stories</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Ananya",
-                country: "UK",
-                scholarship: "Chevening Scholarship",
-                university: "University of Leeds",
-              },
-              {
-                name: "Rohit",
-                country: "Canada",
-                scholarship: "Vanier Graduate Scholarship",
-                university: "University of Toronto",
-              },
-              {
-                name: "Meera",
-                country: "USA",
-                scholarship: "Fulbright Scholarship",
-                university: "University of California",
-              },
-            ].map((s, index) => (
-              <div key={index} className="bg-gray-50 rounded-2xl p-6 shadow-md">
-                <h3 className="text-xl font-bold text-gray-900 mb-1">{s.name}</h3>
-                <p className="text-brand font-semibold mb-2">
-                  {s.scholarship} – {s.country}
-                </p>
-                <p className="text-gray-600 mb-2">{s.university}</p>
-                <p className="text-sm text-gray-700">
-                  “Stack Learn helped me identify the right scholarship and submit a strong application.”
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link href="/success-stories" className="text-brand font-semibold hover:underline">
-              Read More Success Stories →
-            </Link>
-          </div>
-        </div>
-      </section>
+      <ScholarshipSuccessStoriesBlock stories={successStories} />
 
       {/* Final CTA */}
       <section className="relative py-20 text-white overflow-hidden">

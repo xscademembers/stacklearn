@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FiArrowRight, FiCheckCircle, FiChevronDown } from "react-icons/fi";
 import CorporateTrainingButton from "@/components/CorporateTrainingButton";
 import CorporateFaqs from "./CorporateFaqs";
+import TrainingSuccessStoriesSection from "@/components/trainings/TrainingSuccessStoriesSection";
 
 export const metadata: Metadata = {
   title: "Corporate Training Programs | StackLearn",
@@ -369,6 +370,11 @@ export default function CorporateTrainingsPage() {
           </div>
         </div>
       </section>
+
+      <TrainingSuccessStoriesSection
+        trainingTrack="corporate"
+        contextLabel="Corporate Trainings"
+      />
 
       {/* FAQs */}
       <CorporateFaqs />

@@ -2,12 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { COLLECTIONS, getDatabase, isMongoConfigured } from "@/lib/mongodb";
 import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/sanitize-blog-html";
+import GatedChecklist from "@/components/GatedChecklist";
 
 /** CDN ISR — published post body (Mongo). */
 export const revalidate = 60;
 
 type BlogBlock = {
-  kind?: "heading" | "paragraph" | "image" | "table";
+  kind?: "heading" | "paragraph" | "image" | "table" | "checklist";
   heading?: string;
   paragraph?: string;
   imageUrl?: string;
@@ -16,6 +17,7 @@ type BlogBlock = {
     columns?: string[];
     rows?: string[][];
   };
+  checklist?: string;
   align?: "left" | "center" | "right";
   bold?: boolean;
   italic?: boolean;
@@ -375,6 +377,12 @@ export default async function BlogDetailPage({
                       </div>
                     ) : null}
                     {b.kind === "table" || b.table ? <RenderTable block={b} /> : null}
+                    {(b.kind === "checklist" || (!b.kind && b.checklist)) && b.checklist ? (
+                      <GatedChecklist
+                        slug={slugNormalized}
+                        items={b.checklist.split("\n").map((l: string) => l.trim()).filter(Boolean)}
+                      />
+                    ) : null}
                   </section>
                 ))}
               </div>

@@ -6,6 +6,8 @@ import { FiX } from "react-icons/fi";
 import Link from "next/link";
 import { withSubmissionContext } from "@/lib/submissionPayload";
 import IndiaPhoneInput from "@/components/forms/IndiaPhoneInput";
+import DestinationCountryFields from "@/components/forms/DestinationCountryFields";
+import { destinationFieldPayload } from "@/lib/destination-form-options";
 
 export default function LeadsPopup() {
   const pathname = usePathname();
@@ -15,7 +17,8 @@ export default function LeadsPopup() {
     name: "",
     email: "",
     mobile: "",
-    destination: "",
+    destinationSelect: "",
+    otherDestinationName: "",
   });
 
   const markDismissed = () => {
@@ -74,7 +77,19 @@ export default function LeadsPopup() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
-          withSubmissionContext({ ...formData }, pathname, "leads_popup")
+          withSubmissionContext(
+            {
+              name: formData.name,
+              email: formData.email,
+              mobile: formData.mobile,
+              destination: destinationFieldPayload(
+                formData.destinationSelect,
+                formData.otherDestinationName
+              ),
+            },
+            pathname,
+            "leads_popup"
+          )
         ),
       });
       if (response.ok) {
@@ -136,9 +151,8 @@ export default function LeadsPopup() {
                   required
                   value={formData.mobile}
                   onChange={(next) => setFormData({ ...formData, mobile: next })}
-                  className="w-full border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-brand focus-within:border-transparent"
-                  inputClassName="w-full px-4 py-3 outline-none"
-                  placeholder="10-digit mobile number"
+                  className="w-full"
+                  fieldClassName="[&>span]:py-3 [&>input]:py-3 [&>input]:px-4"
                 />
               </div>
               <div>
@@ -160,20 +174,20 @@ export default function LeadsPopup() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Destination Country
                 </label>
-                <select
-                  value={formData.destination}
-                  onChange={(e) =>
-                    setFormData({ ...formData, destination: e.target.value })
+                <DestinationCountryFields
+                  selectValue={formData.destinationSelect}
+                  otherDestinationName={formData.otherDestinationName}
+                  onSelectChange={(destinationSelect) =>
+                    setFormData((prev) => ({ ...prev, destinationSelect }))
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
-                >
-                  <option value="">Select a country</option>
-                  <option value="uk">United Kingdom</option>
-                  <option value="usa">United States</option>
-                  <option value="canada">Canada</option>
-                  <option value="australia">Australia</option>
-                  <option value="germany">Germany</option>
-                </select>
+                  onOtherChange={(otherDestinationName) =>
+                    setFormData((prev) => ({ ...prev, otherDestinationName }))
+                  }
+                  selectClassName="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
+                  otherInputClassName="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
+                  emptyOptionLabel="Select a country"
+                  otherInputId="leads-popup-destination-other"
+                />
               </div>
               <button
                 type="submit"

@@ -9,6 +9,26 @@ import {
   countryFieldToSelectValue,
   resolveToCanonicalCountry,
 } from "@/lib/success-story-country-options";
+import {
+  SUCCESS_STORY_SERVICE_OPTIONS,
+  isSuccessStoryServiceSlug,
+} from "@/lib/success-story-service-options";
+import {
+  SUCCESS_STORY_TEST_PREP_OPTIONS,
+  isSuccessStoryTestPrepSlug,
+} from "@/lib/success-story-test-prep-options";
+import {
+  ADMIN_TRAINING_NON_TECHNICAL_COURSES,
+  ADMIN_TRAINING_TECHNICAL_COURSES,
+  TRAINING_TRACK_OPTIONS,
+  computeTrainingDisplayLabel,
+  isTrainingTrack,
+  isValidTrainingCourseForTrack,
+  type TrainingTrack,
+} from "@/lib/success-story-training-options";
+import { successStoryMetaLine, type PublicSuccessStory, type SuccessStoryKind } from "@/lib/success-story-public";
+
+type AdminPlacementKind = SuccessStoryKind;
 
 interface SuccessStory {
   _id: string;
@@ -19,6 +39,59 @@ interface SuccessStory {
   story: string;
   createdAt: string;
   updatedAt?: string;
+  kind?: string;
+  serviceSlug?: string;
+  testPrepSlug?: string;
+  trainingTrack?: string;
+  trainingCourseSlug?: string;
+  trainingDisplayLabel?: string;
+}
+
+function normalizeKindFromDoc(raw: unknown): AdminPlacementKind {
+  const k = typeof raw === "string" ? raw.trim().toLowerCase() : "";
+  if (k === "service") return "service";
+  if (k === "test_prep" || k === "test-prep") return "test_prep";
+  if (k === "home") return "home";
+  if (k === "scholarships" || k === "scholarship") return "scholarships";
+  if (k === "training") return "training";
+  return "destination";
+}
+
+function toPublicSuccessStory(s: SuccessStory): PublicSuccessStory {
+  const kind = normalizeKindFromDoc(s.kind);
+  const serviceSlug =
+    kind === "service" && s.serviceSlug && isSuccessStoryServiceSlug(s.serviceSlug) ? s.serviceSlug : "";
+  const testPrepSlug =
+    kind === "test_prep" && s.testPrepSlug && isSuccessStoryTestPrepSlug(s.testPrepSlug)
+      ? s.testPrepSlug
+      : "";
+  const trainingTrack =
+    kind === "training" && s.trainingTrack && isTrainingTrack(s.trainingTrack) ? s.trainingTrack : "";
+  const trainingCourseSlug =
+    kind === "training" && trainingTrack && (trainingTrack === "technical" || trainingTrack === "non_technical")
+      ? (s.trainingCourseSlug || "").trim()
+      : "";
+  const trainingDisplayLabel =
+    kind === "training"
+      ? (s.trainingDisplayLabel || "").trim() ||
+        (trainingTrack
+          ? computeTrainingDisplayLabel(trainingTrack as TrainingTrack, trainingCourseSlug)
+          : "")
+      : "";
+  return {
+    _id: s._id,
+    name: s.name,
+    country: s.country,
+    university: s.university,
+    imageUrl: s.imageUrl,
+    story: s.story,
+    kind,
+    serviceSlug,
+    testPrepSlug,
+    trainingTrack,
+    trainingCourseSlug,
+    trainingDisplayLabel,
+  };
 }
 
 function editingRecordKey(editing: Partial<SuccessStory> | null): string | null {
@@ -32,6 +105,12 @@ const emptyStory: Partial<SuccessStory> = {
   university: "",
   imageUrl: "",
   story: "",
+  kind: "destination",
+  serviceSlug: "",
+  testPrepSlug: "",
+  trainingTrack: "",
+  trainingCourseSlug: "",
+  trainingDisplayLabel: "",
 };
 
 export default function AdminSuccessStoriesPage() {
@@ -42,16 +121,50 @@ export default function AdminSuccessStoriesPage() {
   const [error, setError] = useState("");
   const [listError, setListError] = useState("");
   const [countryMenu, setCountryMenu] = useState("");
+  const [categoryKind, setCategoryKind] = useState<AdminPlacementKind>("destination");
+  const [serviceMenu, setServiceMenu] = useState("");
+  const [testPrepMenu, setTestPrepMenu] = useState("");
+  const [trainingTrackMenu, setTrainingTrackMenu] = useState("");
+  const [trainingCourseMenu, setTrainingCourseMenu] = useState("");
 
   const recordKey = editingRecordKey(editing);
 
   useEffect(() => {
     if (recordKey === null) {
       setCountryMenu("");
+      setCategoryKind("destination");
+      setServiceMenu("");
+      setTestPrepMenu("");
+      setTrainingTrackMenu("");
+      setTrainingCourseMenu("");
       return;
     }
     if (!editing) return;
+    const k = normalizeKindFromDoc(editing.kind);
+    setCategoryKind(k);
     setCountryMenu(countryFieldToSelectValue(editing.country));
+    setServiceMenu(
+      k === "service" && editing.serviceSlug && isSuccessStoryServiceSlug(editing.serviceSlug)
+        ? editing.serviceSlug
+        : ""
+    );
+    setTestPrepMenu(
+      k === "test_prep" && editing.testPrepSlug && isSuccessStoryTestPrepSlug(editing.testPrepSlug)
+        ? editing.testPrepSlug
+        : ""
+    );
+    setTrainingTrackMenu(
+      k === "training" && editing.trainingTrack && isTrainingTrack(editing.trainingTrack)
+        ? editing.trainingTrack
+        : ""
+    );
+    setTrainingCourseMenu(
+      k === "training" &&
+        (editing.trainingTrack === "technical" || editing.trainingTrack === "non_technical") &&
+        editing.trainingCourseSlug
+        ? editing.trainingCourseSlug
+        : ""
+    );
     // Only re-sync when opening the editor or switching records (not on every keystroke).
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally omit `editing` identity
   }, [recordKey]);
@@ -93,18 +206,81 @@ export default function AdminSuccessStoriesPage() {
 
   const handleSave = async () => {
     if (!editing) return;
-    if (countryMenu === SUCCESS_STORY_COUNTRY_OTHER && !(editing.country || "").trim()) {
-      setError('When "Other" is selected, enter the country name.');
-      return;
+    if (categoryKind === "destination") {
+      if (!countryMenu) {
+        setError("Select a country, or choose Other and type the country name.");
+        return;
+      }
+      if (countryMenu === SUCCESS_STORY_COUNTRY_OTHER && !(editing.country || "").trim()) {
+        setError('When "Other" is selected, enter the country name.');
+        return;
+      }
+    } else if (categoryKind === "service") {
+      if (!serviceMenu || !isSuccessStoryServiceSlug(serviceMenu)) {
+        setError("Select a service.");
+        return;
+      }
+    } else if (categoryKind === "test_prep") {
+      if (!testPrepMenu || !isSuccessStoryTestPrepSlug(testPrepMenu)) {
+        setError("Select IELTS, GRE, TOEFL, or GMAT.");
+        return;
+      }
+    } else if (categoryKind === "training") {
+      if (!trainingTrackMenu || !isTrainingTrack(trainingTrackMenu)) {
+        setError("Select a training category.");
+        return;
+      }
+      if (trainingTrackMenu === "technical" || trainingTrackMenu === "non_technical") {
+        if (!trainingCourseMenu || !isValidTrainingCourseForTrack(trainingTrackMenu, trainingCourseMenu)) {
+          setError("Select a course for this training category.");
+          return;
+        }
+      }
     }
+
+    const country =
+      categoryKind === "destination"
+        ? countryMenu === SUCCESS_STORY_COUNTRY_OTHER
+          ? (editing.country || "").trim()
+          : countryMenu
+        : "";
+    const serviceSlug = categoryKind === "service" ? serviceMenu : "";
+    const testPrepSlug = categoryKind === "test_prep" ? testPrepMenu : "";
+    const trainingTrack = categoryKind === "training" ? trainingTrackMenu : "";
+    const trainingCourseSlug =
+      categoryKind === "training" &&
+      (trainingTrackMenu === "technical" || trainingTrackMenu === "non_technical")
+        ? trainingCourseMenu
+        : "";
+    const trainingDisplayLabel =
+      categoryKind === "training" && trainingTrackMenu
+        ? computeTrainingDisplayLabel(trainingTrackMenu as TrainingTrack, trainingCourseSlug)
+        : "";
+    const university = categoryKind === "destination" ? (editing.university || "").trim() : "";
+    const basePayload = {
+      name: (editing.name || "").trim(),
+      story: (editing.story || "").trim(),
+      imageUrl: (editing.imageUrl || "").trim(),
+      kind: categoryKind,
+      country,
+      serviceSlug,
+      testPrepSlug,
+      trainingTrack,
+      trainingCourseSlug,
+      trainingDisplayLabel,
+      university,
+    };
+    const isUpdate = editing._id != null && String(editing._id).trim() !== "";
+    const payload = isUpdate ? { ...basePayload, _id: String(editing._id).trim() } : basePayload;
+
     setSaving(true);
     setError("");
     try {
-      const method = editing._id ? "PUT" : "POST";
+      const method = isUpdate ? "PUT" : "POST";
       const res = await adminFetch("/api/admin/success-stories", {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editing),
+        body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -169,72 +345,237 @@ export default function AdminSuccessStoriesPage() {
               />
             </div>
             <div>
-              <label htmlFor="ss-country" className="block text-sm font-semibold mb-2">
-                Country
+              <label htmlFor="ss-category" className="block text-sm font-semibold mb-2">
+                Story type
               </label>
               <select
-                id="ss-country"
-                value={countryMenu}
+                id="ss-category"
+                value={categoryKind}
                 onChange={(e) => {
-                  const v = e.target.value;
-                  if (v === "") {
-                    setCountryMenu("");
-                    setEditing({ ...editing, country: "" });
-                    return;
-                  }
-                  if (v === SUCCESS_STORY_COUNTRY_OTHER) {
-                    setCountryMenu(SUCCESS_STORY_COUNTRY_OTHER);
-                    const prev = (editing.country || "").trim();
-                    const canon = resolveToCanonicalCountry(prev);
-                    setEditing({ ...editing, country: canon ? "" : prev });
-                    return;
-                  }
-                  setCountryMenu(v);
-                  setEditing({ ...editing, country: v });
+                  const v = e.target.value as AdminPlacementKind;
+                  setCategoryKind(v);
+                  setCountryMenu("");
+                  setServiceMenu("");
+                  setTestPrepMenu("");
+                  setTrainingTrackMenu("");
+                  setTrainingCourseMenu("");
+                  setEditing({
+                    ...editing,
+                    kind: v,
+                    country: "",
+                    university: "",
+                    serviceSlug: "",
+                    testPrepSlug: "",
+                    trainingTrack: "",
+                    trainingCourseSlug: "",
+                    trainingDisplayLabel: "",
+                  });
                 }}
                 className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
               >
-                <option value="">Select country…</option>
-                {SUCCESS_STORY_COUNTRY_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-                <option value={SUCCESS_STORY_COUNTRY_OTHER}>Other (type below)</option>
+                <option value="destination">Destination</option>
+                <option value="service">Services</option>
+                <option value="test_prep">Test preparation</option>
+                <option value="training">Training</option>
+                <option value="home">Home page</option>
+                <option value="scholarships">Scholarships page</option>
               </select>
-              {showOtherCountry ? (
-                <div className="mt-3">
-                  <label htmlFor="ss-country-other" className="block text-xs font-semibold text-foreground-muted mb-2">
-                    Country name (custom)
-                  </label>
-                  <input
-                    id="ss-country-other"
-                    type="text"
-                    value={editing.country || ""}
-                    onChange={(e) => setEditing({ ...editing, country: e.target.value })}
-                    className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
-                    placeholder="e.g. France, UAE"
-                    autoComplete="off"
-                  />
-                </div>
-              ) : null}
-              <p className="mt-2 text-xs text-foreground-muted leading-relaxed">
-                Pick a country so this story appears on the matching destination page. Use &ldquo;Other&rdquo; only if
-                the study destination is not in the list.
-              </p>
             </div>
-            <div>
-              <label htmlFor="ss-university" className="block text-sm font-semibold mb-2">
-                University
-              </label>
-              <input
-                id="ss-university"
-                type="text"
-                value={editing.university || ""}
-                onChange={(e) => setEditing({ ...editing, university: e.target.value })}
-                className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
-              />
-            </div>
+            {categoryKind === "destination" ? (
+              <div>
+                <label htmlFor="ss-country" className="block text-sm font-semibold mb-2">
+                  Country
+                </label>
+                <select
+                  id="ss-country"
+                  value={countryMenu}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (v === "") {
+                      setCountryMenu("");
+                      setEditing({ ...editing, country: "" });
+                      return;
+                    }
+                    if (v === SUCCESS_STORY_COUNTRY_OTHER) {
+                      setCountryMenu(SUCCESS_STORY_COUNTRY_OTHER);
+                      const prev = (editing.country || "").trim();
+                      const canon = resolveToCanonicalCountry(prev);
+                      setEditing({ ...editing, country: canon ? "" : prev });
+                      return;
+                    }
+                    setCountryMenu(v);
+                    setEditing({ ...editing, country: v });
+                  }}
+                  className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                >
+                  <option value="">Select country…</option>
+                  {SUCCESS_STORY_COUNTRY_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                  <option value={SUCCESS_STORY_COUNTRY_OTHER}>Other (type below)</option>
+                </select>
+              </div>
+            ) : null}
+            {categoryKind === "service" ? (
+              <div>
+                <label htmlFor="ss-service" className="block text-sm font-semibold mb-2">
+                  Service
+                </label>
+                <select
+                  id="ss-service"
+                  value={serviceMenu}
+                  onChange={(e) => {
+                    const slug = e.target.value;
+                    setServiceMenu(slug);
+                    setEditing({ ...editing, serviceSlug: slug });
+                  }}
+                  className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                >
+                  <option value="">Select service…</option>
+                  {SUCCESS_STORY_SERVICE_OPTIONS.map((opt) => (
+                    <option key={opt.slug} value={opt.slug}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
+            {categoryKind === "test_prep" ? (
+              <div>
+                <label htmlFor="ss-testprep" className="block text-sm font-semibold mb-2">
+                  Test program
+                </label>
+                <select
+                  id="ss-testprep"
+                  value={testPrepMenu}
+                  onChange={(e) => {
+                    const slug = e.target.value;
+                    setTestPrepMenu(slug);
+                    setEditing({ ...editing, testPrepSlug: slug });
+                  }}
+                  className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                >
+                  <option value="">Select exam…</option>
+                  {SUCCESS_STORY_TEST_PREP_OPTIONS.map((opt) => (
+                    <option key={opt.slug} value={opt.slug}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
+            {categoryKind === "training" ? (
+              <div>
+                <label htmlFor="ss-training-track" className="block text-sm font-semibold mb-2">
+                  Training category
+                </label>
+                <select
+                  id="ss-training-track"
+                  value={trainingTrackMenu}
+                  onChange={(e) => {
+                    const tr = e.target.value as TrainingTrack | "";
+                    setTrainingTrackMenu(tr);
+                    setTrainingCourseMenu("");
+                    setEditing({
+                      ...editing,
+                      trainingTrack: tr,
+                      trainingCourseSlug: "",
+                      trainingDisplayLabel: "",
+                    });
+                  }}
+                  className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                >
+                  <option value="">Select training…</option>
+                  {TRAINING_TRACK_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
+            {categoryKind === "home" || categoryKind === "scholarships" ? (
+              <div className="flex items-end min-h-[44px]">
+                <p className="text-xs text-foreground-muted leading-relaxed m-0">
+                  {categoryKind === "home"
+                    ? "Shown on the main home page carousel (no extra selection)."
+                    : "Shown on the scholarships page (no extra selection)."}
+                </p>
+              </div>
+            ) : null}
+            {categoryKind === "training" &&
+            (trainingTrackMenu === "technical" || trainingTrackMenu === "non_technical") ? (
+              <div className="sm:col-span-2">
+                <label htmlFor="ss-training-course" className="block text-sm font-semibold mb-2">
+                  Course
+                </label>
+                <select
+                  id="ss-training-course"
+                  value={trainingCourseMenu}
+                  onChange={(e) => {
+                    const slug = e.target.value;
+                    setTrainingCourseMenu(slug);
+                    setEditing({ ...editing, trainingCourseSlug: slug });
+                  }}
+                  className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                >
+                  <option value="">Select course…</option>
+                  {(trainingTrackMenu === "technical"
+                    ? ADMIN_TRAINING_TECHNICAL_COURSES
+                    : ADMIN_TRAINING_NON_TECHNICAL_COURSES
+                  ).map((opt) => (
+                    <option key={opt.slug} value={opt.slug}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
+            <p className="sm:col-span-2 text-xs text-foreground-muted leading-relaxed">
+              {categoryKind === "destination"
+                ? "Destination stories appear on the matching country page. Use Country → Other only if the destination is not listed."
+                : categoryKind === "service"
+                  ? "Service stories appear on the matching page under Services."
+                  : categoryKind === "test_prep"
+                    ? "Test prep stories appear on the matching /test-prep/{exam} page."
+                    : categoryKind === "training"
+                      ? "Technical / non-technical stories appear on each course page. Study abroad and corporate stories appear on those training hubs."
+                      : categoryKind === "home"
+                        ? "Tag stories you want highlighted on the site home page."
+                        : "Tag stories for the main scholarships landing page."}
+            </p>
+            {categoryKind === "destination" && showOtherCountry ? (
+              <div className="sm:col-span-2">
+                <label htmlFor="ss-country-other" className="block text-xs font-semibold text-foreground-muted mb-2">
+                  Country name (custom)
+                </label>
+                <input
+                  id="ss-country-other"
+                  type="text"
+                  value={editing.country || ""}
+                  onChange={(e) => setEditing({ ...editing, country: e.target.value })}
+                  className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                  placeholder="e.g. France, UAE"
+                  autoComplete="off"
+                />
+              </div>
+            ) : null}
+            {categoryKind === "destination" ? (
+              <div className="sm:col-span-2">
+                <label htmlFor="ss-university" className="block text-sm font-semibold mb-2">
+                  University
+                </label>
+                <input
+                  id="ss-university"
+                  type="text"
+                  value={editing.university || ""}
+                  onChange={(e) => setEditing({ ...editing, university: e.target.value })}
+                  className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                />
+              </div>
+            ) : null}
             <div className="sm:col-span-2">
               <label htmlFor="ss-image" className="block text-sm font-semibold mb-2">
                 Photo URL
@@ -367,7 +708,7 @@ export default function AdminSuccessStoriesPage() {
                   <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-foreground text-sm truncate">{s.name}</h3>
                     <p className="text-xs text-foreground-muted mt-1 line-clamp-2">
-                      {[s.university, s.country].filter(Boolean).join(" · ") || "—"}
+                      {successStoryMetaLine(toPublicSuccessStory(s))}
                     </p>
                   </div>
                 </div>

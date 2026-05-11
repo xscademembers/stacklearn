@@ -3,17 +3,17 @@ import {
   countryMatchesDestinationSlug,
   isDestinationSuccessStorySlug,
 } from "@/lib/destination-country-match";
+import { isSuccessStoryServiceSlug } from "@/lib/success-story-service-options";
+import { isSuccessStoryTestPrepSlug } from "@/lib/success-story-test-prep-options";
+import {
+  computeTrainingDisplayLabel,
+  isTrainingTrack,
+  type TrainingTrack,
+} from "@/lib/success-story-training-options";
+import type { PublicSuccessStory, SuccessStoryKind } from "@/lib/success-story-public";
 
-export type PublicSuccessStory = {
-  _id: string;
-  name: string;
-  country: string;
-  university: string;
-  imageUrl: string;
-  story: string;
-  createdAt?: string;
-  updatedAt?: string;
-};
+export type { PublicSuccessStory, SuccessStoryKind } from "@/lib/success-story-public";
+export { successStoryMetaLine } from "@/lib/success-story-public";
 
 function toIso(d: unknown): string | undefined {
   if (d instanceof Date) return d.toISOString();
@@ -21,7 +21,49 @@ function toIso(d: unknown): string | undefined {
   return undefined;
 }
 
+function parseDocKind(doc: Record<string, unknown>): SuccessStoryKind {
+  const k = typeof doc.kind === "string" ? doc.kind.trim().toLowerCase() : "";
+  if (k === "service") return "service";
+  if (k === "test_prep" || k === "test-prep" || k === "test preparation") return "test_prep";
+  if (k === "home") return "home";
+  if (k === "scholarships" || k === "scholarship") return "scholarships";
+  if (k === "training") return "training";
+  return "destination";
+}
+
 function serialize(doc: Record<string, unknown>): PublicSuccessStory {
+  const kind = parseDocKind(doc);
+  const serviceSlug =
+    kind === "service" && typeof doc.serviceSlug === "string" && isSuccessStoryServiceSlug(doc.serviceSlug)
+      ? doc.serviceSlug
+      : "";
+  const testPrepSlug =
+    kind === "test_prep" && typeof doc.testPrepSlug === "string" && isSuccessStoryTestPrepSlug(doc.testPrepSlug)
+      ? doc.testPrepSlug
+      : "";
+
+  let trainingTrack = "";
+  let trainingCourseSlug = "";
+  let trainingDisplayLabel = "";
+  if (kind === "training") {
+    const tt = typeof doc.trainingTrack === "string" ? doc.trainingTrack.trim() : "";
+    if (isTrainingTrack(tt)) {
+      trainingTrack = tt;
+      const rawCourse =
+        tt === "technical" || tt === "non_technical"
+          ? typeof doc.trainingCourseSlug === "string"
+            ? doc.trainingCourseSlug.trim()
+            : ""
+          : "";
+      trainingCourseSlug = rawCourse;
+      trainingDisplayLabel =
+        typeof doc.trainingDisplayLabel === "string" ? doc.trainingDisplayLabel.trim() : "";
+      if (!trainingDisplayLabel) {
+        trainingDisplayLabel = computeTrainingDisplayLabel(tt as TrainingTrack, trainingCourseSlug);
+      }
+    }
+  }
+
   return {
     _id: String(doc._id),
     name: typeof doc.name === "string" ? doc.name : "",
@@ -29,6 +71,12 @@ function serialize(doc: Record<string, unknown>): PublicSuccessStory {
     university: typeof doc.university === "string" ? doc.university : "",
     imageUrl: typeof doc.imageUrl === "string" ? doc.imageUrl : "",
     story: typeof doc.story === "string" ? doc.story : "",
+    kind,
+    serviceSlug,
+    testPrepSlug,
+    trainingTrack,
+    trainingCourseSlug,
+    trainingDisplayLabel,
     createdAt: toIso(doc.createdAt),
     updatedAt: toIso(doc.updatedAt),
   };
@@ -56,9 +104,10 @@ export async function getAllSuccessStoriesSorted(): Promise<PublicSuccessStory[]
   }
 }
 
-/** Latest stories by most recently updated (fallback: created). */
-export async function getLatestSuccessStoriesForHome(limit = 4): Promise<PublicSuccessStory[]> {
+/** Stories tagged for the main home page carousel (`kind: home`), newest first. */
+export async function getLatestSuccessStoriesForHome(limit = 24): Promise<PublicSuccessStory[]> {
   if (!isMongoConfigured()) return [];
+  const cap = typeof limit === "number" && limit > 0 ? limit : 24;
   try {
     const db = await getDatabase();
     const docs = await db
@@ -70,10 +119,46 @@ export async function getLatestSuccessStoriesForHome(limit = 4): Promise<PublicS
           },
         },
         { $sort: { _sortAt: -1 } },
-        { $limit: limit },
       ])
       .toArray();
-    return docs.map((d) => serialize(d as Record<string, unknown>));
+    const out: PublicSuccessStory[] = [];
+    for (const d of docs) {
+      const row = serialize(d as Record<string, unknown>);
+      if (row.kind !== "home") continue;
+      out.push(row);
+      if (out.length >= cap) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
+/** Stories tagged for `/scholarships`, newest first. */
+export async function getSuccessStoriesForScholarshipsPage(limit?: number): Promise<PublicSuccessStory[]> {
+  if (!isMongoConfigured()) return [];
+  const max = typeof limit === "number" && limit > 0 ? limit : Number.POSITIVE_INFINITY;
+  try {
+    const db = await getDatabase();
+    const docs = await db
+      .collection(COLLECTIONS.SUCCESS_STORIES)
+      .aggregate([
+        {
+          $addFields: {
+            _sortAt: { $ifNull: ["$updatedAt", "$createdAt"] },
+          },
+        },
+        { $sort: { _sortAt: -1 } },
+      ])
+      .toArray();
+    const out: PublicSuccessStory[] = [];
+    for (const d of docs) {
+      const row = serialize(d as Record<string, unknown>);
+      if (row.kind !== "scholarships") continue;
+      out.push(row);
+      if (out.length >= max) break;
+    }
+    return out;
   } catch {
     return [];
   }
@@ -108,7 +193,123 @@ export async function getSuccessStoriesForDestinationSlug(
     const out: PublicSuccessStory[] = [];
     for (const d of docs) {
       const row = serialize(d as Record<string, unknown>);
+      if (row.kind !== "destination") continue;
       if (!countryMatchesDestinationSlug(row.country, slug)) continue;
+      out.push(row);
+      if (out.length >= max) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
+/** Stories for a service page (`/services/{slug}`), newest first. */
+export async function getSuccessStoriesForServiceSlug(
+  slug: string,
+  limit?: number
+): Promise<PublicSuccessStory[]> {
+  if (!isSuccessStoryServiceSlug(slug)) return [];
+  if (!isMongoConfigured()) return [];
+  const max = typeof limit === "number" && limit > 0 ? limit : Number.POSITIVE_INFINITY;
+  try {
+    const db = await getDatabase();
+    const docs = await db
+      .collection(COLLECTIONS.SUCCESS_STORIES)
+      .aggregate([
+        {
+          $addFields: {
+            _sortAt: { $ifNull: ["$updatedAt", "$createdAt"] },
+          },
+        },
+        { $sort: { _sortAt: -1 } },
+      ])
+      .toArray();
+
+    const out: PublicSuccessStory[] = [];
+    for (const d of docs) {
+      const row = serialize(d as Record<string, unknown>);
+      if (row.kind !== "service" || row.serviceSlug !== slug) continue;
+      out.push(row);
+      if (out.length >= max) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
+/** Stories for `/test-prep/{slug}` (ielts, gre, toefl, gmat). */
+export async function getSuccessStoriesForTestPrepSlug(
+  slug: string,
+  limit?: number
+): Promise<PublicSuccessStory[]> {
+  if (!isSuccessStoryTestPrepSlug(slug)) return [];
+  if (!isMongoConfigured()) return [];
+  const max = typeof limit === "number" && limit > 0 ? limit : Number.POSITIVE_INFINITY;
+  try {
+    const db = await getDatabase();
+    const docs = await db
+      .collection(COLLECTIONS.SUCCESS_STORIES)
+      .aggregate([
+        {
+          $addFields: {
+            _sortAt: { $ifNull: ["$updatedAt", "$createdAt"] },
+          },
+        },
+        { $sort: { _sortAt: -1 } },
+      ])
+      .toArray();
+
+    const out: PublicSuccessStory[] = [];
+    for (const d of docs) {
+      const row = serialize(d as Record<string, unknown>);
+      if (row.kind !== "test_prep" || row.testPrepSlug !== slug) continue;
+      out.push(row);
+      if (out.length >= max) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
+/** Training stories for hub or course pages (`kind: training`). */
+export async function getSuccessStoriesForTrainingPlacement(
+  track: TrainingTrack,
+  courseSlug: string | undefined,
+  limit?: number
+): Promise<PublicSuccessStory[]> {
+  if (!isMongoConfigured()) return [];
+  const max = typeof limit === "number" && limit > 0 ? limit : Number.POSITIVE_INFINITY;
+  const course = (courseSlug ?? "").trim();
+  if (track === "technical" || track === "non_technical") {
+    if (!course) return [];
+  } else if (course) {
+    return [];
+  }
+
+  try {
+    const db = await getDatabase();
+    const docs = await db
+      .collection(COLLECTIONS.SUCCESS_STORIES)
+      .aggregate([
+        {
+          $addFields: {
+            _sortAt: { $ifNull: ["$updatedAt", "$createdAt"] },
+          },
+        },
+        { $sort: { _sortAt: -1 } },
+      ])
+      .toArray();
+
+    const out: PublicSuccessStory[] = [];
+    for (const d of docs) {
+      const row = serialize(d as Record<string, unknown>);
+      if (row.kind !== "training" || row.trainingTrack !== track) continue;
+      if (track === "technical" || track === "non_technical") {
+        if (row.trainingCourseSlug !== course) continue;
+      }
       out.push(row);
       if (out.length >= max) break;
     }

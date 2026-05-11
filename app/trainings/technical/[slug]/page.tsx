@@ -16,6 +16,7 @@ import {
   FiBriefcase,
 } from "react-icons/fi";
 import TrainingEnquiryButton from "@/components/TrainingEnquiryButton";
+import TrainingSuccessStoriesSection from "@/components/trainings/TrainingSuccessStoriesSection";
 import { getTechnicalCourseBySlug } from "@/lib/technical-courses-data";
 
 type TabId = "overview" | "curriculum" | "faqs";
@@ -399,6 +400,12 @@ export default function TechnicalCourseDetailPage() {
           </section>
         )}
       </div>
+
+      <TrainingSuccessStoriesSection
+        trainingTrack="technical"
+        courseSlug={course.slug}
+        contextLabel={course.shortTitle}
+      />
 
       {/* Bottom CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">

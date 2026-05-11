@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { isMongoConfigured, MONGODB_NOT_CONFIGURED_MESSAGE } from "@/lib/mongodb";
 import { getAllSuccessStoriesSorted } from "@/lib/get-success-stories";
+import { successStoryMetaLine } from "@/lib/success-story-public";
 
 /** CDN ISR — success stories list (Mongo). */
 export const revalidate = 60;
@@ -68,9 +69,7 @@ export default async function SuccessStoriesPage() {
                     </div>
                     <div className="flex flex-1 flex-col p-6">
                       <h3 className="mb-2 text-xl font-bold text-foreground">{story.name}</h3>
-                      <p className="mb-4 text-sm font-semibold text-brand">
-                        {[story.university, story.country].filter(Boolean).join(" · ") || "—"}
-                      </p>
+                      <p className="mb-4 text-sm font-semibold text-brand">{successStoryMetaLine(story)}</p>
                       <blockquote className="m-0 flex-1 text-sm italic leading-relaxed text-foreground-muted">
                         &ldquo;{story.story}&rdquo;
                       </blockquote>

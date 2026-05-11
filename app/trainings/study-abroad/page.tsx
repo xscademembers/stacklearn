@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { FiArrowRight, FiCheckCircle } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import TrainingSuccessStoriesSection from "@/components/trainings/TrainingSuccessStoriesSection";
 
 export const metadata: Metadata = {
   title: "Study Abroad Training | StackLearn",
@@ -152,6 +153,11 @@ export default function StudyAbroadTrainingsPage() {
           </div>
         </div>
       </section>
+
+      <TrainingSuccessStoriesSection
+        trainingTrack="study_abroad"
+        contextLabel="Study Abroad Trainings"
+      />
 
       {/* CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">

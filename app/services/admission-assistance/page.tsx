@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { FiArrowRight, FiCheckCircle } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import ServiceSuccessStoriesSection from "@/components/services/ServiceSuccessStoriesSection";
 
 const supportIncludes = [
   "Personalized university & course selection",
@@ -164,19 +165,10 @@ export default function AdmissionAssistancePage() {
         </div>
       </section>
 
-      {/* Success Stories */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-              Success <span className="gradient-text">Stories</span>
-            </h2>
-            <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-              Over the years, we have helped students secure admissions in reputed universities across multiple countries. Whether a student has strong academics or needs strategic planning to overcome challenges like backlogs or career shifts &mdash; we create customized admission strategies. Our focus is not just admission, but the right admission for your long-term success.
-            </p>
-          </div>
-        </div>
-      </section>
+      <ServiceSuccessStoriesSection
+        serviceSlug="admission-assistance"
+        serviceLabel="University Admission Assistance"
+      />
 
       {/* FAQs */}
       <section className="py-16 md:py-20 bg-gray-50">

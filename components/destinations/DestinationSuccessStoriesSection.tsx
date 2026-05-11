@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import type { PublicSuccessStory } from "@/lib/get-success-stories";
+import { successStoryMetaLine, type PublicSuccessStory } from "@/lib/success-story-public";
 
 type Props = {
   destinationSlug: string;
@@ -119,9 +119,7 @@ export default function DestinationSuccessStoriesSection({ destinationSlug, coun
                       </span>
                     </div>
                     <h3 className="mb-2 text-2xl font-extrabold text-foreground">{s.name}</h3>
-                    <p className="mb-4 text-lg font-bold text-brand">
-                      {[s.university, s.country].filter(Boolean).join(" · ") || "—"}
-                    </p>
+                    <p className="mb-4 text-lg font-bold text-brand">{successStoryMetaLine(s)}</p>
                     <blockquote className="m-0 whitespace-pre-wrap text-lg italic leading-relaxed text-foreground-muted">
                       &ldquo;{s.story}&rdquo;
                     </blockquote>

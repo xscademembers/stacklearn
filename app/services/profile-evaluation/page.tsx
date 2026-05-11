@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { FiArrowRight, FiCheckCircle } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import ServiceSuccessStoriesSection from "@/components/services/ServiceSuccessStoriesSection";
 
 const evaluationPoints = [
   "Academic performance & backlogs",
@@ -175,6 +176,11 @@ export default function ProfileEvaluationPage() {
           </div>
         </div>
       </section>
+
+      <ServiceSuccessStoriesSection
+        serviceSlug="profile-evaluation"
+        serviceLabel="Profile Evaluation"
+      />
 
       {/* FAQs */}
       <section className="py-16 md:py-20 bg-white">

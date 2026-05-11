@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { FiArrowRight, FiCheckCircle } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import ServiceSuccessStoriesSection from "@/components/services/ServiceSuccessStoriesSection";
 
 const sopHighlights = [
   "Academic journey",
@@ -213,6 +214,8 @@ export default function SopLorPage() {
           </div>
         </div>
       </section>
+
+      <ServiceSuccessStoriesSection serviceSlug="sop-lor" serviceLabel="SOP & LOR Writing Support" />
 
       {/* FAQs */}
       <section className="py-16 md:py-20 bg-white">

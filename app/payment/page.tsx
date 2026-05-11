@@ -181,9 +181,8 @@ export default function PaymentPage() {
                   required
                   value={formData.mobile}
                   onChange={(next) => setFormData({ ...formData, mobile: next })}
-                  className="w-full border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-brand"
-                  inputClassName="w-full px-4 py-3 outline-none"
-                  placeholder="10-digit mobile number"
+                  className="w-full"
+                  fieldClassName="[&>span]:py-3 [&>input]:py-3 [&>input]:px-4"
                 />
               </div>
               <div>
