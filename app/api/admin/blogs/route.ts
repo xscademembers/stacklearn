@@ -11,7 +11,7 @@ import { getAdminSession } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 type BlogBlock = {
-  kind?: "heading" | "paragraph" | "image" | "table";
+  kind?: "heading" | "paragraph" | "image" | "table" | "checklist";
   heading?: string;
   paragraph?: string;
   imageUrl?: string;
@@ -20,6 +20,7 @@ type BlogBlock = {
     columns?: string[];
     rows?: string[][];
   };
+  checklist?: string;
   align?: "left" | "center" | "right";
   bold?: boolean;
   italic?: boolean;
@@ -95,7 +96,7 @@ function sanitizeTable(v: unknown): BlogBlock["table"] | undefined {
 function sanitizeBlock(b: unknown): BlogBlock {
   const blk = (b ?? {}) as Record<string, unknown>;
   const kind =
-    blk.kind === "heading" || blk.kind === "paragraph" || blk.kind === "image" || blk.kind === "table"
+    blk.kind === "heading" || blk.kind === "paragraph" || blk.kind === "image" || blk.kind === "table" || blk.kind === "checklist"
       ? blk.kind
       : undefined;
 
@@ -103,6 +104,7 @@ function sanitizeBlock(b: unknown): BlogBlock {
   const paragraph = clampStr(blk.paragraph, 20000);
   const imageUrl = clampStr(blk.imageUrl, 2048);
   const table = sanitizeTable(blk.table);
+  const checklist = clampStr(blk.checklist, 10000);
   const align = sanitizeAlign(blk.align);
   const bold = typeof blk.bold === "boolean" ? blk.bold : undefined;
   const italic = typeof blk.italic === "boolean" ? blk.italic : undefined;
@@ -116,6 +118,7 @@ function sanitizeBlock(b: unknown): BlogBlock {
     paragraph,
     imageUrl,
     table,
+    checklist,
     align,
     bold,
     italic,
@@ -172,7 +175,7 @@ export async function POST(request: NextRequest) {
   const cleanBlocks: BlogBlock[] = Array.isArray(blocks)
     ? (blocks as unknown[])
         .map(sanitizeBlock)
-        .filter((b) => (b.heading || b.paragraph || b.imageUrl || b.table))
+        .filter((b) => (b.heading || b.paragraph || b.imageUrl || b.table || b.checklist))
     : [];
 
   const isPublished = Boolean(published);
@@ -220,7 +223,7 @@ export async function PUT(request: NextRequest) {
   if (Array.isArray(updates.blocks)) {
     updates.blocks = (updates.blocks as unknown[])
       .map(sanitizeBlock)
-      .filter((b) => (b.heading || b.paragraph || b.imageUrl || b.table));
+      .filter((b) => (b.heading || b.paragraph || b.imageUrl || b.table || b.checklist));
   }
 
   const now = new Date();
