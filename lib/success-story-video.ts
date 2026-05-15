@@ -39,7 +39,40 @@ function vimeoId(url: URL): string | null {
   return id ?? null;
 }
 
-const DIRECT_VIDEO_EXT = /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i;
+function googleDriveFileId(url: URL): string | null {
+  if (!url.hostname.includes("drive.google.com")) return null;
+  const m = url.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  return m?.[1] ?? null;
+}
+
+function dropboxDirectUrl(url: URL): string | null {
+  const host = url.hostname.replace(/^www\./, "");
+  if (host !== "dropbox.com" && host !== "dl.dropboxusercontent.com") return null;
+  if (host === "dl.dropboxusercontent.com") return url.toString();
+  const path = url.pathname;
+  if (!path.includes("/s/") && !path.includes("/scl/")) return null;
+  const direct = new URL(url.toString());
+  direct.hostname = "dl.dropboxusercontent.com";
+  direct.searchParams.set("raw", "1");
+  return direct.toString();
+}
+
+const DIRECT_VIDEO_EXT = /\.(mp4|webm|ogg|mov|m4v|m3u8)(\?|#|$)/i;
+
+function isLikelyDirectVideoFile(url: URL): boolean {
+  if (DIRECT_VIDEO_EXT.test(url.pathname)) return true;
+  if (url.hostname.includes("blob:")) return false;
+  if (
+    url.hostname.includes("cloudinary.com") &&
+    (url.pathname.includes("/video/") || DIRECT_VIDEO_EXT.test(url.pathname))
+  ) {
+    return true;
+  }
+  if (url.hostname.includes("amazonaws.com") && DIRECT_VIDEO_EXT.test(url.pathname)) {
+    return true;
+  }
+  return false;
+}
 
 export function parseVideoEmbedUrl(raw: string): ParsedVideoEmbed | null {
   const url = sanitizeVideoUrl(raw);
@@ -52,7 +85,7 @@ export function parseVideoEmbedUrl(raw: string): ParsedVideoEmbed | null {
     if (yt) {
       return {
         type: "youtube",
-        embedUrl: `https://www.youtube-nocookie.com/embed/${yt.id}?rel=0&modestbranding=1`,
+        embedUrl: `https://www.youtube-nocookie.com/embed/${yt.id}?rel=0&modestbranding=1&autoplay=0`,
         aspectHint: yt.vertical ? "vertical" : "horizontal",
       };
     }
@@ -61,34 +94,40 @@ export function parseVideoEmbedUrl(raw: string): ParsedVideoEmbed | null {
     if (vimeo) {
       return {
         type: "vimeo",
-        embedUrl: `https://player.vimeo.com/video/${vimeo}?title=0&byline=0`,
+        embedUrl: `https://player.vimeo.com/video/${vimeo}?title=0&byline=0&autoplay=0`,
       };
     }
 
     if (parsed.hostname.includes("loom.com")) {
       const share = parsed.pathname.match(/\/share\/([a-zA-Z0-9]+)/);
-      if (share?.[1]) {
+      const embed = parsed.pathname.match(/\/embed\/([a-zA-Z0-9]+)/);
+      const id = share?.[1] || embed?.[1];
+      if (id) {
         return {
           type: "iframe",
-          embedUrl: `https://www.loom.com/embed/${share[1]}`,
+          embedUrl: `https://www.loom.com/embed/${id}`,
         };
       }
     }
 
-    if (DIRECT_VIDEO_EXT.test(parsed.pathname) || parsed.pathname.includes("/video/")) {
+    const driveId = googleDriveFileId(parsed);
+    if (driveId) {
+      return {
+        type: "iframe",
+        embedUrl: `https://drive.google.com/file/d/${driveId}/preview`,
+      };
+    }
+
+    const dropbox = dropboxDirectUrl(parsed);
+    if (dropbox && DIRECT_VIDEO_EXT.test(new URL(dropbox).pathname)) {
+      return { type: "direct", src: dropbox };
+    }
+
+    if (isLikelyDirectVideoFile(parsed)) {
       return { type: "direct", src: url };
     }
 
-    if (
-      parsed.hostname.includes("drive.google.com") ||
-      parsed.hostname.includes("dropbox.com") ||
-      parsed.hostname.includes("cloudinary.com") ||
-      parsed.hostname.includes("amazonaws.com")
-    ) {
-      return { type: "direct", src: url };
-    }
-
-    return { type: "direct", src: url };
+    return null;
   } catch {
     return null;
   }
