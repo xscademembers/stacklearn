@@ -31,7 +31,15 @@ import {
   mainPageCheckboxLabel,
   supportsShowOnMainPageCheckbox,
 } from "@/lib/success-story-main-page";
-import { successStoryMetaLine, type PublicSuccessStory, type SuccessStoryKind } from "@/lib/success-story-public";
+import {
+  isVideoSuccessStory,
+  parseSuccessStoryMediaType,
+  successStoryMetaLine,
+  type PublicSuccessStory,
+  type SuccessStoryKind,
+  type SuccessStoryMediaType,
+} from "@/lib/success-story-public";
+import { isValidVideoTestimonialUrl } from "@/lib/success-story-video";
 
 type AdminPlacementKind = SuccessStoryKind;
 
@@ -51,6 +59,8 @@ interface SuccessStory {
   trainingCourseSlug?: string;
   trainingDisplayLabel?: string;
   showOnMainPage?: boolean;
+  mediaType?: string;
+  videoUrl?: string;
 }
 
 function readShowOnMainPageFlag(v: unknown): boolean {
@@ -106,6 +116,8 @@ function toPublicSuccessStory(s: SuccessStory): PublicSuccessStory {
     trainingCourseSlug,
     trainingDisplayLabel,
     showOnMainPage: readShowOnMainPageFlag(s.showOnMainPage),
+    mediaType: parseSuccessStoryMediaType(s.mediaType),
+    videoUrl: typeof s.videoUrl === "string" ? s.videoUrl : "",
   };
 }
 
@@ -127,6 +139,8 @@ const emptyStory: Partial<SuccessStory> = {
   trainingCourseSlug: "",
   trainingDisplayLabel: "",
   showOnMainPage: false,
+  mediaType: "story",
+  videoUrl: "",
 };
 
 export default function AdminSuccessStoriesPage() {
@@ -142,8 +156,10 @@ export default function AdminSuccessStoriesPage() {
   const [testPrepMenu, setTestPrepMenu] = useState("");
   const [trainingTrackMenu, setTrainingTrackMenu] = useState("");
   const [trainingCourseMenu, setTrainingCourseMenu] = useState("");
+  const [mediaTypeMenu, setMediaTypeMenu] = useState<SuccessStoryMediaType>("story");
 
   const recordKey = editingRecordKey(editing);
+  const isVideoForm = mediaTypeMenu === "video";
 
   useEffect(() => {
     if (recordKey === null) {
@@ -153,9 +169,11 @@ export default function AdminSuccessStoriesPage() {
       setTestPrepMenu("");
       setTrainingTrackMenu("");
       setTrainingCourseMenu("");
+      setMediaTypeMenu("story");
       return;
     }
     if (!editing) return;
+    setMediaTypeMenu(parseSuccessStoryMediaType(editing.mediaType));
     const k = normalizeKindFromDoc(editing.kind);
     setCategoryKind(k);
     setCountryMenu(countryFieldToSelectValue(editing.country));
@@ -218,6 +236,24 @@ export default function AdminSuccessStoriesPage() {
 
   const handleSave = async () => {
     if (!editing) return;
+    if (!(editing.name || "").trim()) {
+      setError("Student name is required.");
+      return;
+    }
+    if (isVideoForm) {
+      const url = (editing.videoUrl || "").trim();
+      if (!url) {
+        setError("Video URL is required for video testimonials.");
+        return;
+      }
+      if (!isValidVideoTestimonialUrl(url)) {
+        setError("Enter a valid video URL (YouTube, Vimeo, Loom, or direct mp4/webm link).");
+        return;
+      }
+    } else if (!(editing.story || "").trim()) {
+      setError("Story text is required for written success stories.");
+      return;
+    }
     if (categoryKind === "destination") {
       if (!countryMenu) {
         setError("Select a country, or choose Other and type the country name.");
@@ -268,11 +304,14 @@ export default function AdminSuccessStoriesPage() {
       categoryKind === "training" && trainingTrackMenu
         ? computeTrainingDisplayLabel(trainingTrackMenu as TrainingTrack, trainingCourseSlug)
         : "";
-    const university = categoryKind === "destination" ? (editing.university || "").trim() : "";
+    const university =
+      categoryKind === "destination" && !isVideoForm ? (editing.university || "").trim() : "";
     const basePayload = {
       name: (editing.name || "").trim(),
-      story: (editing.story || "").trim(),
-      imageUrl: (editing.imageUrl || "").trim(),
+      mediaType: mediaTypeMenu,
+      videoUrl: isVideoForm ? (editing.videoUrl || "").trim() : "",
+      story: isVideoForm ? "" : (editing.story || "").trim(),
+      imageUrl: isVideoForm ? "" : (editing.imageUrl || "").trim(),
       kind: categoryKind,
       country,
       serviceSlug,
@@ -332,7 +371,7 @@ export default function AdminSuccessStoriesPage() {
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="flex items-center justify-between gap-4">
           <h2 className="text-xl font-bold text-foreground">
-            {editing._id ? "Edit success story" : "New success story"}
+            {editing._id ? "Edit testimonial" : "New testimonial"}
           </h2>
           <button
             type="button"
@@ -347,8 +386,33 @@ export default function AdminSuccessStoriesPage() {
         <section className="bg-surface rounded-xl border border-border p-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="sm:col-span-2">
+              <label htmlFor="ss-media-type" className="block text-sm font-semibold mb-2">
+                Content type
+              </label>
+              <select
+                id="ss-media-type"
+                value={mediaTypeMenu}
+                onChange={(e) => {
+                  const v = e.target.value as SuccessStoryMediaType;
+                  setMediaTypeMenu(v);
+                  setEditing({
+                    ...editing,
+                    mediaType: v,
+                    ...(v === "video" ? { story: "", imageUrl: "" } : { videoUrl: "" }),
+                  });
+                }}
+                className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+              >
+                <option value="story">Written success story</option>
+                <option value="video">Video testimonial</option>
+              </select>
+              <p className="mt-2 text-xs text-foreground-muted">
+                Video testimonials need only name, where to show, and a video URL (any aspect ratio).
+              </p>
+            </div>
+            <div className="sm:col-span-2">
               <label htmlFor="ss-name" className="block text-sm font-semibold mb-2">
-                Student name <span className="text-red-600">*</span>
+                Name <span className="text-red-600">*</span>
               </label>
               <input
                 id="ss-name"
@@ -581,7 +645,7 @@ export default function AdminSuccessStoriesPage() {
                 />
               </div>
             ) : null}
-            {categoryKind === "destination" ? (
+            {categoryKind === "destination" && !isVideoForm ? (
               <div className="sm:col-span-2">
                 <label htmlFor="ss-university" className="block text-sm font-semibold mb-2">
                   University
@@ -617,6 +681,27 @@ export default function AdminSuccessStoriesPage() {
                 </label>
               </div>
             ) : null}
+            {isVideoForm ? (
+              <div className="sm:col-span-2">
+                <label htmlFor="ss-video" className="block text-sm font-semibold mb-2">
+                  Video URL <span className="text-red-600">*</span>
+                </label>
+                <input
+                  id="ss-video"
+                  type="url"
+                  inputMode="url"
+                  value={editing.videoUrl || ""}
+                  onChange={(e) => setEditing({ ...editing, videoUrl: e.target.value })}
+                  className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                  placeholder="https://www.youtube.com/watch?v=… or direct .mp4 link"
+                />
+                <p className="mt-2 text-xs text-foreground-muted">
+                  YouTube, Vimeo, Loom, or direct mp4/webm. Portrait and landscape are supported.
+                </p>
+              </div>
+            ) : null}
+            {!isVideoForm ? (
+            <>
             <div className="sm:col-span-2">
               <label htmlFor="ss-image" className="block text-sm font-semibold mb-2">
                 Photo URL
@@ -648,9 +733,11 @@ export default function AdminSuccessStoriesPage() {
               />
               <p className="mt-2 text-xs text-foreground-muted">{(editing.story || "").length}/400 characters</p>
             </div>
+            </>
+            ) : null}
           </div>
 
-          {editing.imageUrl && /^https?:\/\//i.test(editing.imageUrl.trim()) ? (
+          {!isVideoForm && editing.imageUrl && /^https?:\/\//i.test(editing.imageUrl.trim()) ? (
             <figure className="rounded-xl border border-border bg-page-soft overflow-hidden p-4">
               <figcaption className="text-xs font-semibold text-foreground-muted mb-3">Preview</figcaption>
               {/* eslint-disable-next-line @next/next/no-img-element */}

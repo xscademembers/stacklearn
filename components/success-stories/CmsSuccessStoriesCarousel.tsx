@@ -2,19 +2,27 @@
 
 import { useEffect, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { successStoryMetaLine, type PublicSuccessStory } from "@/lib/success-story-public";
+import {
+  isVideoSuccessStory,
+  successStorySectionHeading,
+  type PublicSuccessStory,
+} from "@/lib/success-story-public";
+import SuccessStorySlideCard from "@/components/success-stories/SuccessStorySlideCard";
 
 type Props = {
   stories: PublicSuccessStory[];
   /** Stable id fragment for `aria-labelledby`, e.g. `service-profile-evaluation` */
   sectionId: string;
-  /** Line below the “Success Stories” heading */
+  /** Line below the heading */
   subtitle: string;
 };
 
 export default function CmsSuccessStoriesCarousel({ stories, sectionId, subtitle }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev">("next");
+
+  const hasVideo = stories.some(isVideoSuccessStory);
+  const heading = successStorySectionHeading(hasVideo);
 
   useEffect(() => {
     setCurrentIndex(0);
@@ -45,7 +53,7 @@ export default function CmsSuccessStoriesCarousel({ stories, sectionId, subtitle
       <div className="container mx-auto px-4 md:px-8">
         <header className="mx-auto mb-10 max-w-3xl text-center md:mb-14">
           <h2 id={`success-stories-${sectionId}`} className="mb-4 text-3xl font-extrabold text-foreground md:text-4xl">
-            Success <span className="gradient-text">Stories</span>
+            {heading.lead} <span className="gradient-text">{heading.gradient}</span>
           </h2>
           <p className="text-base text-foreground-muted md:text-lg">{subtitle}</p>
         </header>
@@ -60,35 +68,7 @@ export default function CmsSuccessStoriesCarousel({ stories, sectionId, subtitle
             >
               {stories.map((s) => (
                 <div key={s._id} className="min-w-full shrink-0 px-2 md:px-4">
-                  <article className="mx-auto max-w-2xl rounded-2xl border border-border bg-surface p-8 text-center shadow-sm md:p-10">
-                    <div className="relative mb-6 inline-block">
-                      <div className="relative mx-auto h-28 w-28">
-                        {s.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={s.imageUrl}
-                            alt=""
-                            className="h-full w-full rounded-full object-cover ring-4 ring-brand/15"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center rounded-full bg-page-soft px-2 text-xs font-medium text-foreground-muted ring-4 ring-brand/15">
-                            No photo
-                          </div>
-                        )}
-                      </div>
-                      <span
-                        className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-bold text-white shadow"
-                        aria-hidden
-                      >
-                        ✓
-                      </span>
-                    </div>
-                    <h3 className="mb-2 text-2xl font-extrabold text-foreground">{s.name}</h3>
-                    <p className="mb-4 text-lg font-bold text-brand">{successStoryMetaLine(s)}</p>
-                    <blockquote className="m-0 whitespace-pre-wrap text-lg italic leading-relaxed text-foreground-muted">
-                      &ldquo;{s.story}&rdquo;
-                    </blockquote>
-                  </article>
+                  <SuccessStorySlideCard story={s} />
                 </div>
               ))}
             </div>
@@ -98,7 +78,7 @@ export default function CmsSuccessStoriesCarousel({ stories, sectionId, subtitle
             type="button"
             onClick={prevSlide}
             className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-surface p-3 shadow-md transition-colors motion-reduce:transition-none hover:bg-page-soft"
-            aria-label="Previous story"
+            aria-label="Previous testimonial"
           >
             <FiChevronLeft className="h-6 w-6 text-foreground" aria-hidden />
           </button>
@@ -106,12 +86,12 @@ export default function CmsSuccessStoriesCarousel({ stories, sectionId, subtitle
             type="button"
             onClick={nextSlide}
             className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-border bg-surface p-3 shadow-md transition-colors motion-reduce:transition-none hover:bg-page-soft"
-            aria-label="Next story"
+            aria-label="Next testimonial"
           >
             <FiChevronRight className="h-6 w-6 text-foreground" aria-hidden />
           </button>
 
-          <div className="mt-8 flex justify-center gap-2" aria-label="Story slides">
+          <div className="mt-8 flex justify-center gap-2" aria-label="Testimonial slides">
             {stories.map((s, index) => (
               <button
                 key={s._id}
@@ -120,7 +100,7 @@ export default function CmsSuccessStoriesCarousel({ stories, sectionId, subtitle
                 className={`h-2 rounded-full transition-all motion-reduce:transition-none ${
                   index === currentIndex ? "w-8 bg-brand" : "w-2 bg-border hover:bg-foreground-muted/50"
                 }`}
-                aria-label={`Go to story ${index + 1}`}
+                aria-label={`Go to testimonial ${index + 1}`}
                 aria-pressed={index === currentIndex}
               />
             ))}

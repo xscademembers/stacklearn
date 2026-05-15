@@ -10,6 +10,8 @@ import { getAdminSession } from "@/lib/auth";
 import { isSuccessStoryServiceSlug } from "@/lib/success-story-service-options";
 import { isSuccessStoryTestPrepSlug } from "@/lib/success-story-test-prep-options";
 import { supportsShowOnMainPageCheckbox } from "@/lib/success-story-main-page";
+import { parseSuccessStoryMediaType, type SuccessStoryMediaType } from "@/lib/success-story-public";
+import { isValidVideoTestimonialUrl, sanitizeVideoUrl } from "@/lib/success-story-video";
 import {
   computeTrainingDisplayLabel,
   isTrainingTrack,
@@ -49,6 +51,8 @@ type StoryPayload = {
   university: string;
   imageUrl: string;
   story: string;
+  mediaType: SuccessStoryMediaType;
+  videoUrl: string;
   kind: StoryKind;
   serviceSlug: string;
   testPrepSlug: string;
@@ -69,6 +73,7 @@ function parseKind(body: Record<string, unknown>): StoryKind {
 }
 
 function parseBody(body: Record<string, unknown>): StoryPayload {
+  const mediaType = parseSuccessStoryMediaType(body.mediaType);
   const kind = parseKind(body);
   const serviceRaw = clampStr(body.serviceSlug, 64);
   const serviceSlug =
@@ -96,12 +101,16 @@ function parseBody(body: Record<string, unknown>): StoryPayload {
     }
   }
 
+  const videoUrl = mediaType === "video" ? sanitizeVideoUrl(body.videoUrl) : "";
+
   return {
     name: clampStr(body.name, 120),
     country,
     university,
-    imageUrl: sanitizeImageUrl(body.imageUrl),
-    story: clampStr(body.story, 400),
+    imageUrl: mediaType === "video" ? "" : sanitizeImageUrl(body.imageUrl),
+    story: mediaType === "video" ? "" : clampStr(body.story, 400),
+    mediaType: mediaType === "video" && videoUrl ? "video" : "story",
+    videoUrl,
     kind,
     serviceSlug,
     testPrepSlug,
@@ -112,8 +121,39 @@ function parseBody(body: Record<string, unknown>): StoryPayload {
   };
 }
 
+function validatePlacement(parsed: StoryPayload): string | null {
+  if (parsed.mediaType === "video") {
+    if (!parsed.videoUrl) return "Video URL is required for video testimonials.";
+    if (!isValidVideoTestimonialUrl(parsed.videoUrl)) {
+      return "Enter a valid video URL (YouTube, Vimeo, Loom, or a direct mp4/webm link).";
+    }
+  } else if (!parsed.story) {
+    return "Story (about two lines) is required.";
+  }
+  if (parsed.kind === "destination" && !parsed.country) {
+    return "Country is required for destination stories.";
+  }
+  if (parsed.kind === "service" && !parsed.serviceSlug) {
+    return "Service is required for service stories.";
+  }
+  if (parsed.kind === "test_prep" && !parsed.testPrepSlug) {
+    return "Test preparation exam is required.";
+  }
+  if (parsed.kind === "training") {
+    if (!parsed.trainingTrack) return "Training category is required.";
+    if (parsed.trainingTrack === "technical" || parsed.trainingTrack === "non_technical") {
+      if (!parsed.trainingCourseSlug) {
+        return "Course is required for technical or non-technical training stories.";
+      }
+    }
+  }
+  return null;
+}
+
 function mongoPlacementFields(parsed: StoryPayload) {
   return {
+    mediaType: parsed.mediaType,
+    videoUrl: parsed.mediaType === "video" ? parsed.videoUrl : "",
     kind: parsed.kind,
     country: parsed.kind === "destination" ? parsed.country : "",
     university: parsed.kind === "destination" ? parsed.university : "",
@@ -164,31 +204,8 @@ export async function POST(request: NextRequest) {
   if (!parsed.name) {
     return NextResponse.json({ message: "Student name is required" }, { status: 400 });
   }
-  if (!parsed.story) {
-    return NextResponse.json({ message: "Story (about two lines) is required" }, { status: 400 });
-  }
-  if (parsed.kind === "destination" && !parsed.country) {
-    return NextResponse.json({ message: "Country is required for destination stories" }, { status: 400 });
-  }
-  if (parsed.kind === "service" && !parsed.serviceSlug) {
-    return NextResponse.json({ message: "Service is required for service stories" }, { status: 400 });
-  }
-  if (parsed.kind === "test_prep" && !parsed.testPrepSlug) {
-    return NextResponse.json({ message: "Test preparation exam is required" }, { status: 400 });
-  }
-  if (parsed.kind === "training") {
-    if (!parsed.trainingTrack) {
-      return NextResponse.json({ message: "Training category is required" }, { status: 400 });
-    }
-    if (parsed.trainingTrack === "technical" || parsed.trainingTrack === "non_technical") {
-      if (!parsed.trainingCourseSlug) {
-        return NextResponse.json(
-          { message: "Course is required for technical or non-technical training stories" },
-          { status: 400 }
-        );
-      }
-    }
-  }
+  const placementErr = validatePlacement(parsed);
+  if (placementErr) return NextResponse.json({ message: placementErr }, { status: 400 });
 
   const db = await getDatabase();
   const now = new Date();
@@ -227,31 +244,8 @@ export async function PUT(request: NextRequest) {
   if (!parsed.name) {
     return NextResponse.json({ message: "Student name is required" }, { status: 400 });
   }
-  if (!parsed.story) {
-    return NextResponse.json({ message: "Story (about two lines) is required" }, { status: 400 });
-  }
-  if (parsed.kind === "destination" && !parsed.country) {
-    return NextResponse.json({ message: "Country is required for destination stories" }, { status: 400 });
-  }
-  if (parsed.kind === "service" && !parsed.serviceSlug) {
-    return NextResponse.json({ message: "Service is required for service stories" }, { status: 400 });
-  }
-  if (parsed.kind === "test_prep" && !parsed.testPrepSlug) {
-    return NextResponse.json({ message: "Test preparation exam is required" }, { status: 400 });
-  }
-  if (parsed.kind === "training") {
-    if (!parsed.trainingTrack) {
-      return NextResponse.json({ message: "Training category is required" }, { status: 400 });
-    }
-    if (parsed.trainingTrack === "technical" || parsed.trainingTrack === "non_technical") {
-      if (!parsed.trainingCourseSlug) {
-        return NextResponse.json(
-          { message: "Course is required for technical or non-technical training stories" },
-          { status: 400 }
-        );
-      }
-    }
-  }
+  const placementErr = validatePlacement(parsed);
+  if (placementErr) return NextResponse.json({ message: placementErr }, { status: 400 });
 
   const db = await getDatabase();
   const placement = mongoPlacementFields(parsed);

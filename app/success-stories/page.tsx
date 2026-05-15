@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { isMongoConfigured, MONGODB_NOT_CONFIGURED_MESSAGE } from "@/lib/mongodb";
 import { getAllSuccessStoriesSorted } from "@/lib/get-success-stories";
-import { successStoryMetaLine } from "@/lib/success-story-public";
+import SuccessStoryArchiveCard from "@/components/success-stories/SuccessStoryArchiveCard";
 
 /** CDN ISR — success stories list (Mongo). */
 export const revalidate = 60;
@@ -52,29 +52,7 @@ export default async function SuccessStoriesPage() {
             <ul className="m-0 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
               {stories.map((story) => (
                 <li key={story._id}>
-                  <article className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-page-soft shadow-sm transition-shadow motion-reduce:transition-none hover:shadow-md">
-                    <div className="relative aspect-[4/3] w-full bg-surface">
-                      {story.imageUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={story.imageUrl}
-                          alt=""
-                          className="absolute inset-0 h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-sm text-foreground-muted">
-                          No photo
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex flex-1 flex-col p-6">
-                      <h3 className="mb-2 text-xl font-bold text-foreground">{story.name}</h3>
-                      <p className="mb-4 text-sm font-semibold text-brand">{successStoryMetaLine(story)}</p>
-                      <blockquote className="m-0 flex-1 text-sm italic leading-relaxed text-foreground-muted">
-                        &ldquo;{story.story}&rdquo;
-                      </blockquote>
-                    </div>
-                  </article>
+                  <SuccessStoryArchiveCard story={story} />
                 </li>
               ))}
             </ul>

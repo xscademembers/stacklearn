@@ -15,6 +15,8 @@ export type SuccessStoryKind =
   | "scholarships"
   | "training";
 
+export type SuccessStoryMediaType = "story" | "video";
+
 export type PublicSuccessStory = {
   _id: string;
   name: string;
@@ -22,6 +24,9 @@ export type PublicSuccessStory = {
   university: string;
   imageUrl: string;
   story: string;
+  /** `story` = photo + quote; `video` = video URL testimonial */
+  mediaType: SuccessStoryMediaType;
+  videoUrl: string;
   kind: SuccessStoryKind;
   serviceSlug: string;
   testPrepSlug: string;
@@ -36,8 +41,26 @@ export type PublicSuccessStory = {
   updatedAt?: string;
 };
 
+export function parseSuccessStoryMediaType(raw: unknown): SuccessStoryMediaType {
+  const v = typeof raw === "string" ? raw.trim().toLowerCase() : "";
+  if (v === "video" || v === "video_testimonial" || v === "video-testimonial") return "video";
+  return "story";
+}
+
+export function isVideoSuccessStory(story: PublicSuccessStory): boolean {
+  return story.mediaType === "video" && Boolean(story.videoUrl.trim());
+}
+
 /** Subtitle line under the student name (carousel / cards). Safe for client bundles. */
 export function successStoryMetaLine(story: PublicSuccessStory): string {
+  if (isVideoSuccessStory(story)) {
+    const base = successStoryPlacementMeta(story);
+    return base ? `Video testimonial · ${base}` : "Video testimonial";
+  }
+  return successStoryPlacementMeta(story);
+}
+
+function successStoryPlacementMeta(story: PublicSuccessStory): string {
   if (story.kind === "service" && story.serviceSlug && isSuccessStoryServiceSlug(story.serviceSlug)) {
     const label = serviceLabelForSlug(story.serviceSlug);
     return [story.university, label].filter(Boolean).join(" · ") || label;
@@ -52,4 +75,11 @@ export function successStoryMetaLine(story: PublicSuccessStory): string {
     return (story.trainingDisplayLabel || "").trim() || "Training";
   }
   return [story.university, story.country].filter(Boolean).join(" · ") || "—";
+}
+
+export function successStorySectionHeading(includeVideo: boolean): { lead: string; gradient: string } {
+  if (includeVideo) {
+    return { lead: "Success Stories &", gradient: "Video Testimonials" };
+  }
+  return { lead: "Success", gradient: "Stories" };
 }

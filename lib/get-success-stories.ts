@@ -17,7 +17,12 @@ import {
   storyMatchesMainPageHub,
   type SuccessStoryMainPageHub,
 } from "@/lib/success-story-main-page";
-import type { PublicSuccessStory, SuccessStoryKind } from "@/lib/success-story-public";
+import {
+  parseSuccessStoryMediaType,
+  type PublicSuccessStory,
+  type SuccessStoryKind,
+} from "@/lib/success-story-public";
+import { sanitizeVideoUrl } from "@/lib/success-story-video";
 
 export type { PublicSuccessStory, SuccessStoryKind } from "@/lib/success-story-public";
 export { successStoryMetaLine } from "@/lib/success-story-public";
@@ -86,6 +91,10 @@ function serialize(doc: Record<string, unknown>): PublicSuccessStory {
     }
   }
 
+  const mediaType = parseSuccessStoryMediaType(doc.mediaType);
+  const videoUrl =
+    mediaType === "video" ? sanitizeVideoUrl(doc.videoUrl) : "";
+
   return {
     _id: String(doc._id),
     name: typeof doc.name === "string" ? doc.name : "",
@@ -93,6 +102,8 @@ function serialize(doc: Record<string, unknown>): PublicSuccessStory {
     university: typeof doc.university === "string" ? doc.university : "",
     imageUrl: typeof doc.imageUrl === "string" ? doc.imageUrl : "",
     story: typeof doc.story === "string" ? doc.story : "",
+    mediaType: mediaType === "video" && videoUrl ? "video" : "story",
+    videoUrl,
     kind,
     serviceSlug,
     testPrepSlug,
