@@ -107,7 +107,7 @@ function parseBody(body: Record<string, unknown>): StoryPayload {
     name: clampStr(body.name, 120),
     country,
     university,
-    imageUrl: mediaType === "video" ? "" : sanitizeImageUrl(body.imageUrl),
+    imageUrl: sanitizeImageUrl(body.imageUrl),
     story: mediaType === "video" ? "" : clampStr(body.story, 400),
     mediaType: mediaType === "video" && videoUrl ? "video" : "story",
     videoUrl,

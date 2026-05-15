@@ -1,7 +1,7 @@
 /** Parsed embed for a testimonial video URL (YouTube, Vimeo, or direct file). */
 export type ParsedVideoEmbed =
-  | { type: "youtube"; embedUrl: string; aspectHint: "vertical" | "horizontal" }
-  | { type: "vimeo"; embedUrl: string }
+  | { type: "youtube"; embedUrl: string; videoId: string; aspectHint: "vertical" | "horizontal" }
+  | { type: "vimeo"; embedUrl: string; videoId: string }
   | { type: "direct"; src: string }
   | { type: "iframe"; embedUrl: string };
 
@@ -85,7 +85,8 @@ export function parseVideoEmbedUrl(raw: string): ParsedVideoEmbed | null {
     if (yt) {
       return {
         type: "youtube",
-        embedUrl: `https://www.youtube-nocookie.com/embed/${yt.id}?rel=0&modestbranding=1&autoplay=0`,
+        videoId: yt.id,
+        embedUrl: `https://www.youtube-nocookie.com/embed/${yt.id}?rel=0&modestbranding=1`,
         aspectHint: yt.vertical ? "vertical" : "horizontal",
       };
     }
@@ -94,7 +95,8 @@ export function parseVideoEmbedUrl(raw: string): ParsedVideoEmbed | null {
     if (vimeo) {
       return {
         type: "vimeo",
-        embedUrl: `https://player.vimeo.com/video/${vimeo}?title=0&byline=0&autoplay=0`,
+        videoId: vimeo,
+        embedUrl: `https://player.vimeo.com/video/${vimeo}?title=0&byline=0`,
       };
     }
 
@@ -137,4 +139,37 @@ export function isValidVideoTestimonialUrl(v: unknown): boolean {
   const url = sanitizeVideoUrl(v);
   if (!url) return false;
   return parseVideoEmbedUrl(url) !== null;
+}
+
+/** Preview image before the user presses play (YouTube / Vimeo). */
+export function getVideoPosterUrl(embed: ParsedVideoEmbed): string | null {
+  if (embed.type === "youtube") {
+    return `https://img.youtube.com/vi/${embed.videoId}/hqdefault.jpg`;
+  }
+  if (embed.type === "vimeo") {
+    return `https://vumbnail.com/${embed.videoId}.jpg`;
+  }
+  return null;
+}
+
+/** Embed URL with autoplay — only call after the user clicks play. */
+export function getEmbedPlayUrl(embed: ParsedVideoEmbed): string {
+  if (embed.type === "youtube") {
+    return `https://www.youtube-nocookie.com/embed/${embed.videoId}?autoplay=1&rel=0&modestbranding=1`;
+  }
+  if (embed.type === "vimeo") {
+    return `https://player.vimeo.com/video/${embed.videoId}?autoplay=1&title=0&byline=0`;
+  }
+  if (embed.type === "iframe") {
+    const sep = embed.embedUrl.includes("?") ? "&" : "?";
+    return `${embed.embedUrl}${sep}autoplay=1`;
+  }
+  return embed.src;
+}
+
+export function embedAspectClass(embed: ParsedVideoEmbed): string {
+  if (embed.type === "youtube" && embed.aspectHint === "vertical") {
+    return "aspect-[9/16] max-h-[min(80vh,640px)] max-w-[min(100%,360px)]";
+  }
+  return "aspect-video max-h-[min(80vh,640px)] w-full";
 }

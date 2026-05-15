@@ -14,7 +14,11 @@ export default function SuccessStoryArchiveCard({ story }: Props) {
     <article className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-page-soft shadow-sm transition-shadow motion-reduce:transition-none hover:shadow-md">
       <div className={`relative w-full bg-surface ${isVideo ? "p-4" : "aspect-[4/3]"}`}>
         {isVideo ? (
-          <SuccessStoryVideoPlayer videoUrl={story.videoUrl} studentName={story.name} />
+          <SuccessStoryVideoPlayer
+            videoUrl={story.videoUrl}
+            studentName={story.name}
+            posterUrl={story.imageUrl || undefined}
+          />
         ) : story.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={story.imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />

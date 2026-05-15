@@ -700,6 +700,25 @@ export default function AdminSuccessStoriesPage() {
                 </p>
               </div>
             ) : null}
+            {isVideoForm ? (
+              <div className="sm:col-span-2">
+                <label htmlFor="ss-video-poster" className="block text-sm font-semibold mb-2">
+                  Thumbnail / poster URL <span className="font-normal text-foreground-muted">(optional)</span>
+                </label>
+                <input
+                  id="ss-video-poster"
+                  type="url"
+                  inputMode="url"
+                  value={editing.imageUrl || ""}
+                  onChange={(e) => setEditing({ ...editing, imageUrl: e.target.value })}
+                  className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
+                  placeholder="https://example.com/thumbnail.jpg"
+                />
+                <p className="mt-2 text-xs text-foreground-muted">
+                  Shown before play. YouTube/Vimeo auto-fetch a thumbnail if this is empty.
+                </p>
+              </div>
+            ) : null}
             {!isVideoForm ? (
             <>
             <div className="sm:col-span-2">
@@ -737,7 +756,7 @@ export default function AdminSuccessStoriesPage() {
             ) : null}
           </div>
 
-          {!isVideoForm && editing.imageUrl && /^https?:\/\//i.test(editing.imageUrl.trim()) ? (
+          {editing.imageUrl && /^https?:\/\//i.test(editing.imageUrl.trim()) ? (
             <figure className="rounded-xl border border-border bg-page-soft overflow-hidden p-4">
               <figcaption className="text-xs font-semibold text-foreground-muted mb-3">Preview</figcaption>
               {/* eslint-disable-next-line @next/next/no-img-element */}
