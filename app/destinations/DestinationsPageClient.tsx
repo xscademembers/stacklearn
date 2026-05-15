@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiChevronDown, FiCheck } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import MainPageSuccessStoriesSection from "@/components/success-stories/MainPageSuccessStoriesSection";
+import type { PublicSuccessStory } from "@/lib/success-story-public";
 
 export type DestinationsHeroCms = {
   kicker: string;
@@ -222,7 +224,13 @@ const faqs = [
 const DEFAULT_HERO_QUOTE =
   "Our goal is to simplify the overseas education process and ensure that students are equipped with all the necessary tools and information to make informed decisions for their future.";
 
-export default function DestinationsPageClient({ hero }: { hero: DestinationsHeroCms }) {
+export default function DestinationsPageClient({
+  hero,
+  mainPageSuccessStories,
+}: {
+  hero: DestinationsHeroCms;
+  mainPageSuccessStories: PublicSuccessStory[];
+}) {
   const leftFaqs = faqs.slice(0, 5);
   const rightFaqs = faqs.slice(5, 9);
   const heroUnopt =
@@ -541,6 +549,8 @@ export default function DestinationsPageClient({ hero }: { hero: DestinationsHer
           </div>
         </div>
       </section>
+
+      <MainPageSuccessStoriesSection mainPage="destinations" stories={mainPageSuccessStories} />
 
       {/* Success Stories CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">

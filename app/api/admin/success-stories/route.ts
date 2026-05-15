@@ -9,6 +9,7 @@ import {
 import { getAdminSession } from "@/lib/auth";
 import { isSuccessStoryServiceSlug } from "@/lib/success-story-service-options";
 import { isSuccessStoryTestPrepSlug } from "@/lib/success-story-test-prep-options";
+import { supportsShowOnMainPageCheckbox } from "@/lib/success-story-main-page";
 import {
   computeTrainingDisplayLabel,
   isTrainingTrack,
@@ -34,6 +35,13 @@ function sanitizeImageUrl(v: unknown): string {
 
 type StoryKind = "destination" | "service" | "test_prep" | "home" | "scholarships" | "training";
 
+function parseShowOnMainPage(body: Record<string, unknown>): boolean {
+  const v = body.showOnMainPage;
+  if (v === true) return true;
+  if (v === "true" || v === "on" || v === "1") return true;
+  return false;
+}
+
 type StoryPayload = {
   name: string;
   country: string;
@@ -46,6 +54,7 @@ type StoryPayload = {
   trainingTrack: string;
   trainingCourseSlug: string;
   trainingDisplayLabel: string;
+  showOnMainPage: boolean;
 };
 
 function parseKind(body: Record<string, unknown>): StoryKind {
@@ -98,6 +107,7 @@ function parseBody(body: Record<string, unknown>): StoryPayload {
     trainingTrack,
     trainingCourseSlug,
     trainingDisplayLabel,
+    showOnMainPage: parseShowOnMainPage(body),
   };
 }
 
@@ -111,6 +121,8 @@ function mongoPlacementFields(parsed: StoryPayload) {
     trainingTrack: parsed.kind === "training" ? parsed.trainingTrack : "",
     trainingCourseSlug: parsed.kind === "training" ? parsed.trainingCourseSlug : "",
     trainingDisplayLabel: parsed.kind === "training" ? parsed.trainingDisplayLabel : "",
+    showOnMainPage:
+      supportsShowOnMainPageCheckbox(parsed.kind, parsed.trainingTrack) && parsed.showOnMainPage,
   };
 }
 

@@ -3,9 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiClock, FiUsers, FiCheckCircle } from "react-icons/fi";
 import TrainingEnquiryButton from "@/components/TrainingEnquiryButton";
+import MainPageSuccessStoriesSection from "@/components/success-stories/MainPageSuccessStoriesSection";
 import { technicalCourses } from "@/lib/technical-courses-data";
 import { getMergedPageContent } from "@/lib/get-merged-page-content";
 import { getCmsField } from "@/lib/cms-merge-sections";
+import { getSuccessStoriesForMainPage } from "@/lib/get-success-stories";
 
 /** CDN ISR — trainings hub CMS. */
 export const revalidate = 60;
@@ -25,7 +27,10 @@ const courseIcons: Record<string, string> = {
 };
 
 export default async function TechnicalTrainingsPage() {
-  const sections = await getMergedPageContent("trainings");
+  const [sections, mainPageSuccessStories] = await Promise.all([
+    getMergedPageContent("trainings"),
+    getSuccessStoriesForMainPage("training-technical"),
+  ]);
   const kicker = getCmsField(sections, "hero", "kicker") || "Technical Training Programs";
   const headingMain =
     getCmsField(sections, "hero", "headingMain") || "Industry-Ready Technical";
@@ -220,6 +225,8 @@ export default async function TechnicalTrainingsPage() {
           </div>
         </div>
       </section>
+
+      <MainPageSuccessStoriesSection mainPage="training-technical" stories={mainPageSuccessStories} />
 
       {/* CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">

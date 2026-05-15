@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiClock, FiUsers, FiCheckCircle } from "react-icons/fi";
 import TrainingEnquiryButton from "@/components/TrainingEnquiryButton";
+import MainPageSuccessStoriesSection from "@/components/success-stories/MainPageSuccessStoriesSection";
+import { getSuccessStoriesForMainPage } from "@/lib/get-success-stories";
 import { nonTechnicalCourses } from "@/lib/non-technical-courses-data";
 
 export const metadata: Metadata = {
@@ -11,7 +13,9 @@ export const metadata: Metadata = {
     "Specialized non-technical and domain-focused training programs including VLSI Design Verification with hands-on projects, expert mentorship, and placement assistance. Part of StackLearn's broader Technical & Non-Technical Training offerings that support global study abroad and career goals.",
 };
 
-export default function NonTechnicalTrainingsPage() {
+export default async function NonTechnicalTrainingsPage() {
+  const mainPageSuccessStories = await getSuccessStoriesForMainPage("training-non-technical");
+
   return (
     <div>
       {/* Hero */}
@@ -197,6 +201,11 @@ export default function NonTechnicalTrainingsPage() {
           </div>
         </div>
       </section>
+
+      <MainPageSuccessStoriesSection
+        mainPage="training-non-technical"
+        stories={mainPageSuccessStories}
+      />
 
       {/* CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">

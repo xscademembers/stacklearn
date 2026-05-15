@@ -30,6 +30,8 @@ export type PublicSuccessStory = {
   trainingCourseSlug: string;
   /** Denormalized label for cards (set at save / serialize). */
   trainingDisplayLabel: string;
+  /** When true, story appears on the hub/main listing page for its story type. */
+  showOnMainPage: boolean;
   createdAt?: string;
   updatedAt?: string;
 };

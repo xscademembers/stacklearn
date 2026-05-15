@@ -205,50 +205,7 @@ export default function GREPage() {
         </div>
       </section>
 
-      {/* Success Stories */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
-              GRE Success Stories
-            </h2>
-            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-              Our students have consistently achieved competitive GRE scores and secured admission
-              into reputed international universities.
-            </p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                title: "Score 322 in 10 Weeks",
-                body: "Student A improved from 300 to 322 with focused quant and verbal practice.",
-              },
-              {
-                title: "325 for Top US Admit",
-                body:
-                  "Student B scored 325 and secured admission in a highly ranked US university.",
-              },
-              {
-                title: "318 with Scholarship",
-                body:
-                  "Student C achieved 318 and received scholarship consideration for graduate study.",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl bg-page-soft border border-slate-200 px-5 py-6 md:px-6 md:py-7 hover-lift"
-              >
-                <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">
-                  {item.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestPrepSuccessStoriesSection testPrepSlug="gre" />
 
       {/* FAQs */}
       <section className="py-16 md:py-20 bg-gray-50">
@@ -293,8 +250,6 @@ export default function GREPage() {
           </div>
         </div>
       </section>
-
-      <TestPrepSuccessStoriesSection testPrepSlug="gre" />
 
       {/* CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">

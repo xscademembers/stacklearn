@@ -221,50 +221,7 @@ export default function IELTSPage() {
         </div>
       </section>
 
-      {/* Success Stories */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
-              IELTS Success Stories
-            </h2>
-            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-              Countless students have achieved their desired IELTS bands with StackLearn&apos;s
-              expert support. Our structured coaching and regular mock tests have helped students
-              secure admissions and visas at top universities.
-            </p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                title: "Band 7.5 in 8 Weeks",
-                body:
-                  "Student X improved from Band 6.0 to Band 7.5 within 8 weeks of focused coaching.",
-              },
-              {
-                title: "Band 8.0 for UK Admit",
-                body:
-                  "Student Y scored Band 8.0 and received offers from top UK universities.",
-              },
-              {
-                title: "Band 7.0 with Scholarship",
-                body:
-                  "Student Z achieved Band 7.0 and secured admission with scholarship support.",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl bg-page-soft border border-slate-200 px-5 py-6 md:px-6 md:py-7 hover-lift"
-              >
-                <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestPrepSuccessStoriesSection testPrepSlug="ielts" />
 
       {/* FAQs */}
       <section className="py-16 md:py-20 bg-gray-50">
@@ -310,8 +267,6 @@ export default function IELTSPage() {
           </div>
         </div>
       </section>
-
-      <TestPrepSuccessStoriesSection testPrepSlug="ielts" />
 
       {/* CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">

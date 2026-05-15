@@ -10,6 +10,12 @@ import {
   isTrainingTrack,
   type TrainingTrack,
 } from "@/lib/success-story-training-options";
+import {
+  isSuccessStoryMainPageHub,
+  mongoFilterForMainPageHub,
+  storyMatchesMainPageHub,
+  type SuccessStoryMainPageHub,
+} from "@/lib/success-story-main-page";
 import type { PublicSuccessStory, SuccessStoryKind } from "@/lib/success-story-public";
 
 export type { PublicSuccessStory, SuccessStoryKind } from "@/lib/success-story-public";
@@ -21,14 +27,34 @@ function toIso(d: unknown): string | undefined {
   return undefined;
 }
 
+function readShowOnMainPage(doc: Record<string, unknown>): boolean {
+  const v = doc.showOnMainPage;
+  if (v === true || v === 1) return true;
+  if (typeof v === "string") {
+    const s = v.trim().toLowerCase();
+    return s === "true" || s === "1" || s === "on" || s === "yes";
+  }
+  return false;
+}
+
 function parseDocKind(doc: Record<string, unknown>): SuccessStoryKind {
   const k = typeof doc.kind === "string" ? doc.kind.trim().toLowerCase() : "";
-  if (k === "service") return "service";
+  if (k === "service" || k === "services") return "service";
   if (k === "test_prep" || k === "test-prep" || k === "test preparation") return "test_prep";
   if (k === "home") return "home";
   if (k === "scholarships" || k === "scholarship") return "scholarships";
   if (k === "training") return "training";
+  if (k === "destination" || k === "destinations") return "destination";
   return "destination";
+}
+
+function parseDocTrainingTrack(doc: Record<string, unknown>): string {
+  const raw = typeof doc.trainingTrack === "string" ? doc.trainingTrack.trim().toLowerCase() : "";
+  if (raw === "technical") return "technical";
+  if (raw === "non_technical" || raw === "non-technical" || raw === "non technical") return "non_technical";
+  if (raw === "study_abroad" || raw === "study-abroad") return "study_abroad";
+  if (raw === "corporate") return "corporate";
+  return raw;
 }
 
 function serialize(doc: Record<string, unknown>): PublicSuccessStory {
@@ -46,7 +72,7 @@ function serialize(doc: Record<string, unknown>): PublicSuccessStory {
   let trainingCourseSlug = "";
   let trainingDisplayLabel = "";
   if (kind === "training") {
-    const tt = typeof doc.trainingTrack === "string" ? doc.trainingTrack.trim() : "";
+    const tt = parseDocTrainingTrack(doc);
     if (isTrainingTrack(tt)) {
       trainingTrack = tt;
       const rawCourse =
@@ -77,6 +103,7 @@ function serialize(doc: Record<string, unknown>): PublicSuccessStory {
     trainingTrack,
     trainingCourseSlug,
     trainingDisplayLabel,
+    showOnMainPage: readShowOnMainPage(doc),
     createdAt: toIso(doc.createdAt),
     updatedAt: toIso(doc.updatedAt),
   };
@@ -312,6 +339,42 @@ export async function getSuccessStoriesForTrainingPlacement(
       }
       out.push(row);
       if (out.length >= max) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
+/** Stories flagged for a hub/main listing page (`showOnMainPage: true`), newest first. */
+export async function getSuccessStoriesForMainPage(
+  hub: SuccessStoryMainPageHub,
+  limit = 24
+): Promise<PublicSuccessStory[]> {
+  if (!isSuccessStoryMainPageHub(hub)) return [];
+  if (!isMongoConfigured()) return [];
+  const max = typeof limit === "number" && limit > 0 ? limit : 24;
+  try {
+    const db = await getDatabase();
+    const docs = await db
+      .collection(COLLECTIONS.SUCCESS_STORIES)
+      .aggregate([
+        { $match: mongoFilterForMainPageHub(hub) },
+        {
+          $addFields: {
+            _sortAt: { $ifNull: ["$updatedAt", "$createdAt"] },
+          },
+        },
+        { $sort: { _sortAt: -1 } },
+        { $limit: max },
+      ])
+      .toArray();
+
+    const out: PublicSuccessStory[] = [];
+    for (const d of docs) {
+      const row = serialize(d as Record<string, unknown>);
+      if (!storyMatchesMainPageHub(row, hub)) continue;
+      out.push(row);
     }
     return out;
   } catch {

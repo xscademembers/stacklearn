@@ -200,51 +200,7 @@ export default function GMATPage() {
         </div>
       </section>
 
-      {/* Success Stories */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
-              GMAT Success Stories
-            </h2>
-            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-              Our students have secured strong GMAT scores and gained admission into international
-              MBA programs.
-            </p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                title: "Score 690 from 580",
-                body:
-                  "Student G improved from 580 to 690 through focused quant and verbal practice.",
-              },
-              {
-                title: "710 for Top MBA Admit",
-                body:
-                  "Student H scored 710 and secured MBA admission at a reputed global business school.",
-              },
-              {
-                title: "650+ with Profile Boost",
-                body:
-                  "Student I achieved 650+ and strengthened their profile with guided application support.",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl bg-page-soft border border-slate-200 px-5 py-6 md:px-6 md:py-7 hover-lift"
-              >
-                <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-xs md:text-sm text-slate-700 leading-relaxed">
-                  {item.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestPrepSuccessStoriesSection testPrepSlug="gmat" />
 
       {/* FAQs */}
       <section className="py-16 md:py-20 bg-gray-50">
@@ -284,8 +240,6 @@ export default function GMATPage() {
           </div>
         </div>
       </section>
-
-      <TestPrepSuccessStoriesSection testPrepSlug="gmat" />
 
       {/* CTA */}
       <section className="relative py-16 md:py-20 text-white overflow-hidden">

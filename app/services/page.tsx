@@ -2,7 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import MainPageSuccessStoriesSection from "@/components/success-stories/MainPageSuccessStoriesSection";
 import { getMergedPageContent } from "@/lib/get-merged-page-content";
+import { getSuccessStoriesForMainPage } from "@/lib/get-success-stories";
 import { getCmsField, parseCmsJson } from "@/lib/cms-merge-sections";
 import {
   DEFAULT_SERVICES_PAGE_BODY,
@@ -25,7 +27,10 @@ const DEFAULT_HERO = {
 };
 
 export default async function ServicesPage() {
-  const sections = await getMergedPageContent("services");
+  const [sections, mainPageSuccessStories] = await Promise.all([
+    getMergedPageContent("services"),
+    getSuccessStoriesForMainPage("services"),
+  ]);
   const kicker = getCmsField(sections, "hero", "kicker") || DEFAULT_HERO.kicker;
   const heading = getCmsField(sections, "hero", "heading") || DEFAULT_HERO.heading;
   const paragraph1 = getCmsField(sections, "hero", "paragraph1") || DEFAULT_HERO.paragraph1;
@@ -223,6 +228,8 @@ export default async function ServicesPage() {
           </div>
         </div>
       </section>
+
+      <MainPageSuccessStoriesSection mainPage="services" stories={mainPageSuccessStories} />
 
       <section className="relative py-16 md:py-20 text-white overflow-hidden">
         <div className="absolute inset-0 z-0">

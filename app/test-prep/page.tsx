@@ -2,8 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiArrowRight, FiBookOpen } from "react-icons/fi";
 import BookConsultButton from "@/components/BookConsultButton";
+import MainPageSuccessStoriesSection from "@/components/success-stories/MainPageSuccessStoriesSection";
 import { getMergedPageContent } from "@/lib/get-merged-page-content";
 import { getCmsField } from "@/lib/cms-merge-sections";
+import { getSuccessStoriesForMainPage } from "@/lib/get-success-stories";
 
 /** CDN ISR — test prep CMS. */
 export const revalidate = 60;
@@ -32,7 +34,10 @@ const tests = [
 ];
 
 export default async function TestPrepPage() {
-  const sections = await getMergedPageContent("test-prep");
+  const [sections, mainPageSuccessStories] = await Promise.all([
+    getMergedPageContent("test-prep"),
+    getSuccessStoriesForMainPage("test-prep"),
+  ]);
   const kicker =
     getCmsField(sections, "hero", "kicker") || "Test Preparation for Study Abroad";
   const heading = getCmsField(sections, "hero", "heading") || "Test Preparation";
@@ -246,39 +251,7 @@ export default async function TestPrepPage() {
         </div>
       </section>
 
-      {/* Success Stories */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="container mx-auto px-6 md:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3">
-              Test Preparation Success Stories
-            </h2>
-            <p className="text-slate-700 text-sm md:text-base leading-relaxed">
-              Our students have consistently achieved strong scores and secured admissions in top
-              global universities.
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-4">
-            {[
-              { label: "IELTS Band Achievers", value: "7.5+" },
-              { label: "GRE Score Students", value: "320+" },
-              { label: "TOEFL Score Achievers", value: "100+" },
-              { label: "GMAT MBA Admissions", value: "650+" },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="rounded-2xl bg-page-soft border border-slate-200 px-5 py-6 text-center"
-              >
-                <p className="text-2xl md:text-3xl font-extrabold text-brand mb-1">
-                  {item.value}
-                </p>
-                <p className="text-xs md:text-sm text-slate-700 leading-snug">{item.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <MainPageSuccessStoriesSection mainPage="test-prep" stories={mainPageSuccessStories} />
 
       {/* Final CTA */}
       <section className="relative py-20 text-white overflow-hidden">

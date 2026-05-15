@@ -6,7 +6,9 @@ import {
   getSuccessStoriesForScholarshipsPage,
   getSuccessStoriesForTestPrepSlug,
   getSuccessStoriesForTrainingPlacement,
+  getSuccessStoriesForMainPage,
 } from "@/lib/get-success-stories";
+import { isSuccessStoryMainPageHub } from "@/lib/success-story-main-page";
 import { isMongoConfigured, MONGODB_NOT_CONFIGURED_MESSAGE } from "@/lib/mongodb";
 import { isDestinationSuccessStorySlug } from "@/lib/destination-country-match";
 import { isSuccessStoryServiceSlug } from "@/lib/success-story-service-options";
@@ -44,6 +46,12 @@ export async function GET(request: NextRequest) {
   }
 
   const cap = parseCap(request);
+
+  const mainPageRaw = request.nextUrl.searchParams.get("mainPage")?.trim() || "";
+  if (mainPageRaw && isSuccessStoryMainPageHub(mainPageRaw)) {
+    const successStories = await getSuccessStoriesForMainPage(mainPageRaw, cap);
+    return NextResponse.json({ successStories });
+  }
 
   if (service) {
     if (!isSuccessStoryServiceSlug(service)) {

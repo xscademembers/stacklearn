@@ -26,6 +26,10 @@ import {
   isValidTrainingCourseForTrack,
   type TrainingTrack,
 } from "@/lib/success-story-training-options";
+import {
+  mainPageCheckboxLabel,
+  supportsShowOnMainPageCheckbox,
+} from "@/lib/success-story-main-page";
 import { successStoryMetaLine, type PublicSuccessStory, type SuccessStoryKind } from "@/lib/success-story-public";
 
 type AdminPlacementKind = SuccessStoryKind;
@@ -45,6 +49,16 @@ interface SuccessStory {
   trainingTrack?: string;
   trainingCourseSlug?: string;
   trainingDisplayLabel?: string;
+  showOnMainPage?: boolean;
+}
+
+function readShowOnMainPageFlag(v: unknown): boolean {
+  if (v === true || v === 1) return true;
+  if (typeof v === "string") {
+    const s = v.trim().toLowerCase();
+    return s === "true" || s === "1" || s === "on" || s === "yes";
+  }
+  return false;
 }
 
 function normalizeKindFromDoc(raw: unknown): AdminPlacementKind {
@@ -91,6 +105,7 @@ function toPublicSuccessStory(s: SuccessStory): PublicSuccessStory {
     trainingTrack,
     trainingCourseSlug,
     trainingDisplayLabel,
+    showOnMainPage: readShowOnMainPageFlag(s.showOnMainPage),
   };
 }
 
@@ -111,6 +126,7 @@ const emptyStory: Partial<SuccessStory> = {
   trainingTrack: "",
   trainingCourseSlug: "",
   trainingDisplayLabel: "",
+  showOnMainPage: false,
 };
 
 export default function AdminSuccessStoriesPage() {
@@ -269,6 +285,9 @@ export default function AdminSuccessStoriesPage() {
       trainingCourseSlug,
       trainingDisplayLabel,
       university,
+      showOnMainPage:
+        supportsShowOnMainPageCheckbox(categoryKind, trainingTrackMenu) &&
+        readShowOnMainPageFlag(editing.showOnMainPage),
     };
     const isUpdate = editing._id != null && String(editing._id).trim() !== "";
     const payload = isUpdate ? { ...basePayload, _id: String(editing._id).trim() } : basePayload;
@@ -369,6 +388,7 @@ export default function AdminSuccessStoriesPage() {
                     trainingTrack: "",
                     trainingCourseSlug: "",
                     trainingDisplayLabel: "",
+                    showOnMainPage: false,
                   });
                 }}
                 className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
@@ -483,6 +503,9 @@ export default function AdminSuccessStoriesPage() {
                       trainingTrack: tr,
                       trainingCourseSlug: "",
                       trainingDisplayLabel: "",
+                      showOnMainPage:
+                        supportsShowOnMainPageCheckbox("training", tr) &&
+                        readShowOnMainPageFlag(editing.showOnMainPage),
                     });
                   }}
                   className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
@@ -574,6 +597,28 @@ export default function AdminSuccessStoriesPage() {
                   onChange={(e) => setEditing({ ...editing, university: e.target.value })}
                   className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
                 />
+              </div>
+            ) : null}
+            {supportsShowOnMainPageCheckbox(categoryKind, trainingTrackMenu) ? (
+              <div className="sm:col-span-2">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={readShowOnMainPageFlag(editing.showOnMainPage)}
+                    onChange={(e) =>
+                      setEditing({ ...editing, showOnMainPage: e.target.checked })
+                    }
+                    className="mt-1 h-4 w-4 rounded border-border text-brand focus:ring-brand"
+                  />
+                  <span className="text-sm text-foreground leading-relaxed">
+                    {mainPageCheckboxLabel(categoryKind, trainingTrackMenu)}
+                    <span className="block text-xs text-foreground-muted mt-1">
+                      When checked, this story also appears on the main listing page for this
+                      category (in addition to the specific country, service, exam, or course
+                      page).
+                    </span>
+                  </span>
+                </label>
               </div>
             ) : null}
             <div className="sm:col-span-2">
@@ -718,7 +763,12 @@ export default function AdminSuccessStoriesPage() {
                 <div className="flex items-center gap-2 mt-auto pt-2 border-t border-border">
                   <button
                     type="button"
-                    onClick={() => setEditing(s)}
+                    onClick={() =>
+                      setEditing({
+                        ...s,
+                        showOnMainPage: readShowOnMainPageFlag(s.showOnMainPage),
+                      })
+                    }
                     className="p-2 rounded-lg hover:bg-page-soft transition-colors motion-reduce:transition-none text-foreground-muted hover:text-brand"
                     title="Edit"
                   >
