@@ -8,6 +8,7 @@ import { isSuccessStoryTestPrepSlug } from "@/lib/success-story-test-prep-option
 import {
   computeTrainingDisplayLabel,
   isTrainingTrack,
+  normalizeTrainingTrack,
   type TrainingTrack,
 } from "@/lib/success-story-training-options";
 import {
@@ -49,12 +50,7 @@ function parseDocKind(doc: Record<string, unknown>): SuccessStoryKind {
 }
 
 function parseDocTrainingTrack(doc: Record<string, unknown>): string {
-  const raw = typeof doc.trainingTrack === "string" ? doc.trainingTrack.trim().toLowerCase() : "";
-  if (raw === "technical") return "technical";
-  if (raw === "non_technical" || raw === "non-technical" || raw === "non technical") return "non_technical";
-  if (raw === "study_abroad" || raw === "study-abroad") return "study_abroad";
-  if (raw === "corporate") return "corporate";
-  return raw;
+  return normalizeTrainingTrack(doc.trainingTrack);
 }
 
 function serialize(doc: Record<string, unknown>): PublicSuccessStory {
@@ -351,6 +347,9 @@ export async function getSuccessStoriesForMainPage(
   hub: SuccessStoryMainPageHub,
   limit = 24
 ): Promise<PublicSuccessStory[]> {
+  const { unstable_noStore: noStore } = await import("next/cache");
+  noStore();
+
   if (!isSuccessStoryMainPageHub(hub)) return [];
   if (!isMongoConfigured()) return [];
   const max = typeof limit === "number" && limit > 0 ? limit : 24;
@@ -366,7 +365,7 @@ export async function getSuccessStoriesForMainPage(
           },
         },
         { $sort: { _sortAt: -1 } },
-        { $limit: max },
+        { $limit: max * 2 },
       ])
       .toArray();
 
@@ -375,7 +374,28 @@ export async function getSuccessStoriesForMainPage(
       const row = serialize(d as Record<string, unknown>);
       if (!storyMatchesMainPageHub(row, hub)) continue;
       out.push(row);
+      if (out.length >= max) break;
     }
+
+    // Fallback: scan flagged training stories if regex $match missed legacy field shapes
+    if (
+      out.length === 0 &&
+      (hub === "training-technical" || hub === "training-non-technical")
+    ) {
+      const flagged = await db
+        .collection(COLLECTIONS.SUCCESS_STORIES)
+        .find({ showOnMainPage: { $in: [true, "true", "1", 1] } })
+        .sort({ updatedAt: -1, createdAt: -1 })
+        .limit(100)
+        .toArray();
+      for (const d of flagged) {
+        const row = serialize(d as Record<string, unknown>);
+        if (!storyMatchesMainPageHub(row, hub)) continue;
+        out.push(row);
+        if (out.length >= max) break;
+      }
+    }
+
     return out;
   } catch {
     return [];

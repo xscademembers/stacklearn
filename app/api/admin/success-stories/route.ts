@@ -14,6 +14,7 @@ import {
   computeTrainingDisplayLabel,
   isTrainingTrack,
   isValidTrainingCourseForTrack,
+  normalizeTrainingTrack,
   type TrainingTrack,
 } from "@/lib/success-story-training-options";
 
@@ -82,8 +83,8 @@ function parseBody(body: Record<string, unknown>): StoryPayload {
   let trainingCourseSlug = "";
   let trainingDisplayLabel = "";
   if (kind === "training") {
-    const tr = clampStr(body.trainingTrack, 32);
-    if (isTrainingTrack(tr)) {
+    const tr = normalizeTrainingTrack(clampStr(body.trainingTrack, 32));
+    if (tr) {
       trainingTrack = tr;
       const cs = clampStr(body.trainingCourseSlug, 120);
       if (tr === "technical" || tr === "non_technical") {

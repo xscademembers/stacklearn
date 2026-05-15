@@ -7,6 +7,9 @@ import MainPageSuccessStoriesSection from "@/components/success-stories/MainPage
 import { getSuccessStoriesForMainPage } from "@/lib/get-success-stories";
 import { nonTechnicalCourses } from "@/lib/non-technical-courses-data";
 
+/** Refresh CMS success stories on the hub (same as technical trainings). */
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Non-Technical Training Courses | StackLearn",
   description:

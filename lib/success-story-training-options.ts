@@ -16,6 +16,22 @@ export function isTrainingTrack(v: string): v is TrainingTrack {
   return TRACK_SET.has(v);
 }
 
+/** Normalize stored/API training track strings to canonical values. */
+export function normalizeTrainingTrack(v: unknown): TrainingTrack | "" {
+  if (typeof v !== "string") return "";
+  const raw = v.trim().toLowerCase();
+  if (!raw) return "";
+  if (raw === "technical") return "technical";
+  if (raw === "corporate") return "corporate";
+  if (raw === "study_abroad" || raw === "study-abroad") return "study_abroad";
+  if (raw === "non_technical" || raw === "non-technical" || raw === "non technical") return "non_technical";
+  const compact = raw.replace(/[-\s]/g, "_");
+  if (compact === "non_technical" || compact === "nontechnical") return "non_technical";
+  if (isTrainingTrack(raw)) return raw;
+  if (isTrainingTrack(compact)) return compact as TrainingTrack;
+  return "";
+}
+
 export const ADMIN_TRAINING_TECHNICAL_COURSES = technicalCourses.map((c) => ({
   slug: c.slug,
   label: c.shortTitle || c.title,

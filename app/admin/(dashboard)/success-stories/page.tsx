@@ -24,6 +24,7 @@ import {
   computeTrainingDisplayLabel,
   isTrainingTrack,
   isValidTrainingCourseForTrack,
+  normalizeTrainingTrack,
   type TrainingTrack,
 } from "@/lib/success-story-training-options";
 import {
@@ -79,8 +80,7 @@ function toPublicSuccessStory(s: SuccessStory): PublicSuccessStory {
     kind === "test_prep" && s.testPrepSlug && isSuccessStoryTestPrepSlug(s.testPrepSlug)
       ? s.testPrepSlug
       : "";
-  const trainingTrack =
-    kind === "training" && s.trainingTrack && isTrainingTrack(s.trainingTrack) ? s.trainingTrack : "";
+  const trainingTrack = kind === "training" ? normalizeTrainingTrack(s.trainingTrack) : "";
   const trainingCourseSlug =
     kind === "training" && trainingTrack && (trainingTrack === "technical" || trainingTrack === "non_technical")
       ? (s.trainingCourseSlug || "").trim()
@@ -169,11 +169,7 @@ export default function AdminSuccessStoriesPage() {
         ? editing.testPrepSlug
         : ""
     );
-    setTrainingTrackMenu(
-      k === "training" && editing.trainingTrack && isTrainingTrack(editing.trainingTrack)
-        ? editing.trainingTrack
-        : ""
-    );
+    setTrainingTrackMenu(k === "training" ? normalizeTrainingTrack(editing.trainingTrack) : "");
     setTrainingCourseMenu(
       k === "training" &&
         (editing.trainingTrack === "technical" || editing.trainingTrack === "non_technical") &&

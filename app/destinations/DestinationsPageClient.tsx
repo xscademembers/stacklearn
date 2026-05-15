@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -552,46 +552,6 @@ export default function DestinationsPageClient({
 
       <MainPageSuccessStoriesSection mainPage="destinations" stories={mainPageSuccessStories} />
 
-      {/* Success Stories CTA */}
-      <section className="relative py-16 md:py-20 text-white overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-slate-900" />
-          <Image
-            src="https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            alt="Successful students celebrating"
-            fill
-            className="object-cover opacity-35"
-          />
-        </div>
-        <div className="absolute inset-0 z-[1] opacity-15 pointer-events-none">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-brand rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-10 right-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
-        </div>
-        <div className="container mx-auto px-6 md:px-8 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
-              Success Stories
-            </h2>
-            <p className="text-base md:text-lg text-white/90 leading-relaxed mb-8">
-              Hundreds of students have achieved their dream of studying abroad with Stack Learn.
-              From securing admissions at top-ranked universities to receiving visas with ease &mdash;
-              their journeys inspire the next generation.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/success-stories"
-                className="px-8 py-4 bg-white text-brand rounded-full font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 inline-flex items-center gap-2 justify-center"
-              >
-                View Success Stories
-                <FiArrowRight className="w-4 h-4" />
-              </Link>
-              <BookConsultButton variant="secondary" className="border-white/40 text-white hover:bg-white/10 hover:text-white">
-                Start Your Journey
-              </BookConsultButton>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* FAQs */}
       <section className="py-16 md:py-24 bg-gray-50">
