@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FiPlay } from "react-icons/fi";
 import {
-  embedAspectClass,
+  embedAspectPadding,
+  embedShellClass,
   getEmbedPlayUrl,
   getVideoPosterUrl,
   parseVideoEmbedUrl,
@@ -18,6 +19,26 @@ type Props = {
   posterUrl?: string;
 };
 
+/** Fixed-height frame so overlays/iframes never collapse to 0px. */
+function VideoAspectFrame({
+  embed,
+  className = "",
+  children,
+}: {
+  embed: ParsedVideoEmbed;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={`relative mx-auto overflow-hidden rounded-2xl border border-border bg-black shadow-lg ${embedShellClass(embed)} ${className}`}
+    >
+      <div className={`relative w-full ${embedAspectPadding(embed)}`} aria-hidden />
+      <div className="absolute inset-0">{children}</div>
+    </div>
+  );
+}
+
 function VideoPlayOverlay({
   posterUrl,
   studentName,
@@ -31,7 +52,7 @@ function VideoPlayOverlay({
     <button
       type="button"
       onClick={onPlay}
-      className="group absolute inset-0 flex w-full cursor-pointer flex-col items-center justify-center border-0 bg-transparent p-0 motion-reduce:transition-none"
+      className="group absolute inset-0 flex h-full w-full cursor-pointer flex-col items-center justify-center border-0 bg-transparent p-0 motion-reduce:transition-none"
       aria-label={`Play video testimonial from ${studentName}`}
     >
       {posterUrl ? (
@@ -43,7 +64,7 @@ function VideoPlayOverlay({
         />
       ) : (
         <div
-          className="absolute inset-0 bg-gradient-to-br from-brand/30 via-brand/10 to-accent/25"
+          className="absolute inset-0 bg-gradient-to-br from-brand/40 via-brand/20 to-accent/35"
           aria-hidden
         />
       )}
@@ -77,6 +98,7 @@ function DirectFilePlayer({
   const [loadError, setLoadError] = useState(false);
 
   const displayPoster = posterUrl || framePoster;
+  const embed: ParsedVideoEmbed = { type: "direct", src };
 
   useEffect(() => {
     if (posterUrl || isPlaying) return;
@@ -135,7 +157,7 @@ function DirectFilePlayer({
   }
 
   return (
-    <div className={`relative mx-auto overflow-hidden rounded-2xl border border-border bg-black shadow-lg ${embedAspectClass({ type: "direct", src })}`}>
+    <VideoAspectFrame embed={embed}>
       {!posterUrl && !isPlaying ? (
         <video ref={probeRef} className="pointer-events-none absolute h-0 w-0 opacity-0" muted playsInline preload="metadata" />
       ) : null}
@@ -153,7 +175,7 @@ function DirectFilePlayer({
       ) : (
         <VideoPlayOverlay posterUrl={displayPoster} studentName={studentName} onPlay={handlePlay} />
       )}
-    </div>
+    </VideoAspectFrame>
   );
 }
 
@@ -170,20 +192,62 @@ function EmbedPlayer({
   const thumb = posterUrl ?? getVideoPosterUrl(embed);
 
   return (
-    <div
-      className={`relative mx-auto overflow-hidden rounded-2xl border border-border bg-black shadow-lg ${embedAspectClass(embed)}`}
-    >
+    <VideoAspectFrame embed={embed}>
       {isPlaying ? (
         <iframe
           src={getEmbedPlayUrl(embed)}
           title={`Video testimonial from ${studentName}`}
-          allow="accelerometer; fullscreen; encrypted-media; picture-in-picture"
+          allow="accelerometer; autoplay; fullscreen; encrypted-media; picture-in-picture"
           allowFullScreen
-          className="absolute inset-0 h-full w-full border-0"
+          className="h-full w-full border-0"
         />
       ) : (
         <VideoPlayOverlay posterUrl={thumb} studentName={studentName} onPlay={() => setIsPlaying(true)} />
       )}
+    </VideoAspectFrame>
+  );
+}
+
+function UnembeddableFallback({
+  cleanUrl,
+  studentName,
+  posterUrl,
+}: {
+  cleanUrl: string;
+  studentName: string;
+  posterUrl: string | null;
+}) {
+  return (
+    <div className="relative mx-auto w-full overflow-hidden rounded-2xl border border-border bg-black shadow-lg">
+      <div className="relative w-full pt-[56.25%]" aria-hidden />
+      <div className="absolute inset-0">
+        {cleanUrl ? (
+          <a
+            href={cleanUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group absolute inset-0 flex h-full w-full flex-col items-center justify-center no-underline motion-reduce:transition-none"
+          >
+            {posterUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={posterUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-brand/40 via-brand/20 to-accent/35" aria-hidden />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/20" aria-hidden />
+            <span className="relative z-10 flex h-[72px] w-[72px] items-center justify-center rounded-full bg-brand text-white shadow-lg ring-4 ring-white/40">
+              <FiPlay className="ml-1 h-8 w-8" aria-hidden />
+            </span>
+            <span className="relative z-10 mt-6 px-6 text-center text-sm font-semibold text-white drop-shadow-md">
+              Watch {studentName}&apos;s testimonial
+            </span>
+          </a>
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center px-4 text-center text-sm text-white/90">
+            <p className="m-0">Video URL is missing. Add a link in admin and save again.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -191,32 +255,23 @@ function EmbedPlayer({
 export default function SuccessStoryVideoPlayer({ videoUrl, studentName, posterUrl }: Props) {
   const cleanUrl = sanitizeVideoUrl(videoUrl);
   const embed = useMemo(() => parseVideoEmbedUrl(cleanUrl), [cleanUrl]);
-  const label = `Video testimonial from ${studentName}`;
   const optionalPoster = posterUrl?.trim() && /^https?:\/\//i.test(posterUrl.trim()) ? posterUrl.trim() : null;
 
   if (!embed) {
     return (
-      <div className="rounded-2xl border border-border bg-page-soft px-4 py-8 text-center text-sm text-foreground-muted">
-        <p className="m-0 mb-3">This video link could not be embedded.</p>
-        <p className="m-0 text-xs">Use YouTube, Vimeo, Loom, Google Drive, or a direct .mp4 / .webm link.</p>
+      <div className="w-full">
+        <UnembeddableFallback cleanUrl={cleanUrl} studentName={studentName} posterUrl={optionalPoster} />
         {cleanUrl ? (
-          <a
-            href={cleanUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-block font-semibold text-brand hover:underline"
-          >
-            Open video link
-          </a>
+          <p className="mt-3 text-center text-xs text-foreground-muted">
+            Opens in a new tab if embedded playback is not supported for this link.
+          </p>
         ) : null}
       </div>
     );
   }
 
   if (embed.type === "direct") {
-    return (
-      <DirectFilePlayer src={embed.src} studentName={studentName} posterUrl={optionalPoster} />
-    );
+    return <DirectFilePlayer src={embed.src} studentName={studentName} posterUrl={optionalPoster} />;
   }
 
   return <EmbedPlayer embed={embed} studentName={studentName} posterUrl={optionalPoster} />;

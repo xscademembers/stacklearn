@@ -41,8 +41,11 @@ function vimeoId(url: URL): string | null {
 
 function googleDriveFileId(url: URL): string | null {
   if (!url.hostname.includes("drive.google.com")) return null;
-  const m = url.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-  return m?.[1] ?? null;
+  const fromPath = url.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (fromPath?.[1]) return fromPath[1];
+  const fromQuery = url.searchParams.get("id");
+  if (fromQuery && /^[a-zA-Z0-9_-]+$/.test(fromQuery)) return fromQuery;
+  return null;
 }
 
 function dropboxDirectUrl(url: URL): string | null {
@@ -167,9 +170,18 @@ export function getEmbedPlayUrl(embed: ParsedVideoEmbed): string {
   return embed.src;
 }
 
-export function embedAspectClass(embed: ParsedVideoEmbed): string {
+/** Outer shell width constraints (height comes from padding spacer in the player). */
+export function embedShellClass(embed: ParsedVideoEmbed): string {
   if (embed.type === "youtube" && embed.aspectHint === "vertical") {
-    return "aspect-[9/16] max-h-[min(80vh,640px)] max-w-[min(100%,360px)]";
+    return "max-w-[min(100%,360px)]";
   }
-  return "aspect-video max-h-[min(80vh,640px)] w-full";
+  return "w-full";
+}
+
+/** Padding-top % for aspect-ratio box (works with absolutely positioned overlay). */
+export function embedAspectPadding(embed: ParsedVideoEmbed): string {
+  if (embed.type === "youtube" && embed.aspectHint === "vertical") {
+    return "pt-[177.78%]";
+  }
+  return "pt-[56.25%]";
 }

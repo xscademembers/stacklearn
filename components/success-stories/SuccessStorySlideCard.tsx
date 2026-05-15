@@ -23,11 +23,13 @@ export default function SuccessStorySlideCard({ story, variant = "carousel" }: P
         <>
           <h3 className="mb-2 text-2xl font-extrabold text-foreground">{story.name}</h3>
           <p className="mb-6 text-lg font-bold text-brand">{successStoryMetaLine(story)}</p>
-          <SuccessStoryVideoPlayer
-            videoUrl={story.videoUrl}
-            studentName={story.name}
-            posterUrl={story.imageUrl || undefined}
-          />
+          <div className="w-full">
+            <SuccessStoryVideoPlayer
+              videoUrl={story.videoUrl}
+              studentName={story.name}
+              posterUrl={story.imageUrl || undefined}
+            />
+          </div>
         </>
       ) : (
         <>
