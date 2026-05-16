@@ -1,34 +1,17 @@
+import { extractYouTubeVideoId, normalizeYouTubeUrlInput, youtubeNocookieEmbedUrl } from "@/lib/youtube";
+
 /** Parsed embed for a testimonial video URL (YouTube, Vimeo, or direct file). */
 export type ParsedVideoEmbed =
-  | { type: "youtube"; embedUrl: string; videoId: string; aspectHint: "vertical" | "horizontal" }
+  | { type: "youtube"; embedUrl: string; videoId: string }
   | { type: "vimeo"; embedUrl: string; videoId: string }
   | { type: "direct"; src: string }
   | { type: "iframe"; embedUrl: string };
 
 export function sanitizeVideoUrl(v: unknown): string {
   if (typeof v !== "string") return "";
-  const s = v.trim();
+  const s = normalizeYouTubeUrlInput(v.trim());
   if (!s || !/^https?:\/\//i.test(s)) return "";
   return s.length > 2048 ? s.slice(0, 2048) : s;
-}
-
-function youtubeId(url: URL): { id: string; vertical: boolean } | null {
-  const host = url.hostname.replace(/^www\./, "");
-  if (host === "youtu.be") {
-    const id = url.pathname.slice(1).split("/")[0];
-    return id ? { id, vertical: false } : null;
-  }
-  if (host === "youtube.com" || host === "m.youtube.com") {
-    if (url.pathname.startsWith("/shorts/")) {
-      const id = url.pathname.split("/")[2];
-      return id ? { id, vertical: true } : null;
-    }
-    const v = url.searchParams.get("v");
-    if (v) return { id: v, vertical: false };
-    const embed = url.pathname.match(/^\/embed\/([^/?]+)/);
-    if (embed?.[1]) return { id: embed[1], vertical: false };
-  }
-  return null;
 }
 
 function vimeoId(url: URL): string | null {
@@ -84,13 +67,12 @@ export function parseVideoEmbedUrl(raw: string): ParsedVideoEmbed | null {
   try {
     const parsed = new URL(url);
 
-    const yt = youtubeId(parsed);
-    if (yt) {
+    const ytId = extractYouTubeVideoId(parsed.toString());
+    if (ytId) {
       return {
         type: "youtube",
-        videoId: yt.id,
-        embedUrl: `https://www.youtube-nocookie.com/embed/${yt.id}?rel=0&modestbranding=1`,
-        aspectHint: yt.vertical ? "vertical" : "horizontal",
+        videoId: ytId,
+        embedUrl: youtubeNocookieEmbedUrl(ytId, false),
       };
     }
 
@@ -158,7 +140,7 @@ export function getVideoPosterUrl(embed: ParsedVideoEmbed): string | null {
 /** Embed URL with autoplay — only call after the user clicks play. */
 export function getEmbedPlayUrl(embed: ParsedVideoEmbed): string {
   if (embed.type === "youtube") {
-    return `https://www.youtube-nocookie.com/embed/${embed.videoId}?autoplay=1&rel=0&modestbranding=1`;
+    return youtubeNocookieEmbedUrl(embed.videoId, true);
   }
   if (embed.type === "vimeo") {
     return `https://player.vimeo.com/video/${embed.videoId}?autoplay=1&title=0&byline=0`;
@@ -171,17 +153,11 @@ export function getEmbedPlayUrl(embed: ParsedVideoEmbed): string {
 }
 
 /** Outer shell width constraints (height comes from padding spacer in the player). */
-export function embedShellClass(embed: ParsedVideoEmbed): string {
-  if (embed.type === "youtube" && embed.aspectHint === "vertical") {
-    return "max-w-[min(100%,360px)]";
-  }
+export function embedShellClass(_embed: ParsedVideoEmbed): string {
   return "w-full";
 }
 
-/** Padding-top % for aspect-ratio box (works with absolutely positioned overlay). */
-export function embedAspectPadding(embed: ParsedVideoEmbed): string {
-  if (embed.type === "youtube" && embed.aspectHint === "vertical") {
-    return "pt-[177.78%]";
-  }
+/** Padding-top % for 16:9 box (Shorts and long YouTube use the same layout). */
+export function embedAspectPadding(_embed: ParsedVideoEmbed): string {
   return "pt-[56.25%]";
 }

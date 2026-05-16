@@ -693,10 +693,10 @@ export default function AdminSuccessStoriesPage() {
                   value={editing.videoUrl || ""}
                   onChange={(e) => setEditing({ ...editing, videoUrl: e.target.value })}
                   className="w-full px-4 h-11 border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand bg-surface"
-                  placeholder="https://www.youtube.com/watch?v=… or direct .mp4 link"
+                  placeholder="https://www.youtube.com/watch?v=… or youtube.com/shorts/…"
                 />
                 <p className="mt-2 text-xs text-foreground-muted">
-                  YouTube, Vimeo, Loom, or direct mp4/webm. Portrait and landscape are supported.
+                  YouTube (watch or Shorts), Vimeo, Loom, or direct mp4/webm. Shorts use the same player as long videos.
                 </p>
               </div>
             ) : null}
